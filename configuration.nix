@@ -7,6 +7,7 @@ cfg = {
 
     ./hardware-configuration.nix
     ./website
+    ./matrix.nix
     base
     services
   ];

@@ -16,15 +16,39 @@ rec {
     nixpkgs.pkgs = pkgs;
 
     nix-bitcoin.generateSecrets = true;
+    # TODO: Remove this when nix-bitcoin supports extensible secrets creation
+    systemd.services.setup-secrets.preStart = let
+      inherit (config.nix-bitcoin) secretsDir;
+    in ''
+      mkdir -p "${secretsDir}"
+      cd "${secretsDir}"
+      chown root: .
+      chmod 0700 .
+      if [[ ! -e matrix-smtp-password ]]; then
+        ${pkgs.pwgen}/bin/pwgen -s 20 1 > matrix-smtp-password
+        tr -d '\n' <matrix-smtp-password \
+          | ${pkgs.apacheHttpd}/bin/htpasswd -niB  "" | cut -d: -f2 > matrix-smtp-password-hashed
+      fi
+    '';
 
     networking.nat.externalInterface = mkForce "eth0";
 
-    # Disable ACME for local testing
+    ## Disable ACME for local testing
     security.acme = mkForce {};
-    services.nginx.virtualHosts."nixbitcoin.org" = {
-      enableACME = mkForce false;
-      forceSSL = mkForce false;
-    };
+    services.nginx.virtualHosts =
+      let
+        disableACME = {
+          enableACME = mkForce false;
+          forceSSL = mkForce false;
+        };
+      in {
+        "nixbitcoin.org" = disableACME;
+        "synapse.nixbitcoin.org" = disableACME;
+        "element.nixbitcoin.org" = disableACME;
+      };
+    # Disable mailserver because it has no option for fast offline cert generation.
+    # `mailserver.certificateScheme = 2` works offline but is too slow.
+    mailserver.enable = mkForce false;
 
     # When WAN is disabled, DNS bootstrapping slows down service startup by ~15 s.
     services.clightning.extraConfig = "disable-dns";
