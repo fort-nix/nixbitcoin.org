@@ -1,4 +1,4 @@
 {
-  url = "https://github.com/fort-nix/nix-bitcoin/releases/download/v0.0.45/nix-bitcoin-0.0.45.tar.gz";
-  sha256 = "b864f7bed970ce54493d4e673381402df0de51d85642351942b6203fdb1d59c7";
+  url = "https://github.com/fort-nix/nix-bitcoin/releases/download/v0.0.46/nix-bitcoin-0.0.46.tar.gz";
+  sha256 = "8c06f88365128c0629dd4b1957c4a345371658a236c5944414a23a53057e1506";
 }
