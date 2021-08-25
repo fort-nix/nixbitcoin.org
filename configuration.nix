@@ -47,10 +47,15 @@ services = {
   services.btcpayserver = {
     enable = true;
     lightningBackend = "clightning";
+    lbtc = true;
   };
   nix-bitcoin.onionServices.btcpayserver.enable = true;
 
   nix-bitcoin.netns-isolation.enable = true;
+
+  services.liquidd.extraConfig = ''
+    whitelist=169.254.1.23
+  '';
 
   services.joinmarket = {
     enable = true;
