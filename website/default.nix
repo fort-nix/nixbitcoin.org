@@ -75,11 +75,11 @@ in {
 
     services.btcpayserver.rootpath = "btcpayserver";
 
-    services.tor.hiddenServices.nginx = {
+    services.tor.relay.onionServices.nginx = {
       map = [{
-        port = 80; toHost = nginxAddress;
+        port = 80; target.addr = nginxAddress; target.port = 80;
       } {
-        port = 443; toHost = nginxAddress;
+        port = 443; target.addr = nginxAddress; target.port = 443;
       }];
       version = 3;
     };
