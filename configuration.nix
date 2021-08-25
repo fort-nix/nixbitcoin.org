@@ -27,7 +27,7 @@ base = {
 
   system.stateVersion = "20.09";
 
-  nix-bitcoin.configVersion = "0.0.41";
+  nix-bitcoin.configVersion = "0.0.49";
 };
 
 services = {
@@ -54,6 +54,7 @@ services = {
 
   services.joinmarket = {
     enable = true;
+    rpcWalletFile = null;
     yieldgenerator.enable = true;
   };
   services.joinmarket-ob-watcher.enable = true;
