@@ -27,7 +27,7 @@ base = {
 
   system.stateVersion = "20.09";
 
-  nix-bitcoin.configVersion = "0.0.49";
+  nix-bitcoin.configVersion = "0.0.50";
 };
 
 services = {
