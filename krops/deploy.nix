@@ -7,6 +7,8 @@ let
     website.file = {
       path = toString ../website;
     };
+    "matrix.nix".file = toString ../matrix.nix;
+    "mail.nix".file = toString ../mail.nix;
   };
 
   krops = (import <nix-bitcoin> {}).krops;

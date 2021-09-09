@@ -30,6 +30,15 @@ let
       (pkgs.writeScriptBin "container" ''
         exec run-node -s nixbitcoinorg-container container "$@"
       '')
+
+      # TODO: Remove this when nix-bitcoin supports extensible secrets creation
+      (pkgs.writeScriptBin "generate-secrets-nixbitcoinorg" ''
+        if [[ ! -e matrix-smtp-password ]]; then
+          ${pkgs.pwgen}/bin/pwgen -s 20 1 > matrix-smtp-password
+          tr -d '\n' <matrix-smtp-password \
+            | ${pkgs.apacheHttpd}/bin/htpasswd -niB  "" | cut -d: -f2 > matrix-smtp-password-hashed
+        fi
+      '')
     ];
   };
 in
@@ -79,7 +88,12 @@ stdenv.mkDerivation rec {
       ${figlet}/bin/figlet "nix-bitcoin"
     fi
 
-    (mkdir -p secrets; cd secrets; env -i ${nix-bitcoin.generate-secrets})
+    (
+      mkdir -p secrets;
+      cd secrets;
+      env -i ${nix-bitcoin.generate-secrets}
+      generate-secrets-nixbitcoinorg
+    )
 
     # Don't run this hook when another nix-shell is run inside this shell
     unset shellHook
