@@ -16,8 +16,6 @@
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/sda";
-  networking.useDHCP = false;
-  networking.interfaces.enp2s0.useDHCP = true;
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/d070abe5-6a51-4ea5-9365-57828fd0dd30";
