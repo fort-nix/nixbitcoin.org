@@ -1,4 +1,4 @@
-{
-  url = "https://github.com/fort-nix/nix-bitcoin/releases/download/v0.0.50/nix-bitcoin-0.0.50.tar.gz";
-  sha256 = "0qv2jfz4civqd20wrbsjb7qg81icsk5rwggqh95pszvnz4fzxdz4";
+builtins.fetchTarball {
+  url = "https://github.com/fort-nix/nix-bitcoin/archive/v0.0.51.tar.gz";
+  sha256 = "sha256-W0ECTTqefRLn0JEHF3nFqAiG6BGoXl0HgdP3YKNyONA=";
 }

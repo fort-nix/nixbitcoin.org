@@ -16,20 +16,6 @@ rec {
     nixpkgs.pkgs = pkgs;
 
     nix-bitcoin.generateSecrets = true;
-    # TODO: Remove this when nix-bitcoin supports extensible secrets creation
-    systemd.services.setup-secrets.preStart = let
-      inherit (config.nix-bitcoin) secretsDir;
-    in ''
-      mkdir -p "${secretsDir}"
-      cd "${secretsDir}"
-      chown root: .
-      chmod 0700 .
-      if [[ ! -e matrix-smtp-password ]]; then
-        ${pkgs.pwgen}/bin/pwgen -s 20 1 > matrix-smtp-password
-        tr -d '\n' <matrix-smtp-password \
-          | ${pkgs.apacheHttpd}/bin/htpasswd -niB  "" | cut -d: -f2 > matrix-smtp-password-hashed
-      fi
-    '';
 
     networking.nat.externalInterface = mkForce "eth0";
 
