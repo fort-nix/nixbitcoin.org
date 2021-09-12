@@ -194,14 +194,14 @@ in {
         enableACME = true;
         forceSSL = true;
 
-	      root = pkgs.element-web.override {
-	        conf = {
-	          default_server_config."m.homeserver" = {
-	            "base_url" = "https://synapse.nixbitcoin.org";
-	            "server_name" = "nixbitcoin.org";
-	          };
-	        };
-	      };
+        root = pkgs.element-web.override {
+          conf = {
+            default_server_config."m.homeserver" = {
+              "base_url" = "https://synapse.nixbitcoin.org";
+              "server_name" = "nixbitcoin.org";
+            };
+          };
+        };
       };
     };
   };
