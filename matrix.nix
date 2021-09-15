@@ -194,33 +194,33 @@ in {
         enableACME = true;
         forceSSL = true;
 
-	      root = pkgs.element-web.override {
-	        conf = {
-	          default_server_config."m.homeserver" = {
-	            "base_url" = "https://synapse.nixbitcoin.org";
-	            "server_name" = "nixbitcoin.org";
-	          };
-	        };
-	      };
+        root = pkgs.element-web.override {
+          conf = {
+            default_server_config."m.homeserver" = {
+              "base_url" = "https://synapse.nixbitcoin.org";
+              "server_name" = "nixbitcoin.org";
+            };
+          };
+        };
       };
     };
   };
 
   # Backups
-  services.postgresqlBackup = {
-    enable = true;
-    databases = [ "matrix-synapse" ];
+  services.backups = {
+    extraFiles = [ dataDir ];
+    postgresqlDatabases = [ "matrix-synapse" ];
   };
-  systemd.services.duplicity = rec {
-    wants = [ "postgresqlBackup-matrix-synapse.service" ];
-    after = wants;
-  };
-  services.backups.extraFiles = [
-    dataDir
-    "${config.services.postgresqlBackup.location}/matrix-synapse.sql.gz"
-  ];
 
   nix-bitcoin.secrets.matrix-smtp-password.user = "matrix-synapse";
   # Used by dovecot2 (via the mailserver module)
   nix-bitcoin.secrets.matrix-smtp-password-hashed.user = "root";
+  nix-bitcoin.generateSecretsCmds.matrix = ''
+    makePasswordSecret matrix-smtp-password
+    if [[ matrix-smtp-password -nt matrix-smtp-password-hashed ]]; then
+      tr -d '\n' <matrix-smtp-password \
+        | ${pkgs.apacheHttpd}/bin/htpasswd -niB "" \
+        | cut -d: -f2 > matrix-smtp-password-hashed
+    fi
+  '';
 }
