@@ -34,6 +34,10 @@ base = {
 services = {
   nix-bitcoin.onionServices.bitcoind.public = true;
 
+  services.bitcoind.extraConfig = ''
+    whitelist=169.254.1.23
+  '';
+
   services.clightning = {
     enable = true;
     plugins.clboss.enable = true;
