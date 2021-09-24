@@ -43,6 +43,7 @@ services = {
     '';
   };
   nix-bitcoin.onionServices.clightning.public = true;
+  systemd.services.clightning.serviceConfig.TimeoutStartSec = "5m";
 
   services.electrs.enable = true;
 
