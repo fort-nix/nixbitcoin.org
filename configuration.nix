@@ -63,6 +63,8 @@ services = {
   services.joinmarket-ob-watcher.enable = true;
 
   nix-bitcoin-org.website.enable = true;
+
+  services.backups.enable = true;
 };
 in
   cfg
