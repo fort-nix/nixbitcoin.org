@@ -28,7 +28,7 @@ base = {
 
   system.stateVersion = "20.09";
 
-  nix-bitcoin.configVersion = "0.0.51";
+  nix-bitcoin.configVersion = "0.0.53";
 };
 
 services = {
@@ -53,10 +53,6 @@ services = {
   nix-bitcoin.onionServices.btcpayserver.enable = true;
 
   nix-bitcoin.netns-isolation.enable = true;
-
-  services.liquidd.extraConfig = ''
-    whitelist=169.254.1.23
-  '';
 
   services.joinmarket = {
     enable = true;
