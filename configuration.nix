@@ -54,10 +54,6 @@ services = {
 
   nix-bitcoin.netns-isolation.enable = true;
 
-  services.liquidd.extraConfig = ''
-    whitelist=169.254.1.23
-  '';
-
   services.joinmarket = {
     enable = true;
     rpcWalletFile = null;
