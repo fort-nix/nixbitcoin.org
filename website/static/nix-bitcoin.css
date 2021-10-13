@@ -1,0 +1,93 @@
+body {
+font-family: var(--font-headings,"Poppins",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif);
+background-color: #9fcced;
+width: 80%;
+padding-top: 175px;
+padding-left: 55px;
+padding-right: 55px;
+font-size: large;
+}
+
+header {
+	background-color: #4B3869;
+	width:  100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+brand {
+	position: absolute;
+    margin-top: 30px;
+	margin-left: 60px;
+    color: #FEFBF3;
+}
+
+#logo {
+   position:relative;
+   float: right;
+   width: 100px;
+   padding: 25px;
+}
+
+#socialicon {
+  fill: #fff;
+}
+
+h2, h3, h4, h5, h6 {
+    color: #4B3869;
+}
+
+strong {
+    color: #4B3869;
+}
+
+ul.socials {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    overflow: hidden;
+}
+ul.socials > li {
+    float: left;
+    display: block;
+    padding-right: 0.8rem;
+}
+ul.socials img {
+    width: 20px;
+}
+
+.datatable {
+        font-family: monospace;
+        line-height: 1.15rem;
+        font-size: 1.2rem;
+      }
+.datatable th {
+        font-family: sans;
+        font-size: 0.8rem;
+        text-align: left;
+        font-weight: bold;
+        padding-right: 10px;
+      }
+
+code {
+        background-color: #4B3869;
+        border: 1px solid #999;
+        border-radius: 10px;
+        max-width: 800px;
+        display: block;
+        padding: 15px;
+        word-wrap: break-word;
+        font-size: 0.8rem;
+        color: #A9E4D7;
+      }
+a {
+    Color: #FEFBF3;
+}
+a:vistited {
+    Color: #A9E4D7;
+}
+
+footer {
+    height:  100px;
+}

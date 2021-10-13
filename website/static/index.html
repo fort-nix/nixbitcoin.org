@@ -1,70 +1,27 @@
 <!DOCTYPE html>
-<html><head>
-    <meta charset="utf-8">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
     <title>nix-bitcoin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-      h1,h2,h3 { line-height: 1.0 }
 
-      ul.socials {
-        margin: 0;
-        padding: 0;
-        list-style-type: none;
-        overflow: hidden;
-      }
-      ul.socials > li {
-        float: left;
-        display: block;
-        padding-right: 0.8rem;
-      }
-      ul.socials img {
-        color: #ff0000;
-        width: 20px;
-      }
-      body {
-        color: #444;
-        padding: 10px 10px;
-        margin: 20px auto;
-        font-size: 1.0rem;
-        max-width: 800px;
-        font-family: sans;
-      }
-      .datatable {
-        font-family: monospace;
-        line-height: 1.15rem;
-        font-size: 1.2rem;
-      }
-      .datatable th {
-        font-family: sans;
-        font-size: 0.8rem;
-        text-align: left;
-        font-weight: bold;
-        padding-right: 10px;
-      }
-      code {
-        background-color: #eee;
-        border: 1px solid #999;
-        max-width: 800px;
-        display: block;
-        padding: 20px;
-        word-wrap: break-word;
-        font-size: 0.8rem;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>nix-bitcoin
-      <img
-        align=right
-        width="100"
-        src="files/nix-bitcoin-logo.png"
-        alt="nix-bitcoin logo">
-    </h1>
+    <link rel="stylesheet" type="text/css" href="nix-bitcoin.css" media="screen" />
+</head>
+
+<body>
+
+<header>
+<brand>
+<h1>NIX-BITCOIN</h1>
+</brand>
+<img id="logo"src="files/nix-bitcoin-logo.png" alt="nix-bitcoin logo">
+</header>
+
     <ul class="socials">
-      <li><a href="https://github.com/fort-nix/nix-bitcoin"><img src="files/github.svg" title="github: nix-bitcoin"></a></li>
-      <li><a href="https://twitter.com/nixbitcoinorg"><img src="files/twitter.svg" title="twitter: @nixbitcoinorg"></a></li>
-      <li><a href="/btcpayserver/apps/4D1Dxb5cGnXHRgNRBpoaraZKTX3i/pos"><img src="files/bitcoin.svg" title="BTCPayServer"></a></li>
-      <li><a href="devkeys.html"><img src="files/key.svg" title="Developer Keys"></a></li>
+
+      <li><a href="https://github.com/fort-nix/nix-bitcoin"><img class="socialicon" src="files/github.svg" title="github: nix-bitcoin"></a></li>
+      <li><a href="https://twitter.com/nixbitcoinorg"><img class="socialicon" src="files/twitter.svg" title="twitter: @nixbitcoinorg"></a></li>
+      <li><a href="/btcpayserver/apps/4D1Dxb5cGnXHRgNRBpoaraZKTX3i/pos"><img class="socialicon" src="files/bitcoin.svg" title="BTCPayServer"></a></li>
+      <li><a href="/devkeys.html"><img class="socialicon" src="files/key.svg" title="Developer Keys"></a></li>
     </ul>
 
     <h3>About</h3>
@@ -99,20 +56,20 @@
           <li><a href="https://github.com/elementsproject/elements">elementsd</a> - daemon for liquid sidechain.</li>
           <li><a href="https://github.com/Blockstream/liquid-swap">liquid swap</a> - tool to swap issued assets on liquid using confidential transactions.</li>
         </ul>
-      <li>Electrs
+      </li><li>Electrs
         <ul>
           <li><a href="https://github.com/romanz/electrs">electrs</a> - electrum server written in rust, reachable over onion service.</li>
         </ul>
       </li>
       <li>BTCPayServer
         <ul>
-          <li><a href="https://btcpayserver.org">btcpayserver</a> - self-hosted BTC payment server.</li>
+          <li><a href="https://btcpayserver.org/">btcpayserver</a> - self-hosted BTC payment server.</li>
           <li><a href="https://github.com/dgarage/NBXplorer">nbxplorer</a> - autoconfigured backend for btcpayserver.</li>
         </ul>
       </li>
       <li>JoinMarket
         <ul>
-          <li><a href="https://joinmarket.me">joinmarket</a> - CoinJoin implementation with incentive structure to convince people to take part. Automatic wallet generation. Plug and play yield generator.</li>
+          <li><a href="https://joinmarket.me/">joinmarket</a> - CoinJoin implementation with incentive structure to convince people to take part. Automatic wallet generation. Plug and play yield generator.</li>
           <li><a href="https://github.com/JoinMarket-Org/joinmarket-clientserver/blob/master/docs/orderbook.md">joinmarket-obwatcher</a> - view JoinMarket orderbook as webpage.</li>
         </ul>
       </li>
@@ -144,7 +101,7 @@
     </ul>
     <h4>Matrix Homeserver</h4>
 
-    <a href="https://element.nixbitcoin.org">@nixbitcoin.org homeserver</a> - matrix-synapse homeserver with open registration (email required).
+    <a href="https://element.nixbitcoin.org/">@nixbitcoin.org homeserver</a> - matrix-synapse homeserver with open registration (email required).
 
     <h4>JoinMarket Orderbook</h4>
 
@@ -153,5 +110,6 @@
     <h3>Donate</h3>
 
     You can donate to our nix-bitcoin hosted BTCPayServer <a href="/btcpayserver/apps/4D1Dxb5cGnXHRgNRBpoaraZKTX3i/pos">here</a>.
-
+<footer>
+</footer>
 </body></html>
