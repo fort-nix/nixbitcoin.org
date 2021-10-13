@@ -33,6 +33,7 @@ base = {
 
 services = {
   nix-bitcoin.onionServices.bitcoind.public = true;
+  services.bitcoind.enforceTor = lib.mkForce false;
 
   services.clightning = {
     enable = true;
@@ -42,6 +43,7 @@ services = {
     '';
   };
   nix-bitcoin.onionServices.clightning.public = true;
+  systemd.services.clightning.serviceConfig.TimeoutStartSec = "5m";
 
   services.electrs.enable = true;
 
@@ -62,6 +64,8 @@ services = {
   services.joinmarket-ob-watcher.enable = true;
 
   nix-bitcoin-org.website.enable = true;
+
+  services.backups.enable = true;
 };
 in
   cfg
