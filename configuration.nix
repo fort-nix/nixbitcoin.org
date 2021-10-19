@@ -33,7 +33,10 @@ base = {
 
 services = {
   nix-bitcoin.onionServices.bitcoind.public = true;
-  services.bitcoind.enforceTor = lib.mkForce false;
+  services.bitcoind = {
+    i2p = true;
+    enforceTor = lib.mkForce false;
+  };
 
   services.clightning = {
     enable = true;
