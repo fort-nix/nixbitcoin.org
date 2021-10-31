@@ -39,6 +39,8 @@ in {
       acceptTerms = true;
     };
 
+    services.btcpayserver.rootpath = "btcpayserver";
+
     services.nginx = let
       hostConfig = {
         extraConfig = ''
@@ -51,6 +53,10 @@ in {
           # Disallow access to the btcpayserver admin interface
           location ~* ^/btcpayserver/(login|register|account)(?:$|/) {
             return 404;
+          }
+
+          location = /donate {
+            rewrite /donate /btcpayserver/apps/4D1Dxb5cGnXHRgNRBpoaraZKTX3i/pos;
           }
 
           location /obwatcher/ {
@@ -77,8 +83,6 @@ in {
       };
       virtualHosts."_" = hostConfig;
     };
-
-    services.btcpayserver.rootpath = "btcpayserver";
 
     services.tor.relay.onionServices.nginx = {
       map = [
