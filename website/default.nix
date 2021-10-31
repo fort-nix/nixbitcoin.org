@@ -1,8 +1,13 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
+  options = {
+    nix-bitcoin-org.website = {
+      enable = mkEnableOption "nix-bitcoin.org website";
+    };
+  };
+
   cfg = config.nix-bitcoin-org.website;
 
   nginxAddress = if config.nix-bitcoin.netns-isolation.enable then
@@ -15,9 +20,7 @@ let
     "${address}:${toString port}";
 
 in {
-  options.nix-bitcoin-org.website = {
-    enable = mkEnableOption "nix-bitcoin.org website";
-  };
+  inherit options;
 
   config = mkIf cfg.enable (mkMerge [
   {
