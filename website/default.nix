@@ -41,12 +41,14 @@ in {
 
     services.nginx = let
       hostConfig = {
-        root = "/var/www";
-        locations."/btcpayserver/" = {
-          proxyPass = "http://${serviceAddress "btcpayserver"}";
-        };
         extraConfig = ''
-          # Disallow access to the admin interface
+          root /var/www;
+
+          location /btcpayserver/ {
+            proxy_pass http://${serviceAddress "btcpayserver"};
+          }
+
+          # Disallow access to the btcpayserver admin interface
           location ~* ^/btcpayserver/(login|register|account)(?:$|/) {
             return 404;
           }
