@@ -50,8 +50,8 @@ in {
             proxy_pass http://${serviceAddress "btcpayserver"};
           }
 
-          # Disallow access to the btcpayserver admin interface
-          location ~* ^/btcpayserver/(login|register|account)(?:$|/) {
+          # Disallow access to the btcpayserver admin interface and the API
+          location ~* ^/btcpayserver/(login|register|account|api)(?:$|/) {
             return 404;
           }
 
