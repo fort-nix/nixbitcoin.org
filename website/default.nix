@@ -1,8 +1,13 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
+  options = {
+    nix-bitcoin-org.website = {
+      enable = mkEnableOption "nix-bitcoin.org website";
+    };
+  };
+
   cfg = config.nix-bitcoin-org.website;
 
   nginxAddress = if config.nix-bitcoin.netns-isolation.enable then
@@ -15,9 +20,7 @@ let
     "${address}:${toString port}";
 
 in {
-  options.nix-bitcoin-org.website = {
-    enable = mkEnableOption "nix-bitcoin.org website";
-  };
+  inherit options;
 
   config = mkIf cfg.enable (mkMerge [
   {
@@ -36,16 +39,24 @@ in {
       acceptTerms = true;
     };
 
+    services.btcpayserver.rootpath = "btcpayserver";
+
     services.nginx = let
       hostConfig = {
-        root = "/var/www";
-        locations."/btcpayserver/" = {
-          proxyPass = "http://${serviceAddress "btcpayserver"}";
-        };
         extraConfig = ''
-          # Disallow access to the admin interface
-          location ~* ^/btcpayserver/(login|register|account)(?:$|/) {
+          root /var/www;
+
+          location /btcpayserver/ {
+            proxy_pass http://${serviceAddress "btcpayserver"};
+          }
+
+          # Disallow access to the btcpayserver admin interface and the API
+          location ~* ^/btcpayserver/(login|register|account|api)(?:$|/) {
             return 404;
+          }
+
+          location = /donate {
+            rewrite /donate /btcpayserver/apps/4D1Dxb5cGnXHRgNRBpoaraZKTX3i/pos;
           }
 
           location /obwatcher/ {
@@ -72,8 +83,6 @@ in {
       };
       virtualHosts."_" = hostConfig;
     };
-
-    services.btcpayserver.rootpath = "btcpayserver";
 
     services.tor.relay.onionServices.nginx = {
       map = [

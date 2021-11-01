@@ -49,10 +49,11 @@ rec {
       address = btcp.address;
       port = toString btcp.port;
       interface = config.networking.nat.externalInterface;
+      netnsBridgeIp = config.nix-bitcoin.netns-isolation.bridgeIp;
     in ''
       iptables -w -t nat -A nixos-nat-pre -i ${interface} -p tcp --dport ${port} -j DNAT --to-destination ${address}
       # Add source NAT to the bridge address because the btcpayserver netns doesn't allow connections to external addresses.
-      iptables -w -t nat -A nixos-nat-post -p tcp -d ${address} -j SNAT --to-source 169.254.1.10
+      iptables -w -t nat -A nixos-nat-post -p tcp -d ${address} -j SNAT --to-source ${netnsBridgeIp}
     '';
   };
 
