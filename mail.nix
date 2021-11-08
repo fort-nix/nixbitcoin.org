@@ -18,10 +18,4 @@
 
     virusScanning = false;
   };
-
-  # Enable TLSv1, needed for matrix-synapse https://github.com/matrix-org/synapse/issues/6211
-  services.postfix.extraConfig = ''
-    smtpd_tls_protocols = TLSv1.3, TLSv1.2, TLSv1.1, TLSv1, !SSLv2, !SSLv3
-    smtpd_tls_mandatory_protocols = TLSv1.3, TLSv1.2, TLSv1.1, TLSv1, !SSLv2, !SSLv3
-  '';
 }
