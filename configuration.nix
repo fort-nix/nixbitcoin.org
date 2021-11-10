@@ -66,7 +66,11 @@ services = {
   };
   services.joinmarket-ob-watcher.enable = true;
 
-  nix-bitcoin-org.website.enable = true;
+  nix-bitcoin-org.website = {
+    enable = true;
+    donate.btcpayserverAppId = "4D1Dxb5cGnXHRgNRBpoaraZKTX3i";
+    donate.btcpayserverAppIdLnurl = "TODO";
+  };
 
   services.backups.enable = true;
 };

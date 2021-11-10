@@ -5,6 +5,10 @@ let
   options = {
     nix-bitcoin-org.website = {
       enable = mkEnableOption "nix-bitcoin.org website";
+      nginxHostConfig = mkOption {
+        type = types.lines;
+        default = "";
+      };
     };
   };
 
@@ -16,10 +20,10 @@ let
     "localhost";
 
   serviceAddress = service:
-    with config.services.${service};
-    "${address}:${toString port}";
-
+    with config.services.${service}; "${address}:${toString port}";
 in {
+  imports = [ ./donate ];
+
   inherit options;
 
   config = mkIf cfg.enable (mkMerge [
@@ -41,32 +45,21 @@ in {
 
     services.btcpayserver.rootpath = "btcpayserver";
 
+    nix-bitcoin-org.website.nginxHostConfig = mkBefore ''
+      root /var/www;
+
+      add_header Onion-Location http://qvzlxbjvyrhvsuyzz5t63xx7x336dowdvt7wfj53sisuun4i4rdtbzid.onion$request_uri;
+
+      location /obwatcher/ {
+        proxy_pass http://${serviceAddress "joinmarket-ob-watcher"};
+        rewrite /obwatcher/(.*) /$1 break;
+      }
+    '';
+
     services.nginx = let
-      hostConfig = {
-        extraConfig = ''
-          root /var/www;
-
-          location /btcpayserver/ {
-            proxy_pass http://${serviceAddress "btcpayserver"};
-          }
-
-          # Disallow access to the btcpayserver admin interface and the API
-          location ~* ^/btcpayserver/(login|register|account|api|)(?:$|/) {
-            return 404;
-          }
-
-          location = /donate {
-            rewrite /donate /btcpayserver/apps/4D1Dxb5cGnXHRgNRBpoaraZKTX3i/pos;
-          }
-
-          location /obwatcher/ {
-            proxy_pass http://${serviceAddress "joinmarket-ob-watcher"};
-            rewrite /obwatcher/(.*) /$1 break;
-          }
-
-          add_header Onion-Location http://qvzlxbjvyrhvsuyzz5t63xx7x336dowdvt7wfj53sisuun4i4rdtbzid.onion$request_uri;
-        '';
-      };
+      hostConfig.extraConfig = ''
+        include ${pkgs.writeText "common.conf" cfg.nginxHostConfig};
+      '';
     in {
       enable = true;
       enableReload = true;
