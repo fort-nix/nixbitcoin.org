@@ -6,7 +6,7 @@ rec {
 
   nixbitcoinorg = { config, ... }: {
     imports = [
-      ./configuration.nix
+      ../configuration.nix
       scenarios.regtestBase
       # Needed by regtestBase
       <nix-bitcoin/test/lib/test-lib.nix>
