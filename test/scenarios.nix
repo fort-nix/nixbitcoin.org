@@ -1,15 +1,16 @@
 { pkgs, lib, scenarios }:
 with lib;
 rec {
-  # Don't use the default test base scenario
-  base = {};
+  # Included in all scenarios
+  base = {
+    imports = [ <nix-bitcoin/test/lib/test-lib.nix> ];
+  };
 
   nixbitcoinorg = { config, ... }: {
     imports = [
       ../configuration.nix
       scenarios.regtestBase
-      # Needed by regtestBase
-      <nix-bitcoin/test/lib/test-lib.nix>
+      disableFeatures
     ];
 
     # Improve eval performance by reusing pkgs
@@ -19,6 +20,26 @@ rec {
 
     networking.nat.externalInterface = mkForce "eth0";
 
+    # automatically create wallet
+    services.joinmarket.rpcWalletFile = mkForce "jm_wallet";
+
+    # Make the btcpayserver admin interface accessible at $nodeIP:23000/btcpayserver
+    networking.nat.extraCommands = let
+      btcp = config.services.btcpayserver;
+      address = btcp.address;
+      port = toString btcp.port;
+      interface = config.networking.nat.externalInterface;
+      netnsBridgeIp = config.nix-bitcoin.netns-isolation.bridgeIp;
+    in ''
+      iptables -w -t nat -A nixos-nat-pre -i ${interface} -p tcp --dport ${port} -j DNAT --to-destination ${address}
+      # Add source NAT to the bridge address because the btcpayserver netns doesn't allow connections to external addresses.
+      iptables -w -t nat -A nixos-nat-post -p tcp -d ${address} -j SNAT --to-source ${netnsBridgeIp}
+    '';
+  };
+
+  # Disable features that should only run in production or that
+  # slow down testing
+  disableFeatures = {
     ## Disable ACME for local testing
     security.acme = mkForce {};
     services.nginx.virtualHosts =
@@ -36,29 +57,25 @@ rec {
     # `mailserver.certificateScheme = 2` works offline but is too slow.
     mailserver.enable = mkForce false;
 
-    # When WAN is disabled, DNS bootstrapping slows down service startup by ~15 s.
+    ## The following features delay system startup when WAN in unavailable.
+    # This is always the case in containers because network is only available
+    # after container startup completed.
+
+    # When WAN is not available, DNS bootstrapping slows down service startup by ~15 s.
     services.clightning.extraConfig = "disable-dns";
 
-    # Disable clboss in offline mode until the delayed startup issue is fixed:
+    # Disable clboss when WAN is disabled until the delayed startup issue is fixed:
     # https://github.com/ZmnSCPxj/clboss/issues/49
-    services.clightning.plugins.clboss.enable = mkIf config.test.noConnections (mkForce false);
-
-    # Make the btcpayserver admin interface accessible at $nodeIP:23000/btcpayserver
-    networking.nat.extraCommands = let
-      btcp = config.services.btcpayserver;
-      address = btcp.address;
-      port = toString btcp.port;
-      interface = config.networking.nat.externalInterface;
-      netnsBridgeIp = config.nix-bitcoin.netns-isolation.bridgeIp;
-    in ''
-      iptables -w -t nat -A nixos-nat-pre -i ${interface} -p tcp --dport ${port} -j DNAT --to-destination ${address}
-      # Add source NAT to the bridge address because the btcpayserver netns doesn't allow connections to external addresses.
-      iptables -w -t nat -A nixos-nat-post -p tcp -d ${address} -j SNAT --to-source ${netnsBridgeIp}
-    '';
+    services.clightning.plugins.clboss.enable = mkForce false;
   };
 
+  # Base scenario for containers
   nixbitcoinorg-container = {
-    imports = [ nixbitcoinorg ];
+    imports = [
+      # `hardened.nix` sets `config.security.lockKernelModules` which doesn't work
+      # in containers
+      nixbitcoinorg-non-hardened
+    ];
     # This service fails if apparmor is not enabled in the host kernel
     security.apparmor.enable = mkForce false;
   };
