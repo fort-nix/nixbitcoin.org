@@ -1,7 +1,8 @@
 :root {
     --text-color: #444;
     --hover-bg: #edeff3;
-    --light-gray: #f7f7f7;
+    --light-grey: #f7f7f7;
+    --grey: #f2f2f2;
     --link-color: #355ba9;;
 }
 #logo {
@@ -55,11 +56,17 @@ a {
     text-decoration-thickness: 0.12em;
 }
 code {
-    background-color: var(--light-gray);
+    background-color: var(--light-grey);
     border: 1px solid #adadad;
     border-radius: 5px;
     display: block;
     padding: 1.2em;
     word-wrap: break-word;
     font-size: 0.9rem;
+}
+.inline-code {
+    background-color: var(--grey);
+    padding: 3px;
+    border-radius: 3px;
+    border: 0px;
 }
