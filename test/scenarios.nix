@@ -115,6 +115,7 @@ rec {
     services.btcpayserver.enable = mkForce true;
     # Required for btcpayserver currency rate fetching
     test.container.enableWAN = true;
+    environment.variables.WANEnabled = "1";
   };
 
   # To demonstrate failures in the test runner

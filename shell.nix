@@ -6,6 +6,10 @@ let
 
     Commands for nixbitcoin.org
     ===========================
+    run-test
+      Run the test for this repo.
+      (Starts a container, so root privileges are required.)
+
     container, co
       Run node in a container and start a shell for interacting with the container.
       (Requires root privileges.)
@@ -79,7 +83,9 @@ let
               exec ${nix-bitcoin}/test/run-tests.sh "$@"
           '')
           extra-container.pkg
-          # Used by test/cmds/website
+          # Used by test/
+          curl
+          jq
           lynx
         ];
       };
