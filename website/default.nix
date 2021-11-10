@@ -69,6 +69,7 @@ in {
       };
     in {
       enable = true;
+      enableReload = true;
       recommendedProxySettings = true;
       recommendedGzipSettings = true;
       recommendedOptimisation = true;
