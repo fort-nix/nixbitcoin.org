@@ -57,6 +57,10 @@ rec {
     # `mailserver.certificateScheme = 2` works offline but is too slow.
     mailserver.enable = mkForce false;
 
+    # joinmarket-ob-watcher doesn't work in regtest mode or requires a synced
+    # bitcoind node on mainnet
+    systemd.services.joinmarket-ob-watcher.wantedBy = mkForce [];
+
     ## The following features delay system startup when WAN in unavailable.
     # This is always the case in containers because network is only available
     # after container startup completed.
