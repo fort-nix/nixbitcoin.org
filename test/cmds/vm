@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+exec run-node -s nixbitcoinorg-non-hardened vm "$@"

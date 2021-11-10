@@ -89,4 +89,49 @@ rec {
     imports = [ nixbitcoinorg ];
     disabledModules = [ <nix-bitcoin/modules/presets/hardened.nix> ];
   };
+
+  # Include this to deactivate all features.
+  # You can then re-activate specific features for quick testing.
+  noFeatures = let
+    testDefault = mkOverride 60;
+  in {
+    services.bitcoind.i2p = testDefault false;
+    services.electrs.enable = testDefault false;
+    services.clightning.enable = testDefault false;
+    services.btcpayserver.enable = testDefault false;
+    services.joinmarket.enable = testDefault false;
+    systemd.services.matrix-synapse.wantedBy = testDefault [];
+    nix-bitcoin-org.website.enable = testDefault false;
+  };
+
+  website = { config, ... }: {
+    imports = [
+      nixbitcoinorg-container
+      noFeatures
+    ];
+    nix-bitcoin-org.website.enable = mkForce true;
+    services.clightning.enable = mkForce true;
+    services.btcpayserver.enable = mkForce true;
+  };
+
+  # To demonstrate failures in the test runner
+  fail = { config, ... }: {
+    systemd.services.long = {
+      wantedBy = [ "multi-user.target" ];
+      preStart = "sleep 3";
+      script = "echo hi";
+    };
+    systemd.services.fail1 = {
+      wantedBy = [ "multi-user.target" ];
+      script = "false";
+    };
+    systemd.services.fail2 = {
+      wantedBy = [ "multi-user.target" ];
+      script = "false";
+    };
+    systemd.services.invalidUnit = {
+      wantedBy = [ "multi-user.target" ];
+      script = "";
+    };
+  };
 }
