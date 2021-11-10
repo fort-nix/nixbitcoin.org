@@ -51,7 +51,7 @@ in {
           }
 
           # Disallow access to the btcpayserver admin interface and the API
-          location ~* ^/btcpayserver/(login|register|account|api)(?:$|/) {
+          location ~* ^/btcpayserver/(login|register|account|api|)(?:$|/) {
             return 404;
           }
 
