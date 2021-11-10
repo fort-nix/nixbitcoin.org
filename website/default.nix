@@ -68,6 +68,18 @@ in {
       recommendedOptimisation = true;
       recommendedTlsSettings = true;
       commonHttpConfig = ''
+        # Add rate limiting:
+        # At any given time, the number of total requests per IP is limited to
+        # (rate * time_elapsed + burst) = (10 * seconds_elapsed + 20)
+        # Additional requests are rejected with error 429.
+        #
+        limit_req_zone $binary_remote_addr zone=global:10m rate=10r/s;
+        limit_req zone=global burst=20 nodelay;
+
+        # 429: "Too Many Requests"
+        limit_conn_status 429;
+        limit_req_status 429;
+
         # Disable the access log for user privacy
         access_log off;
       '';
