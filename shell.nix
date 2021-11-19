@@ -53,6 +53,8 @@ let
       Print all nginx configuration files of the `website` scenario
 
 
+    => Also see ./test/dev.sh which includes snippets for developing and adhoc testing.
+
     => This shell environment can be captured with direnv/lorri
   '';
 

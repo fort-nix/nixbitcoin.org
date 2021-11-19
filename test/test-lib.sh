@@ -94,3 +94,24 @@ isWANenabled() {
   fi
   [[ $WANStatus == 1 ]]
 }
+
+btcpCurl() {
+  method=$1
+  shift
+  curl -sS -H "Content-Type: application/json" --user "a@a.a:aaaaaa" \
+       "$@" "$ip:23000/btcpayserver/api/v1/$method" | jq
+}
+
+btcpAPI() {
+  type=$1
+  method=$2
+  shift
+  shift
+  if [[ $type == get ]]; then
+    btcpCurl $method -X get "$@"
+  else
+    body=$3
+    shift
+    btcpCurl $method -X post -d "$body"
+  fi
+}
