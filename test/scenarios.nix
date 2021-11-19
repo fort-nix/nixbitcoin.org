@@ -11,6 +11,7 @@ rec {
       ../configuration.nix
       scenarios.regtestBase
       disableFeatures
+      ./btcpayserver-config
     ];
 
     # Improve eval performance by reusing pkgs
@@ -112,6 +113,8 @@ rec {
     nix-bitcoin-org.website.enable = mkForce true;
     services.clightning.enable = mkForce true;
     services.btcpayserver.enable = mkForce true;
+    # Required for btcpayserver currency rate fetching
+    test.container.enableWAN = true;
   };
 
   # To demonstrate failures in the test runner

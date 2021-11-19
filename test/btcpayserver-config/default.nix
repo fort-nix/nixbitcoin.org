@@ -10,6 +10,10 @@ let
   psql = "${config.services.postgresql.package}/bin/psql";
 in
 {
+  nix-bitcoin-org.website.donate = {
+    btcpayserverAppId = lib.mkForce "qJ1NExmDYQLr6MoyZFypeeFgLNj";
+  };
+
   systemd.services.importBtcpayserverConfig = rec {
     requires = [ "postgresql.service" ];
     after = requires;
