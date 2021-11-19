@@ -45,6 +45,9 @@ let
       Launch the node in a container, render the website as text, shutdown node.
       (Requires root privileges.)
 
+    nginx-conf
+      Print all nginx configuration files of the `website` scenario
+
 
     => This shell environment can be captured with direnv/lorri
   '';
