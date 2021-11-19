@@ -50,9 +50,14 @@ in {
 
       add_header Onion-Location http://qvzlxbjvyrhvsuyzz5t63xx7x336dowdvt7wfj53sisuun4i4rdtbzid.onion$request_uri;
 
-      location /obwatcher/ {
+      location /orderbook/ {
         proxy_pass http://${serviceAddress "joinmarket-ob-watcher"};
-        rewrite /obwatcher/(.*) /$1 break;
+        rewrite /orderbook/(.*) /$1 break;
+      }
+
+      # Redirect old obwatcher path
+      location /obwatcher {
+        rewrite /obwatcher(.*) /orderbook$1 permanent;
       }
     '';
 
