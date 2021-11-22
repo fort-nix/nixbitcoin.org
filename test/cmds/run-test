@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Name `test` is reserved by POSIX, use `run-test` instead.
+# With option `--debug`, start a debug shell on test failure.
+
+set -euo pipefail
+
+scenario=nixbitcoinorg-container
+case ${1-} in
+  --website|-w)
+    # The minimum required scenario for ../test.sh
+    scenario=website
+    ;;
+esac
+
+exec container $scenario --run "${BASH_SOURCE[0]%/*}"/../test.sh "$@"

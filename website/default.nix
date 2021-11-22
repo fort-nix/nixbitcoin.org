@@ -5,6 +5,10 @@ let
   options = {
     nix-bitcoin-org.website = {
       enable = mkEnableOption "nix-bitcoin.org website";
+      nginxHostConfig = mkOption {
+        type = types.lines;
+        default = "";
+      };
     };
   };
 
@@ -16,10 +20,10 @@ let
     "localhost";
 
   serviceAddress = service:
-    with config.services.${service};
-    "${address}:${toString port}";
-
+    with config.services.${service}; "${address}:${toString port}";
 in {
+  imports = [ ./donate ];
+
   inherit options;
 
   config = mkIf cfg.enable (mkMerge [
@@ -41,39 +45,46 @@ in {
 
     services.btcpayserver.rootpath = "btcpayserver";
 
+    nix-bitcoin-org.website.nginxHostConfig = mkBefore ''
+      root /var/www;
+
+      add_header Onion-Location http://qvzlxbjvyrhvsuyzz5t63xx7x336dowdvt7wfj53sisuun4i4rdtbzid.onion$request_uri;
+
+      location /orderbook/ {
+        proxy_pass http://${serviceAddress "joinmarket-ob-watcher"};
+        rewrite /orderbook/(.*) /$1 break;
+      }
+
+      # Redirect old obwatcher path
+      location /obwatcher {
+        rewrite /obwatcher(.*) /orderbook$1 permanent;
+      }
+    '';
+
     services.nginx = let
-      hostConfig = {
-        extraConfig = ''
-          root /var/www;
-
-          location /btcpayserver/ {
-            proxy_pass http://${serviceAddress "btcpayserver"};
-          }
-
-          # Disallow access to the btcpayserver admin interface and the API
-          location ~* ^/btcpayserver/(login|register|account|api)(?:$|/) {
-            return 404;
-          }
-
-          location = /donate {
-            rewrite /donate /btcpayserver/apps/4D1Dxb5cGnXHRgNRBpoaraZKTX3i/pos;
-          }
-
-          location /obwatcher/ {
-            proxy_pass http://${serviceAddress "joinmarket-ob-watcher"};
-            rewrite /obwatcher/(.*) /$1 break;
-          }
-
-          add_header Onion-Location http://qvzlxbjvyrhvsuyzz5t63xx7x336dowdvt7wfj53sisuun4i4rdtbzid.onion$request_uri;
-        '';
-      };
+      hostConfig.extraConfig = ''
+        include ${pkgs.writeText "common.conf" cfg.nginxHostConfig};
+      '';
     in {
       enable = true;
+      enableReload = true;
       recommendedProxySettings = true;
       recommendedGzipSettings = true;
       recommendedOptimisation = true;
       recommendedTlsSettings = true;
       commonHttpConfig = ''
+        # Add rate limiting:
+        # At any given time, the number of total requests per IP is limited to
+        # (1 + rate * time_elapsed + burst) = (1 + 10 * seconds_elapsed + 20)
+        # Additional requests are rejected with error 429.
+        #
+        limit_req_zone $binary_remote_addr zone=global:10m rate=10r/s;
+        limit_req zone=global burst=20 nodelay;
+
+        # 429: "Too Many Requests"
+        limit_conn_status 429;
+        limit_req_status 429;
+
         # Disable the access log for user privacy
         access_log off;
       '';

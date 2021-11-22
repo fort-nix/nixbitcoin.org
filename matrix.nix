@@ -185,9 +185,9 @@ in {
         '';
 
         # forward all Matrix API calls to the synapse Matrix homeserver
-        locations."/_matrix" = {
-          proxyPass = "http://${synapseAddress}:${toString synapsePort}";
-        };
+        locations."/_matrix".extraConfig = ''
+          proxy_pass http://${synapseAddress}:${toString synapsePort};
+        '';
       };
 
       "element.nixbitcoin.org" = {

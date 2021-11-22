@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+exec container website --run bash -c '
+  lynx $ip -dump
+  echo
+  echo
+  echo nixbitcoin.org/donate
+  lynx $ip/donate -dump
+'
