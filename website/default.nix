@@ -21,6 +21,8 @@ let
 
   serviceAddress = service:
     with config.services.${service}; "${address}:${toString port}";
+
+  torConnectionSrc = config.nix-bitcoin.netns-isolation.bridgeIp;
 in {
   imports = [ ./donate ];
 
@@ -75,11 +77,36 @@ in {
       commonHttpConfig = ''
         # Add rate limiting:
         # At any given time, the number of total requests per IP is limited to
-        # (1 + rate * time_elapsed + burst) = (1 + 30 * seconds_elapsed + 20)
-        # Additional requests are rejected with error 429.
+        # 1 + rate * time_elapsed + burst
         #
-        limit_req_zone $binary_remote_addr zone=global:10m rate=30r/s;
+        # Additional requests are rejected with error 429.
+
+        # Activate rate limit zones `global` or `global_tor`,
+        # depending on the source address of the request
+        geo $limit {
+          default 0;
+          ${torConnectionSrc} 1;
+        }
+        map $limit $limit_key_clearnet {
+          0 $binary_remote_addr;
+          1 "";
+        }
+        map $limit $limit_key_tor {
+          0 "";
+          1 $binary_remote_addr;
+        }
+
+        # Zone `global`, only active for clearnet connections
+        limit_req_zone $limit_key_clearnet zone=global:10m rate=30r/s;
+
+        # Zone `global_tor`, only active for tor connections.
+        # This zone only tracks one source address (torConnectionSrc), so
+        # set the smallest zone size allowed by nginx (32k).
+        limit_req_zone $limit_key_tor zone=global_tor:32k rate=300r/m;
+
+        # Use zones by default in all locations
         limit_req zone=global burst=20 nodelay;
+        limit_req zone=global_tor burst=20 nodelay;
 
         # 429: "Too Many Requests"
         limit_conn_status 429;

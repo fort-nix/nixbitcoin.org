@@ -17,10 +17,13 @@ in {
   inherit options;
 
   config = {
-    # Allow 2 invoices per minute and IP, with a burst limit of 5.
+    # Clearnet: Allow 2 invoices per minute and IP, with a burst limit of 5.
+    # Tor: Allow 30 invoices per minute, with a burst limit of 5.
+    #
     # See the `rate limiting` comment in ../default.nix for details.
-    services.nginx.commonHttpConfig = ''
-      limit_req_zone $binary_remote_addr zone=btcp_invoice:10m rate=2r/m;
+    services.nginx.commonHttpConfig = mkAfter ''
+      limit_req_zone $limit_key_clearnet zone=btcp_invoice:10m rate=2r/m;
+      limit_req_zone $limit_key_tor zone=btcp_invoice_tor:32k rate=30r/m;
     '';
 
     nix-bitcoin-org.website.nginxHostConfig = ''
@@ -56,6 +59,7 @@ in {
 
       location @btcp_limit_post {
         limit_req zone=btcp_invoice burst=5 nodelay;
+        limit_req zone=btcp_invoice_tor burst=5 nodelay;
         proxy_pass http://${btcpayserverAddress};
       }
     '';
