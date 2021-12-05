@@ -43,7 +43,7 @@ assertBurstLimit() {
   type=$2
   url=$3
   actual=$(getBurstLimit "$type" "$url")
-  tolerance=8
+  tolerance=$((expected / 2))
   if ((actual < expected || actual - expected > tolerance)); then
     >&2 echo "Unexpected burst limit: $actual. Expected: $expected ($type $url)"
     return 1

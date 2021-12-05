@@ -75,10 +75,10 @@ in {
       commonHttpConfig = ''
         # Add rate limiting:
         # At any given time, the number of total requests per IP is limited to
-        # (1 + rate * time_elapsed + burst) = (1 + 10 * seconds_elapsed + 20)
+        # (1 + rate * time_elapsed + burst) = (1 + 30 * seconds_elapsed + 20)
         # Additional requests are rejected with error 429.
         #
-        limit_req_zone $binary_remote_addr zone=global:10m rate=10r/s;
+        limit_req_zone $binary_remote_addr zone=global:10m rate=30r/s;
         limit_req zone=global burst=20 nodelay;
 
         # 429: "Too Many Requests"
