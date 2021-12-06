@@ -29,5 +29,8 @@ krops.lib.evalSource [({
     }];
   };
 
-  secrets.file = toString ../secrets;
+  secrets.pass = {
+    dir = toString ../secrets;
+    name = "nixbitcoin.org";
+  };
 } // extraSources)]
