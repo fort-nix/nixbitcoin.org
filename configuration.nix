@@ -19,7 +19,11 @@ base = {
 
   services.openssh.enable = true;
   users.users.root = {
-    openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAO3kpItIalS3HHzqLRnXXFVRFtckuwE1FmytQ4HTh9u" ];
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAO3kpItIalS3HHzqLRnXXFVRFtckuwE1FmytQ4HTh9u" # nixbitcoindev
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOVyeXpwHsOV8RMtQwzPGhOlJ8n5/+4hGa2jc7T47CJC" # nickler
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICW0rZHTE+/gRpbPVw0Q6Wr3csEgU7P+Q8Kw6V2xxDsG" # Erik Arvstedt
+    ];
   };
 
   environment.systemPackages = with pkgs; [
