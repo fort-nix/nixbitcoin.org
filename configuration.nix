@@ -73,6 +73,11 @@ services = {
   };
 
   services.backups.enable = true;
+
+  # TODO-EXTERNAL
+  # Remove this when https://github.com/NixOS/nixpkgs/issues/148009 is resolved
+  systemd.services.nginx.serviceConfig.SystemCallFilter =
+    lib.mkForce "~@cpu-emulation @debug @keyring @ipc @mount @obsolete @privileged @setuid";
 };
 in
   cfg
