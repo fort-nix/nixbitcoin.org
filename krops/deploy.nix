@@ -1,6 +1,6 @@
 let
   # FIXME:
-  target = "root@nixbitcoinorg-node";
+  target = "root@nixbitcoin.org";
 
   extraSources = {
     "hardware-configuration.nix".file = toString ../hardware-configuration.nix;
