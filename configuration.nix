@@ -17,7 +17,10 @@ base = {
   networking.hostName = "nixbitcoin-org";
   time.timeZone = "UTC";
 
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    passwordAuthentication = false;
+  };
   users.users.root = {
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAO3kpItIalS3HHzqLRnXXFVRFtckuwE1FmytQ4HTh9u" # nixbitcoindev
@@ -25,6 +28,9 @@ base = {
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICW0rZHTE+/gRpbPVw0Q6Wr3csEgU7P+Q8Kw6V2xxDsG" # Erik Arvstedt
     ];
   };
+
+  # Refused connections are happening constantly on a public server and can be ignored
+  networking.firewall.logRefusedConnections = false;
 
   environment.systemPackages = with pkgs; [
     vim
