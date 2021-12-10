@@ -26,6 +26,9 @@ base = {
     ];
   };
 
+  # Refused connections are happening constantly on a public server and can be ignored
+  networking.firewall.logRefusedConnections = false;
+
   environment.systemPackages = with pkgs; [
     vim
   ];
