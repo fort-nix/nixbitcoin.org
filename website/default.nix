@@ -8,6 +8,9 @@ let
       nginxHostConfig = mkOption {
         type = types.lines;
         default = "";
+        description = ''
+          Common Nginx config included in all `server` blocks.
+        '';
       };
     };
   };
