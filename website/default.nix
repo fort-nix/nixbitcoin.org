@@ -102,7 +102,7 @@ in {
         # Zone `global_tor`, only active for tor connections.
         # This zone only tracks one source address (torConnectionSrc), so
         # set the smallest zone size allowed by nginx (32k).
-        limit_req_zone $limit_key_tor zone=global_tor:32k rate=300r/m;
+        limit_req_zone $limit_key_tor zone=global_tor:32k rate=300r/s;
 
         # Use zones by default in all locations
         limit_req zone=global burst=20 nodelay;
