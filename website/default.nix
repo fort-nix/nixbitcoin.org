@@ -22,12 +22,12 @@ let
   else
     "localhost";
 
-  serviceAddress = service:
-    with config.services.${service}; "${address}:${toString port}";
-
   torConnectionSrc = config.nix-bitcoin.netns-isolation.bridgeIp;
 in {
-  imports = [ ./donate ];
+  imports = [
+    ./donate
+    ./orderbook.nix
+  ];
 
   inherit options;
 
@@ -52,18 +52,7 @@ in {
 
     nix-bitcoin-org.website.nginxHostConfig = mkBefore ''
       root /var/www;
-
       add_header Onion-Location http://qvzlxbjvyrhvsuyzz5t63xx7x336dowdvt7wfj53sisuun4i4rdtbzid.onion$request_uri;
-
-      location /orderbook/ {
-        proxy_pass http://${serviceAddress "joinmarket-ob-watcher"};
-        rewrite /orderbook/(.*) /$1 break;
-      }
-
-      # Redirect old obwatcher path
-      location /obwatcher {
-        rewrite /obwatcher(.*) /orderbook$1 permanent;
-      }
     '';
 
     services.nginx = let
