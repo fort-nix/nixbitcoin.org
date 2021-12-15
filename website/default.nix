@@ -8,6 +8,9 @@ let
       nginxHostConfig = mkOption {
         type = types.lines;
         default = "";
+        description = ''
+          Common Nginx config included in all `server` blocks.
+        '';
       };
     };
   };
@@ -19,12 +22,12 @@ let
   else
     "localhost";
 
-  serviceAddress = service:
-    with config.services.${service}; "${address}:${toString port}";
-
   torConnectionSrc = config.nix-bitcoin.netns-isolation.bridgeIp;
 in {
-  imports = [ ./donate ];
+  imports = [
+    ./donate
+    ./orderbook.nix
+  ];
 
   inherit options;
 
@@ -49,18 +52,7 @@ in {
 
     nix-bitcoin-org.website.nginxHostConfig = mkBefore ''
       root /var/www;
-
       add_header Onion-Location http://qvzlxbjvyrhvsuyzz5t63xx7x336dowdvt7wfj53sisuun4i4rdtbzid.onion$request_uri;
-
-      location /orderbook/ {
-        proxy_pass http://${serviceAddress "joinmarket-ob-watcher"};
-        rewrite /orderbook/(.*) /$1 break;
-      }
-
-      # Redirect old obwatcher path
-      location /obwatcher {
-        rewrite /obwatcher(.*) /orderbook$1 permanent;
-      }
     '';
 
     services.nginx = let
@@ -102,7 +94,7 @@ in {
         # Zone `global_tor`, only active for tor connections.
         # This zone only tracks one source address (torConnectionSrc), so
         # set the smallest zone size allowed by nginx (32k).
-        limit_req_zone $limit_key_tor zone=global_tor:32k rate=300r/m;
+        limit_req_zone $limit_key_tor zone=global_tor:32k rate=300r/s;
 
         # Use zones by default in all locations
         limit_req zone=global burst=20 nodelay;

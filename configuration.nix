@@ -14,7 +14,7 @@ cfg = {
 };
 
 base = {
-  networking.hostName = "nixbitcoin-org";
+  networking.hostName = "nixbitcoin";
   time.timeZone = "UTC";
 
   services.openssh = {
