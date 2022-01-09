@@ -59,6 +59,9 @@ services = {
   nix-bitcoin.onionServices.clightning.public = true;
   systemd.services.clightning.serviceConfig.TimeoutStartSec = "5m";
 
+  services.rtl.enable = true;
+  services.rtl.nodes.clightning = true;
+
   services.electrs.enable = true;
 
   services.btcpayserver = {
