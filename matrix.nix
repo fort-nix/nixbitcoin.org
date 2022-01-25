@@ -209,6 +209,10 @@ in {
         locations."/_matrix".extraConfig = ''
           proxy_pass http://${synapseAddress}:${toString synapsePort};
         '';
+        locations."/_synapse".extraConfig = ''
+          proxy_pass http://${synapseAddress}:${toString synapsePort};
+        '';
+
       };
 
       "element.nixbitcoin.org" = {
