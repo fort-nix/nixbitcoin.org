@@ -35,7 +35,7 @@ in {
   {
     systemd.tmpfiles.rules = [
       # Create symlink to static website content
-      "L+ /var/www - - - - ${./static}"
+      "L+ /var/www/main - - - - ${./static}"
     ];
 
     networking.firewall.allowedTCPPorts = [
@@ -51,7 +51,7 @@ in {
     services.btcpayserver.rootpath = "btcpayserver";
 
     nix-bitcoin-org.website.nginxHostConfig = mkBefore ''
-      root /var/www;
+      root /var/www/main;
       add_header Onion-Location http://qvzlxbjvyrhvsuyzz5t63xx7x336dowdvt7wfj53sisuun4i4rdtbzid.onion$request_uri;
     '';
 
@@ -112,6 +112,64 @@ in {
         enableACME = true;
       };
       virtualHosts."_" = hostConfig;
+      virtualHosts."mempool.nixbitcoin.org" = {
+        forceSSL = true;
+        enableACME = true;
+        root = "/var/www/mempool/browser";
+        extraConfig = ''
+          add_header Cache-Control "public, no-transform";
+
+          add_header Vary Accept-Language;
+          add_header Vary Cookie;
+
+          location / {
+                  try_files /$lang/$uri /$lang/$uri/ $uri $uri/ /en-US/$uri @index-redirect;
+                  expires 10m;
+          }
+          location /resources {
+                  try_files /$lang/$uri /$lang/$uri/ $uri $uri/ /en-US/$uri @index-redirect;
+                  expires 1h;
+          }
+          location @index-redirect {
+                  rewrite (.*) /$lang/index.html;
+          }
+
+          location ~ ^/(ar|bg|bs|ca|cs|da|de|et|el|es|eo|eu|fa|fr|gl|ko|hr|id|it|he|ka|lv|lt|hu|mk|ms|nl|ja|nb|nn|pl|pt|pt-BR|ro|ru|sk|sl|sr|sh|fi|sv|th|tr|uk|vi|zh|hi)/resources/ {
+                  rewrite ^/[a-zA-Z-]*/resources/(.*) /en-US/resources/$1;
+          }
+          location ~ ^/(ar|bg|bs|ca|cs|da|de|et|el|es|eo|eu|fa|fr|gl|ko|hr|id|it|he|ka|lv|lt|hu|mk|ms|nl|ja|nb|nn|pl|pt|pt-BR|ro|ru|sk|sl|sr|sh|fi|sv|th|tr|uk|vi|zh|hi)/ {
+                  try_files $uri $uri/ /$1/index.html =404;
+          }
+
+          location = /api {
+                  try_files $uri $uri/ /en-US/index.html =404;
+          }
+          location = /api/ {
+                  try_files $uri $uri/ /en-US/index.html =404;
+          }
+
+          location /api/v1/ws {
+                  proxy_pass http://${config.services.mempool.backendAddress}:${toString config.services.mempool.backendPort}/;
+                  proxy_http_version 1.1;
+                  proxy_set_header Upgrade $http_upgrade;
+                  proxy_set_header Connection "Upgrade";
+          }
+          location /api/v1 {
+                  proxy_pass http://${config.services.mempool.backendAddress}:${toString config.services.mempool.backendPort}/api/v1;
+          }
+          location /api/ {
+                  proxy_pass http://${config.services.mempool.backendAddress}:${toString config.services.mempool.backendPort}/api/v1/;
+          }
+
+          location /ws {
+                  proxy_pass http://${config.services.mempool.backendAddress}:${toString config.services.mempool.backendPort}/;
+                  proxy_http_version 1.1;
+                  proxy_set_header Upgrade $http_upgrade;
+                  proxy_set_header Connection "Upgrade";
+          }
+          add_header Onion-Location http://m5ylnqzeqwjifgdp6cveveiwsaqodu444uiyjjz2vrmfhsfgyo6em3yd.onion$request_uri;
+        '';
+      };
     };
 
     services.tor.relay.onionServices.nginx = {
