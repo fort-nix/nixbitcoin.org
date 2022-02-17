@@ -51,8 +51,9 @@ rec {
         };
       in {
         "nixbitcoin.org" = disableACME;
-        "synapse.nixbitcoin.org" = disableACME;
         "element.nixbitcoin.org" = disableACME;
+        "mempool.nixbitcoin.org" = disableACME;
+        "synapse.nixbitcoin.org" = disableACME;
       };
     # Disable mailserver because it has no option for fast offline cert generation.
     # `mailserver.certificateScheme = 2` works offline but is too slow.
@@ -72,6 +73,10 @@ rec {
     # Disable clboss when WAN is disabled until the delayed startup issue is fixed:
     # https://github.com/ZmnSCPxj/clboss/issues/49
     services.clightning.plugins.clboss.enable = mkForce false;
+
+    # The mempool backend fails with:
+    # ERR: Could not connect to database: Host '169.254.1.10' is not allowed to connect to this MariaDB server
+    systemd.services.mempool.wantedBy = mkForce [];
   };
 
   # Base scenario for containers
