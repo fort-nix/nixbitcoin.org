@@ -60,7 +60,7 @@ services = {
   systemd.services.clightning.serviceConfig.TimeoutStartSec = "5m";
 
   services.rtl.enable = true;
-  services.rtl.nodes.clightning = true;
+  services.rtl.nodes.clightning.enable = true;
 
   services.electrs.enable = true;
 
