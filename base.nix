@@ -35,8 +35,22 @@ with lib;
   networking.firewall.logRefusedConnections = false;
 
   environment.systemPackages = with pkgs; [
+    htop
+    tree
     vim
+    tmux
+    pv
   ];
+
+  boot.cleanTmpDir = true;
+  documentation.nixos.enable = false; # Speeds up evaluation
+
+  nix.gc = {
+    automatic = true;
+    options = "--delete-older-than 30d";
+  };
+
+  services.logind.killUserProcesses = true;
 
   # We never deal with multiple NICs in VPS deployments.
   # This allows us to stably address the external interface as `eth0`.
