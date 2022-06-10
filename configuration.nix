@@ -75,5 +75,9 @@
   systemd.services.nginx.serviceConfig.SystemCallFilter =
     lib.mkForce "~@cpu-emulation @debug @keyring @ipc @mount @obsolete @privileged @setuid";
 
+  environment.shellAliases = {
+    sudo = "doas";
+  };
+
   nix-bitcoin.configVersion = "0.0.70";
 }
