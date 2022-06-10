@@ -38,5 +38,9 @@ with lib;
     vim
   ];
 
+  # We never deal with multiple NICs in VPS deployments.
+  # This allows us to stably address the external interface as `eth0`.
+  networking.usePredictableInterfaceNames = false;
+
   system.stateVersion = "20.09";
 }

@@ -187,7 +187,7 @@ in {
     # Forward HTTP(S) connections to the namespaced nginx address
     networking.nat = {
       enable = true;
-      externalInterface = "enp2s0";
+      externalInterface = "eth0";
       forwardPorts = [
         {
           proto = "tcp";
