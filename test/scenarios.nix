@@ -13,6 +13,8 @@ rec {
       disableFeatures
       ./btcpayserver-config
     ];
+    # Ignore hardware config that is specific to the production server
+    disabledModules = [ ../hardware.nix ];
 
     # Improve eval performance by reusing pkgs
     nixpkgs.pkgs = pkgs;
