@@ -7,6 +7,7 @@ with lib;
   imports = [ ./hardware.nix ];
 
   networking.hostName = "nixbitcoin";
+  networking.hostId = "d1af0f9b";
   time.timeZone = "UTC";
 
   services.openssh = {
