@@ -1,0 +1,104 @@
+{
+  "nodes": {
+    "flake-utils": {
+      "locked": {
+        "lastModified": 1653893745,
+        "narHash": "sha256-0jntwV3Z8//YwuOjzhV2sgJJPt+HY6KhU7VZUL0fKZQ=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "1ed9fb1935d260de5fe1c2f7ee0ebaae17ed2fa1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "nix-bitcoin": {
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "nixpkgs": "nixpkgs",
+        "nixpkgsUnstable": "nixpkgsUnstable"
+      },
+      "locked": {
+        "lastModified": 1654329384,
+        "narHash": "sha256-bfCy27DrF4f3Sw/ExWIwAh7oTejjV8yx8VbeCto6nJM=",
+        "owner": "fort-nix",
+        "repo": "nix-bitcoin",
+        "rev": "043ef53cb9d4dfd65e61bd263b126ab0f009ea9b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "fort-nix",
+        "ref": "release",
+        "repo": "nix-bitcoin",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1653830209,
+        "narHash": "sha256-V+HnLKJzvk2HZcLUKt9z2puZ46vLo74chOakxbLfXek=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "cc257c49c495b2d0d7d40c5753a452d0abc8adf3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-21.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-kexec": {
+      "locked": {
+        "lastModified": 1654634070,
+        "narHash": "sha256-EESu7G0k1LTG4cpgMIQOgf//Z0IlFrffXMOMYEaw3Yg=",
+        "owner": "erikarvstedt",
+        "repo": "nixpkgs",
+        "rev": "64589bcefaa6f0225327525de602f5754781583d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "erikarvstedt",
+        "ref": "improve-netboot-initrd",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgsUnstable": {
+      "locked": {
+        "lastModified": 1653738054,
+        "narHash": "sha256-IaR8iLN4Ms3f5EjU1CJkXSc49ZzyS5qv03DtVAti6/s=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "17b62c338f2a0862a58bb6951556beecd98ccda9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "flake-utils": [
+          "nix-bitcoin",
+          "flake-utils"
+        ],
+        "nix-bitcoin": "nix-bitcoin",
+        "nixpkgs": [
+          "nix-bitcoin",
+          "nixpkgs"
+        ],
+        "nixpkgs-kexec": "nixpkgs-kexec"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
