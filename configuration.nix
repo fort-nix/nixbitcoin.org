@@ -8,6 +8,11 @@
     ./matrix.nix
   ];
 
+  services.zfs.autoScrub = {
+    enable = true;
+    interval = "monthly";
+  };
+
   nix-bitcoin.onionServices.bitcoind.public = true;
   services.bitcoind = {
     i2p = true;
