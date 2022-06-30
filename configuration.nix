@@ -41,7 +41,6 @@
 
   services.joinmarket = {
     enable = true;
-    rpcWalletFile = null;
     yieldgenerator.enable = true;
   };
   services.joinmarket-ob-watcher.enable = true;
