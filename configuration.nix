@@ -59,7 +59,7 @@
 
   nix-bitcoin-org.website = {
     enable = true;
-    donate.btcpayserverAppId = "4D1Dxb5cGnXHRgNRBpoaraZKTX3i";
+    donate.btcpayserverAppId = "3NKhG5wANegkfmXJ5x4ZNuSAB1z5";
   };
 
   services.backups = {
