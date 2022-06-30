@@ -2,7 +2,6 @@
 {
   imports = [
     <nix-bitcoin/modules/presets/secure-node.nix>
-    <nix-bitcoin/modules/presets/hardened.nix>
 
     ./base.nix
     ./website
