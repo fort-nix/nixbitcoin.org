@@ -3,6 +3,17 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 let
+  hetznerDedicated = {
+    boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "sd_mod" ];
+    boot.kernelModules = [ "kvm-amd" ];
+    powerManagement.cpuFreqGovernor = "powersave";
+    hardware.cpu.amd.updateMicrocode = true;
+  };
+
+  hetznerCloud = {
+    boot.initrd.availableKernelModules = [ "ata_piix" "virtio_pci" "virtio_scsi" "xhci_pci" "sd_mod" "sr_mod" ];
+  };
+
   # When a device marked with `nonessentialDevice` is unavailable,
   # booting succeeds and systemd marks the system as degraded.
   # This allows the system to boot when one device fails.
@@ -20,14 +31,10 @@ let
   };
 in
 {
-  imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
-    ];
-
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usbhid" "sd_mod" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
+  imports = [
+    hetznerDedicated
+    # hetznerCloud
+  ];
 
   boot.supportedFilesystems = [ "zfs" ];
 
