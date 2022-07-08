@@ -136,10 +136,40 @@ rm -rf /tmp/deploy-nixbitcoinorg
 #―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 # Optional: Restore backups
 
-# Enter server
-ssh nixbitcoin.org
+## Variant 1: Restore /var/lib from another system
+ssh nixbitcoin.org 'rsync -ahz --info=progress2 backup-server:/temp/var/lib/ /var/lib --exclude=/systemd'
 
-rsync -ahz --info=progress2 backup-server:/temp/var/lib/ /var/lib --exclude=/systemd
+## Variant 2: Restore /var/lib from backup
+# TODO: Streamline this deployment step when switching to flakes for the main system deployment
+
+# Copy backup-related secrets
+gpg --decrypt ../secrets/nixbitcoin.org/backup-encryption-password.gpg 2>/dev/null | \
+    ssh nixbitcoin.org 'install -D -m 600 <(cat) /var/src/secrets/backup-encryption-password'
+gpg --decrypt ../secrets/nixbitcoin.org/ssh-key-seedhost.gpg 2>/dev/null | \
+    ssh nixbitcoin.org 'install -D -m 600 <(cat) /var/src/secrets/ssh-key-seedhost'
+
+deployBaseSystemWithBackups() {(
+  set -euxo pipefail
+  nix build .#packages.x86_64-linux.baseSystemWithBackups --out-link /tmp/deploy-nixbitcoinorg/system
+  nix copy --to ssh://nixbitcoin.org /tmp/deploy-nixbitcoinorg/system
+  ssh -n nixbitcoin.org "$(realpath /tmp/deploy-nixbitcoinorg/system)/bin/switch-to-configuration switch"
+)}
+deployBaseSystemWithBackups
+
+# List backups
+ssh nixbitcoin.org borg-job-main list
+# Show last backup
+ssh nixbitcoin.org 'borg-job-main info ::$(borg-job-main list --short | tail -1)'
+
+# Restore last backup
+# As of 2022-07-01, the latest backup had a compressed size of 19.02 GB (54.79 GB uncompressed).
+# Restoring from seedhost took 6m33.127s.
+ssh nixbitcoin.org bash -s <<'EOF'
+tmux new -d -s restore-backup 'cd / && time borg-job-main extract --progress ::$(borg-job-main list --short | tail -1); sleep infinity'
+EOF
+
+# Check progress. Close terminal or press 'Ctrl+b d' to detach
+ssh -t nixbitcoin.org 'tmux attach'
 
 #―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 # Step 3: Install main system

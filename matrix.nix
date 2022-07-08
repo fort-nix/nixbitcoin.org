@@ -231,12 +231,6 @@ in {
     };
   };
 
-  # Backups
-  services.backups = {
-    extraFiles = [ dataDir ];
-    postgresqlDatabases = [ "matrix-synapse" ];
-  };
-
   nix-bitcoin.secrets.matrix-smtp-password.user = "matrix-synapse";
   # Used by dovecot2 (via the mailserver module)
   nix-bitcoin.secrets.matrix-smtp-password-hashed.user = "root";

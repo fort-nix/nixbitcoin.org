@@ -13,3 +13,7 @@ These steps are implemented in: [`./deploy.sh`](./deploy.sh)
 ### Test deployment via a local VM
 
 See [`./vm-deployment.sh`](./vm-deployment.sh)
+
+## Backups
+
+See [`./deploy-backup.sh`](./deploy-backup.sh)

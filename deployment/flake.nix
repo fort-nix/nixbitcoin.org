@@ -39,6 +39,22 @@
             inherit system;
             modules = [ ../base.nix ];
           }).config.system.build.toplevel;
+
+          baseSystemWithBackups = (nixpkgs.lib.nixosSystem {
+            inherit system;
+            modules = [
+              ../base.nix
+              ../backup.nix
+              nix-bitcoin.nixosModule
+              ({lib, ... } :{
+                services.borgbackup.jobs.main.startAt = lib.mkForce [];
+                nix-bitcoin = {
+                  secretsDir = "/var/src/secrets";
+                  setupSecrets = true;
+                };
+              })
+            ];
+          }).config.system.build.toplevel;
         };
       }) // {
         nixosConfigurations = {
