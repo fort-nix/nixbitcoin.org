@@ -59,3 +59,53 @@ xdg-open http://localhost:10000
 # btcpayserver
 gpg --decrypt ../secrets/client-side/btcpayserver-credentials.gpg 2>/dev/null
 xdg-open http://localhost:10001/btcpayserver
+
+#―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+# Update postgresql database schema
+# Required when the postgresql version is updated when changing `system.stateVersion`
+# See also: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading
+
+# The system state version that postgresql should be updated to
+newSystemStateVersion=22.05
+
+# Build script
+drv=$(nix eval --raw ../deployment#lib --apply "lib: (lib.postgresql.updateSystem \"$newSystemStateVersion\").drvPath")
+script=$(nix build --no-link --print-out-paths $drv)
+
+# Check postgresql versions in script
+# See also: https://www.postgresql.org/docs/current/pgupgrade.html
+# By using option `--link` for `pg_upgrade`, db files are hardlinked when
+# the datadir for the new schema is created
+cat $script
+
+# Run script
+nix copy --to ssh://nixbitcoin.org $script
+time ssh nixbitcoin.org $script
+
+# Now change `system.stateVersion` to $newSystemStateVersion in ../base.nix and deploy
+
+# Check postgresql
+ssh nixbitcoin.org 'systemctl status postgresql'
+
+# Run recommended analyzer script
+schema=$(nix eval --raw ../deployment#lib.postgresql.systemPostgresqlSchema)
+echo $schema
+ssh nixbitcoin.org "sudo -u postgres /var/lib/postgresql/$schema/analyze_new_cluster.sh"
+
+# Delete old data dir
+ssh nixbitcoin.org "sudo -u postgres /var/lib/postgresql/$schema/delete_old_cluster.sh"
+
+ssh nixbitcoin.org 'ls -al /var/lib/postgresql'
+
+### Appendix
+# The update step runs pretty fast (~10s)
+# Example:
+# Update the postgresql datadir from schema 11.1 to 14 (2022-07-02)
+ssh nixbitcoin.org 'du -sh --apparent /var/lib/postgresql/11.1' # => 47G
+# Duration:
+# real 0m10.088s
+
+ssh nixbitcoin.org 'ls -al /var/lib/postgresql'
+
+# Undo migration (requires that postgresql was not run with the new datadir.)
+ssh nixbitcoin.org 'mv /var/lib/postgresql/<schema>/global/pg_control{.old,}'

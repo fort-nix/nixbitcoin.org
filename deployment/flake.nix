@@ -44,5 +44,16 @@
             modules = [ ../base.nix ];
           }).config.system.build.toplevel;
         };
-      });
+      }) // {
+        nixosConfigurations = {
+          base = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            modules = [ ../base.nix ];
+          };
+        };
+
+        lib = {
+          postgresql = import ../maintenance/update-postgresql.nix self.nixosConfigurations.base;
+        };
+      };
 }
