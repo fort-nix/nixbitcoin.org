@@ -57,9 +57,10 @@ rec {
         "mempool.nixbitcoin.org" = disableACME;
         "synapse.nixbitcoin.org" = disableACME;
       };
-    # Disable mailserver because it has no option for fast offline cert generation.
-    # `mailserver.certificateScheme = 2` works offline but is too slow.
+    # Disable mailserver by default because it has no option for fast offline cert generation.
     mailserver.enable = mkForce false;
+    # To test the mailserver, enable the mailserver and uncomment the line below:
+    # mailserver.certificateScheme = mkForce 2;
 
     # joinmarket-ob-watcher doesn't work in regtest mode or requires a synced
     # bitcoind node on mainnet
