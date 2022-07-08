@@ -71,8 +71,8 @@ let
           owner = "erikarvstedt";
           repo = "extra-container";
           # Branch `container-checking`
-          rev = "374bd0c2ae55db1bf7ae940e16cfdf01ee204cfd";
-          hash = "sha256-IWBORj8TT3MpnHm4jixb7ILkvChcLDdl+1lzA3o0mec=";
+          rev = "b94e5818dfc10e49bd461c2146404d96c2f7d26c";
+          hash = "sha256-WUKXfFL44GQ3U9YVZxZqv685Gl/gQrf9CgOO/PAteos=";
         };
         pkg = pkgs.callPackage src { pkgSrc = src; };
       };

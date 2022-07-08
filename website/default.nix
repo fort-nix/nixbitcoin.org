@@ -44,7 +44,7 @@ in {
     ];
 
     security.acme = {
-      email = "nixbitcoin@i2pmail.org";
+      defaults.email = "nixbitcoin@i2pmail.org";
       acceptTerms = true;
     };
 
