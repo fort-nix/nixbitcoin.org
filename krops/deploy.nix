@@ -3,7 +3,8 @@ let
   target = "root@nixbitcoin.org";
 
   extraSources = {
-    "hardware-configuration.nix".file = toString ../hardware-configuration.nix;
+    "base.nix".file = toString ../base.nix;
+    "hardware.nix".file = toString ../hardware.nix;
     website.file = {
       path = toString ../website;
     };
