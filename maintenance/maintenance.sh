@@ -109,3 +109,11 @@ ssh nixbitcoin.org 'ls -al /var/lib/postgresql'
 
 # Undo migration (requires that postgresql was not run with the new datadir.)
 ssh nixbitcoin.org 'mv /var/lib/postgresql/<schema>/global/pg_control{.old,}'
+
+#―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+# Securely erase hard disks before decommissioning a server
+# 1. Run `deployInstallerSystem` (../deployment/deploy.sh) to kexec into the installer system
+# 2. Run the following on the installer system:
+lsblk # Show disks
+shred -v --iterations=1 /dev/sda &
+shred -v --iterations=1 /dev/sdb
