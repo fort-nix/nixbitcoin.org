@@ -58,9 +58,6 @@
   services.fulcrum = {
     enable = true;
     port = 50011;
-    extraConfig = ''
-      fast-sync = 2000
-    '';
   };
 
   nix-bitcoin-org.website = {
