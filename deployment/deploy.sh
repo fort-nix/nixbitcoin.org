@@ -99,6 +99,9 @@ ssh nixbitcoin.org :
 # Remount already formatted storage
 # <2-format-storage.sh ssh nixbitcoin.org 'bash -s remount'
 
+# Determine and set `memorySizeGiB` in ../hardware.nix
+ssh nixbitcoin.org free --gibi | awk '/Mem:/ { print $2 }'
+
 # Optional: Generate config to update ../hardware.nix
 makeConfig() {(
   set -euxo pipefail

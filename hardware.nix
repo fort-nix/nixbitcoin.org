@@ -3,6 +3,8 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 let
+  memorySizeGiB = 64;
+
   hetznerDedicated = {
     boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "sd_mod" ];
     boot.kernelModules = [ "kvm-amd" ];
@@ -78,4 +80,9 @@ in
       { path = "/boot2"; devices = [ "/dev/sdb" ]; }
     ];
   };
+
+  services.postgresql.settings.shared_buffers = let
+    size = memorySizeGiB / 4;
+  in
+    assert size >= 1; "${toString size}GB";
 }
