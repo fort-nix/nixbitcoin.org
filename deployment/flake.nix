@@ -3,16 +3,12 @@
   inputs.nixpkgs.follows = "nix-bitcoin/nixpkgs";
   inputs.flake-utils.follows = "nix-bitcoin/flake-utils";
 
-  # The installer system requires NixOS 22.05 for automatic initrd-secrets support
-  # https://github.com/NixOS/nixpkgs/pull/176796
-  inputs.nixpkgs-kexec.url = "github:erikarvstedt/nixpkgs/improve-netboot-initrd";
-
-  outputs = { self, nixpkgs, nixpkgs-kexec, flake-utils, ... }:
+  outputs = { self, nixpkgs, flake-utils, nix-bitcoin }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
 
-        installerSystem = nixpkgs-kexec.lib.nixosSystem {
+        installerSystem = nixpkgs.lib.nixosSystem {
           inherit system;
           modules = [ ./1-installer-system-kexec.nix ];
         };
@@ -42,6 +38,22 @@
           baseSystem = (nixpkgs.lib.nixosSystem {
             inherit system;
             modules = [ ../base.nix ];
+          }).config.system.build.toplevel;
+
+          baseSystemWithBackups = (nixpkgs.lib.nixosSystem {
+            inherit system;
+            modules = [
+              ../base.nix
+              ../backup.nix
+              nix-bitcoin.nixosModule
+              ({lib, ... } :{
+                services.borgbackup.jobs.main.startAt = lib.mkForce [];
+                nix-bitcoin = {
+                  secretsDir = "/var/src/secrets";
+                  setupSecrets = true;
+                };
+              })
+            ];
           }).config.system.build.toplevel;
         };
       }) // {

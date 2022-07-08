@@ -8,6 +8,7 @@ let
     website.file = {
       path = toString ../website;
     };
+    "backup.nix".file = toString ../backup.nix;
     "matrix.nix".file = toString ../matrix.nix;
     "mail.nix".file = toString ../mail.nix;
   };

@@ -63,76 +63,76 @@ in {
 
   services.matrix-synapse = {
     enable = true;
-    enable_registration = true;
+
     extraConfigFiles =  [ "${dataDir}/secret-email-config" ];
-    database_args = {
-      database = "matrix-synapse";
-      user = "matrix-synapse";
-      host = "/run/postgresql";
-    };
-    server_name = "nixbitcoin.org";
-    public_baseurl = "https://synapse.nixbitcoin.org";
-    listeners = [
-      {
-        bind_address = synapseAddress;
-        port = synapsePort;
-        type = "http";
-        tls = false;
-        x_forwarded = true;
-        resources = [
+
+    settings = {
+      server_name = "nixbitcoin.org";
+      public_baseurl = "https://synapse.nixbitcoin.org";
+      enable_registration = true;
+      database.args = {
+        database = "matrix-synapse";
+        user = "matrix-synapse";
+        host = "/run/postgresql";
+      };
+      listeners = [
+        {
+          bind_addresses = [ synapseAddress ];
+          port = synapsePort;
+          type = "http";
+          tls = false;
+          x_forwarded = true;
+          resources = [
+            {
+              names = [ "client" "federation" ];
+              compress = false;
+            }
+          ];
+        }
+      ];
+
+      auto_join_rooms = [ "#general:nixbitcoin.org" ];
+      registrations_require_3pid = [ "email" ];
+      push.include_content = false;
+      enable_metrics = false;
+      report_stats = false;
+      allow_profile_lookup_over_federation = false;
+      allow_device_name_lookup_over_federation = false;
+      include_profile_data_on_invite = false;
+      limit_profile_requests_to_users_who_share_rooms = true;
+      require_auth_for_profile_requests = true;
+      retention = {
+        enabled = true;
+        purge_jobs = [
           {
-            names = [ "client" "federation" ];
-            compress = false;
+            longest_max_lifetime = "1w";
+            interval = "12h";
           }
         ];
-      }
-    ];
-    extraConfig = ''
-      push:
-        include_content: false
+      };
 
-      registrations_require_3pid:
-        - email
-
-      enable_metrics: false
-      report_stats: false
-
-      auto_join_rooms:
-        - "#general:nixbitcoin.org"
-
-      retention:
-        enabled: true
-        purge_jobs:
-        - longest_max_lifetime: 1w
-          interval: 12h
-
-      allow_profile_lookup_over_federation: false
-      allow_device_name_lookup_over_federation: false
-      include_profile_data_on_invite: false
-      limit_profile_requests_to_users_who_share_rooms: true
-      require_auth_for_profile_requests: true
-    '';
-    # Like the NixOS default, but with log level WARNING instead of INFO
-    logConfig = ''
-      version: 1
-      formatters:
-          journal_fmt:
-              format: '%(name)s: [%(request)s] %(message)s'
-      filters:
-          context:
-              (): synapse.util.logcontext.LoggingContextFilter
-              request: ""
-      handlers:
-          journal:
-              class: systemd.journal.JournalHandler
-              formatter: journal_fmt
-              filters: [context]
-              SYSLOG_IDENTIFIER: synapse
-      root:
-          level: WARNING
-          handlers: [journal]
-      disable_existing_loggers: False
-    '';
+      # Like the NixOS default, but with log level WARNING instead of INFO
+      log_config = builtins.toFile "synapse-log-config.yaml" ''
+        version: 1
+        formatters:
+            journal_fmt:
+                format: '%(name)s: [%(request)s] %(message)s'
+        filters:
+            context:
+                (): synapse.util.logcontext.LoggingContextFilter
+                request: ""
+        handlers:
+            journal:
+                class: systemd.journal.JournalHandler
+                formatter: journal_fmt
+                filters: [context]
+                SYSLOG_IDENTIFIER: synapse
+        root:
+            level: WARNING
+            handlers: [journal]
+        disable_existing_loggers: False
+      '';
+    };
   };
 
   systemd.services.matrix-synapse = let
@@ -229,12 +229,6 @@ in {
         };
       };
     };
-  };
-
-  # Backups
-  services.backups = {
-    extraFiles = [ dataDir ];
-    postgresqlDatabases = [ "matrix-synapse" ];
   };
 
   nix-bitcoin.secrets.matrix-smtp-password.user = "matrix-synapse";

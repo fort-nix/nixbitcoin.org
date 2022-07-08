@@ -6,6 +6,7 @@
     ./base.nix
     ./website
     ./matrix.nix
+    ./backup.nix
   ];
 
   services.zfs.autoScrub = {
@@ -57,26 +58,12 @@
   services.fulcrum = {
     enable = true;
     port = 50011;
-    extraConfig = ''
-      fast-sync = 2000
-    '';
   };
 
   nix-bitcoin-org.website = {
     enable = true;
     donate.btcpayserverAppId = "3NKhG5wANegkfmXJ5x4ZNuSAB1z5";
   };
-
-  services.backups = {
-    enable = true;
-    destination = "sftp://nixbitcoin@freak.seedhost.eu";
-  };
-  programs.ssh.knownHosts."freak.seedhost.eu".publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBD2TmdE89ZD4XshcIcXZPLFC/nDxZdAr9yrH2/2OCNKEo/Ex60y8TQjp93isjdDj7Grf/GpW60OONfXTFe0r5iM=";
-
-  # TODO-EXTERNAL
-  # Remove this when https://github.com/NixOS/nixpkgs/issues/148009 is resolved
-  systemd.services.nginx.serviceConfig.SystemCallFilter =
-    lib.mkForce "~@cpu-emulation @debug @keyring @ipc @mount @obsolete @privileged @setuid";
 
   environment.shellAliases = {
     sudo = "doas";

@@ -57,9 +57,10 @@ rec {
         "mempool.nixbitcoin.org" = disableACME;
         "synapse.nixbitcoin.org" = disableACME;
       };
-    # Disable mailserver because it has no option for fast offline cert generation.
-    # `mailserver.certificateScheme = 2` works offline but is too slow.
+    # Disable mailserver by default because it has no option for fast offline cert generation.
     mailserver.enable = mkForce false;
+    # To test the mailserver, enable the mailserver and uncomment the line below:
+    # mailserver.certificateScheme = mkForce 2;
 
     # joinmarket-ob-watcher doesn't work in regtest mode or requires a synced
     # bitcoind node on mainnet
@@ -75,10 +76,6 @@ rec {
     # Disable clboss when WAN is disabled until the delayed startup issue is fixed:
     # https://github.com/ZmnSCPxj/clboss/issues/49
     services.clightning.plugins.clboss.enable = mkForce false;
-
-    # The mempool backend fails with:
-    # ERR: Could not connect to database: Host '169.254.1.10' is not allowed to connect to this MariaDB server
-    systemd.services.mempool.wantedBy = mkForce [];
   };
 
   # Base scenario for containers
