@@ -66,7 +66,22 @@ in {
       recommendedGzipSettings = true;
       recommendedOptimisation = true;
       recommendedTlsSettings = true;
+      appendConfig = ''
+        worker_processes ${
+          toString (max 1 (builtins.floor (config.nixbitcoinorg.hardware.numCPUs * 0.6)))
+        };
+        worker_rlimit_nofile 8192;
+        pcre_jit on;
+      '';
+      eventsConfig = ''
+        worker_connections 4096;
+      '';
       commonHttpConfig = ''
+        # Disable the access log for user privacy
+        access_log off;
+      ''
+        # Rate limiting
+      + ''
         # Add rate limiting:
         # At any given time, the number of total requests per IP is limited to
         # 1 + rate * time_elapsed + burst
@@ -103,9 +118,6 @@ in {
         # 429: "Too Many Requests"
         limit_conn_status 429;
         limit_req_status 429;
-
-        # Disable the access log for user privacy
-        access_log off;
       '';
 
       virtualHosts."nixbitcoin.org" = homepageHostCfg // {
