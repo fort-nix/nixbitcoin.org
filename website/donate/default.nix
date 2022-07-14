@@ -26,7 +26,7 @@ in {
       limit_req_zone $limit_key_tor zone=btcp_invoice_tor:32k rate=30r/m;
     '';
 
-    nix-bitcoin-org.website.nginxHostConfig = ''
+    nix-bitcoin-org.website.homepageHostConfig = ''
       location = /donate {
         rewrite /donate /btcpayserver/apps/${cfg.btcpayserverAppId}/pos;
       }

@@ -5,11 +5,11 @@ let
   options = {
     nix-bitcoin-org.website = {
       enable = mkEnableOption "nix-bitcoin.org website";
-      nginxHostConfig = mkOption {
+      homepageHostConfig = mkOption {
         type = types.lines;
         default = "";
         description = ''
-          Common Nginx config included in all `server` blocks.
+          Common Nginx config included in all `server` blocks for the homepage.
         '';
       };
     };
@@ -34,7 +34,7 @@ in {
   config = mkIf cfg.enable (mkMerge [
   {
     systemd.tmpfiles.rules = [
-      # Create symlink to static website content
+      # Create symlink to static homepage content
       "L+ /var/www/main - - - - ${./static}"
     ];
 
@@ -50,14 +50,14 @@ in {
 
     services.btcpayserver.rootpath = "btcpayserver";
 
-    nix-bitcoin-org.website.nginxHostConfig = mkBefore ''
+    nix-bitcoin-org.website.homepageHostConfig = mkBefore ''
       root /var/www/main;
       add_header Onion-Location http://qvzlxbjvyrhvsuyzz5t63xx7x336dowdvt7wfj53sisuun4i4rdtbzid.onion$request_uri;
     '';
 
     services.nginx = let
-      hostConfig.extraConfig = ''
-        include ${pkgs.writeText "common.conf" cfg.nginxHostConfig};
+      homepageHostCfg.extraConfig = ''
+        include ${pkgs.writeText "common.conf" cfg.homepageHostConfig};
       '';
     in {
       enable = true;
@@ -107,11 +107,14 @@ in {
         # Disable the access log for user privacy
         access_log off;
       '';
-      virtualHosts."nixbitcoin.org" = hostConfig // {
+
+      virtualHosts."nixbitcoin.org" = homepageHostCfg // {
         forceSSL = true;
         enableACME = true;
       };
-      virtualHosts."_" = hostConfig;
+      # Used by Tor
+      virtualHosts."_" = homepageHostCfg;
+
       virtualHosts."mempool.nixbitcoin.org" = {
         forceSSL = true;
         enableACME = true;
