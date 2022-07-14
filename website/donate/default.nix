@@ -34,6 +34,8 @@ in {
       location /btcpayserver/ {
         proxy_pass http://${btcpayserverAddress};
 
+        expires off;
+
         # Disallow access to the btcpayserver admin interface and the API
         location ~* ^/btcpayserver/(login|register|account|api|)(?:$|/) {
           return 404;

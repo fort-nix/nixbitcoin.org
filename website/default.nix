@@ -53,6 +53,7 @@ in {
     nixbitcoin-org.website.homepageHostConfig = mkBefore ''
       root /var/www/main;
       add_header Onion-Location http://qvzlxbjvyrhvsuyzz5t63xx7x336dowdvt7wfj53sisuun4i4rdtbzid.onion$request_uri;
+      expires 10m;
     '';
 
     services.nginx = let
