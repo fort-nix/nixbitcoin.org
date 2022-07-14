@@ -23,9 +23,6 @@ rec {
 
     networking.nat.externalInterface = mkForce "eth0";
 
-    # automatically create wallet
-    services.joinmarket.rpcWalletFile = mkForce "jm_wallet";
-
     # Make the btcpayserver admin interface accessible at $nodeIP:23000/btcpayserver
     networking.nat.extraCommands = let
       btcp = config.services.btcpayserver;
