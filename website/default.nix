@@ -26,7 +26,7 @@ let
 in {
   imports = [
     ./donate
-    ./orderbook.nix
+    ./joinmarket-orderbook.nix
   ];
 
   inherit options;
