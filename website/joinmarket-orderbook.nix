@@ -15,7 +15,7 @@ in {
     '';
   };
 
-  nix-bitcoin-org.website.homepageHostConfig = ''
+  nixbitcoin-org.website.homepageHostConfig = ''
     location /orderbook/ {
       proxy_pass http://${obAddress};
       rewrite /orderbook/(.*) /$1 break;

@@ -108,7 +108,7 @@ rec {
     services.btcpayserver.enable = testDefault false;
     services.joinmarket.enable = testDefault false;
     systemd.services.matrix-synapse.wantedBy = testDefault [];
-    nix-bitcoin-org.website.enable = testDefault false;
+    nixbitcoin-org.website.enable = testDefault false;
   };
 
   website = { config, ... }: {
@@ -116,7 +116,7 @@ rec {
       nixbitcoinorg-container
       noFeatures
     ];
-    nix-bitcoin-org.website.enable = mkForce true;
+    nixbitcoin-org.website.enable = mkForce true;
     services.clightning.enable = mkForce true;
     services.btcpayserver.enable = mkForce true;
     # Required for btcpayserver currency rate fetching

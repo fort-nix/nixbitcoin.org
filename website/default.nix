@@ -3,7 +3,7 @@
 with lib;
 let
   options = {
-    nix-bitcoin-org.website = {
+    nixbitcoin-org.website = {
       enable = mkEnableOption "nix-bitcoin.org website";
       homepageHostConfig = mkOption {
         type = types.lines;
@@ -15,7 +15,7 @@ let
     };
   };
 
-  cfg = config.nix-bitcoin-org.website;
+  cfg = config.nixbitcoin-org.website;
 
   nginxAddress = if config.nix-bitcoin.netns-isolation.enable then
     config.nix-bitcoin.netns-isolation.netns.nginx.address
@@ -50,7 +50,7 @@ in {
 
     services.btcpayserver.rootpath = "btcpayserver";
 
-    nix-bitcoin-org.website.homepageHostConfig = mkBefore ''
+    nixbitcoin-org.website.homepageHostConfig = mkBefore ''
       root /var/www/main;
       add_header Onion-Location http://qvzlxbjvyrhvsuyzz5t63xx7x336dowdvt7wfj53sisuun4i4rdtbzid.onion$request_uri;
     '';

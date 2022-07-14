@@ -3,14 +3,14 @@
 with lib;
 let
   options = {
-    nix-bitcoin-org.website.donate = {
+    nixbitcoin-org.website.donate = {
       btcpayserverAppId = mkOption {
         type = types.str;
       };
     };
   };
 
-  cfg = config.nix-bitcoin-org.website.donate;
+  cfg = config.nixbitcoin-org.website.donate;
 
   btcpayserverAddress = with config.services.btcpayserver; "${address}:${toString port}";
 in {
@@ -26,7 +26,7 @@ in {
       limit_req_zone $limit_key_tor zone=btcp_invoice_tor:32k rate=30r/m;
     '';
 
-    nix-bitcoin-org.website.homepageHostConfig = ''
+    nixbitcoin-org.website.homepageHostConfig = ''
       location = /donate {
         rewrite /donate /btcpayserver/apps/${cfg.btcpayserverAppId}/pos;
       }

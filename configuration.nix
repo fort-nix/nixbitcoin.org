@@ -60,7 +60,7 @@
     port = 50011;
   };
 
-  nix-bitcoin-org.website = {
+  nixbitcoin-org.website = {
     enable = true;
     donate.btcpayserverAppId = "3NKhG5wANegkfmXJ5x4ZNuSAB1z5";
   };
