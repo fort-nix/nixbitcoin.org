@@ -51,14 +51,16 @@
   };
   services.joinmarket-ob-watcher.enable = true;
 
-  services.mempool = {
-    enable = true;
-    electrumServer = "fulcrum";
-  };
   services.fulcrum = {
     enable = true;
     port = 50011;
   };
+
+  services.mempool = {
+    enable = true;
+    electrumServer = "fulcrum";
+  };
+  nix-bitcoin.onionServices.mempool-frontend.enable = true;
 
   nixbitcoin-org.website = {
     enable = true;

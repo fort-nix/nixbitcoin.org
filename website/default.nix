@@ -27,6 +27,7 @@ in {
   imports = [
     ./donate
     ./joinmarket-orderbook.nix
+    ./mempool.nix
   ];
 
   inherit options;
@@ -127,76 +128,6 @@ in {
       };
       # Used by Tor
       virtualHosts."_" = homepageHostCfg;
-
-      virtualHosts."mempool.nixbitcoin.org" = {
-        forceSSL = true;
-        enableACME = true;
-        root = "/var/www/mempool/browser";
-        extraConfig = ''
-          add_header Cache-Control "public, no-transform";
-
-          add_header Vary Accept-Language;
-          add_header Vary Cookie;
-
-          # for exact / requests, redirect based on $lang
-          # cache redirect for 10 minutes
-          location = / {
-          	if ($lang != "") {
-          		return 302 $scheme://$host/$lang/;
-          	}
-          	try_files /en-US/index.html =404;
-          	expires 10m;
-          }
-          # cache /resources/ for 1 week since they don't change often
-          location /resources {
-          	try_files $uri /en-US/index.html;
-          	expires 1w;
-          }
-          # all other locations: cache 10 minutes since they change frequently
-          location / {
-          	try_files /$lang/$uri $uri /en-US/$uri /en-US/index.html =404;
-          	expires 10m;
-          }
-
-          # cache files likes /<lang>/main.f40e91d908a068a2.js forever since they never change
-          location ~ ^/([a-z][a-z])/(.+\..+\.(js|css)) {
-          	try_files $uri =404;
-          	expires 1y;
-          }
-          # cache files like /main.f40e91d908a068a2.js forever since they never change
-          location ~* ^/.+\..+\.(js|css) {
-          	try_files /$lang/$uri /en-US/$uri =404;
-          	expires 1y;
-          }
-          # all other locations with lang prefix: cache for 10 minutes
-          location ~ ^/([a-z][a-z])/?$ {
-          	try_files $uri /$1/index.html /en-US/index.html =404;
-          	expires 10m;
-          }
-
-
-          location /api/v1/ws {
-                  proxy_pass http://${config.services.mempool.backendAddress}:${toString config.services.mempool.backendPort}/;
-                  proxy_http_version 1.1;
-                  proxy_set_header Upgrade $http_upgrade;
-                  proxy_set_header Connection "Upgrade";
-          }
-          location /api/v1 {
-                  proxy_pass http://${config.services.mempool.backendAddress}:${toString config.services.mempool.backendPort}/api/v1;
-          }
-          location /api/ {
-                  proxy_pass http://${config.services.mempool.backendAddress}:${toString config.services.mempool.backendPort}/api/v1/;
-          }
-
-          location /ws {
-                  proxy_pass http://${config.services.mempool.backendAddress}:${toString config.services.mempool.backendPort}/;
-                  proxy_http_version 1.1;
-                  proxy_set_header Upgrade $http_upgrade;
-                  proxy_set_header Connection "Upgrade";
-          }
-          add_header Onion-Location http://m5ylnqzeqwjifgdp6cveveiwsaqodu444uiyjjz2vrmfhsfgyo6em3yd.onion$request_uri;
-        '';
-      };
     };
 
     services.tor.relay.onionServices.nginx = {
