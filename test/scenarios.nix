@@ -23,6 +23,11 @@ rec {
 
     networking.nat.externalInterface = mkForce "eth0";
 
+    nixbitcoinorg.hardware = {
+      numCPUs = 2;
+      memorySizeGiB = 4;
+    };
+
     # Make the btcpayserver admin interface accessible at $nodeIP:23000/btcpayserver
     networking.nat.extraCommands = let
       btcp = config.services.btcpayserver;
