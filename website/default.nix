@@ -12,15 +12,19 @@ let
           Common Nginx config included in all `server` blocks for the homepage.
         '';
       };
+      nginxAddress = mkOption {
+        readOnly = true;
+        default = if config.nix-bitcoin.netns-isolation.enable then
+          config.nix-bitcoin.netns-isolation.netns.nginx.address
+        else
+          "localhost";
+      };
     };
   };
 
   cfg = config.nixbitcoin-org.website;
 
-  nginxAddress = if config.nix-bitcoin.netns-isolation.enable then
-    config.nix-bitcoin.netns-isolation.netns.nginx.address
-  else
-    "localhost";
+  inherit (cfg) nginxAddress;
 
   torConnectionSrc = config.nix-bitcoin.netns-isolation.bridgeIp;
 in {
