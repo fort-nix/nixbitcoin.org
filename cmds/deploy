@@ -3,6 +3,11 @@ set -euo pipefail
 
 cd "${BASH_SOURCE[0]%/*}"
 
+push=
+if [[ ${1:-} == --push ]]; then
+    push=1
+fi
+
 echo
 echo "Copying source"
 rsync -az --exclude='.git*' ../ $remoteHost:/tmp/nix-bitcoin
@@ -18,3 +23,9 @@ echo
 echo
 echo "Switching to configuration"
 ssh -n $remoteHost "/tmp/system/bin/switch-to-configuration switch"
+
+if [[ $push && -d ../.git ]]; then
+    echo
+    echo 'Pushing branch `deployed`'
+    git push -f git@github.com:fort-nix/nixbitcoin.org.git HEAD:deployed
+fi
