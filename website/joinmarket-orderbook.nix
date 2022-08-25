@@ -15,7 +15,7 @@ in {
     '';
   };
 
-  nix-bitcoin-org.website.nginxHostConfig = ''
+  nixbitcoin-org.website.homepageHostConfig = ''
     location /orderbook/ {
       proxy_pass http://${obAddress};
       rewrite /orderbook/(.*) /$1 break;
@@ -25,6 +25,7 @@ in {
       # - Cache responses for 10 minutes
       # - Only cache successful responses (Codes 200, 301, 302)
       proxy_cache_valid 10m;
+      expires 10m;
 
       # Ignore URI query strings (?param=...) in cache keys.
       # This prevents attackers from filling the cache and evicting valid entries

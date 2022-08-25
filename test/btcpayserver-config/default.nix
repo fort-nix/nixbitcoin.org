@@ -10,7 +10,7 @@ let
   psql = "${config.services.postgresql.package}/bin/psql";
 in
 {
-  nix-bitcoin-org.website.donate = {
+  nixbitcoin-org.website.donate = {
     btcpayserverAppId = lib.mkForce "qJ1NExmDYQLr6MoyZFypeeFgLNj";
   };
 

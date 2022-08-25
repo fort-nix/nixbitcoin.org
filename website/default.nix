@@ -3,19 +3,19 @@
 with lib;
 let
   options = {
-    nix-bitcoin-org.website = {
+    nixbitcoin-org.website = {
       enable = mkEnableOption "nix-bitcoin.org website";
-      nginxHostConfig = mkOption {
+      homepageHostConfig = mkOption {
         type = types.lines;
         default = "";
         description = ''
-          Common Nginx config included in all `server` blocks.
+          Common Nginx config included in all `server` blocks for the homepage.
         '';
       };
     };
   };
 
-  cfg = config.nix-bitcoin-org.website;
+  cfg = config.nixbitcoin-org.website;
 
   nginxAddress = if config.nix-bitcoin.netns-isolation.enable then
     config.nix-bitcoin.netns-isolation.netns.nginx.address
@@ -26,7 +26,8 @@ let
 in {
   imports = [
     ./donate
-    ./orderbook.nix
+    ./joinmarket-orderbook.nix
+    ./mempool.nix
   ];
 
   inherit options;
@@ -34,7 +35,7 @@ in {
   config = mkIf cfg.enable (mkMerge [
   {
     systemd.tmpfiles.rules = [
-      # Create symlink to static website content
+      # Create symlink to static homepage content
       "L+ /var/www/main - - - - ${./static}"
     ];
 
@@ -50,14 +51,15 @@ in {
 
     services.btcpayserver.rootpath = "btcpayserver";
 
-    nix-bitcoin-org.website.nginxHostConfig = mkBefore ''
+    nixbitcoin-org.website.homepageHostConfig = mkBefore ''
       root /var/www/main;
       add_header Onion-Location http://qvzlxbjvyrhvsuyzz5t63xx7x336dowdvt7wfj53sisuun4i4rdtbzid.onion$request_uri;
+      expires 10m;
     '';
 
     services.nginx = let
-      hostConfig.extraConfig = ''
-        include ${pkgs.writeText "common.conf" cfg.nginxHostConfig};
+      homepageHostCfg.extraConfig = ''
+        include ${pkgs.writeText "common.conf" cfg.homepageHostConfig};
       '';
     in {
       enable = true;
@@ -66,7 +68,22 @@ in {
       recommendedGzipSettings = true;
       recommendedOptimisation = true;
       recommendedTlsSettings = true;
+      appendConfig = ''
+        worker_processes ${
+          toString (max 1 (builtins.floor (config.nixbitcoinorg.hardware.numCPUs * 0.6)))
+        };
+        worker_rlimit_nofile 8192;
+        pcre_jit on;
+      '';
+      eventsConfig = ''
+        worker_connections 4096;
+      '';
       commonHttpConfig = ''
+        # Disable the access log for user privacy
+        access_log off;
+      ''
+        # Rate limiting
+      + ''
         # Add rate limiting:
         # At any given time, the number of total requests per IP is limited to
         # 1 + rate * time_elapsed + burst
@@ -103,73 +120,14 @@ in {
         # 429: "Too Many Requests"
         limit_conn_status 429;
         limit_req_status 429;
-
-        # Disable the access log for user privacy
-        access_log off;
       '';
-      virtualHosts."nixbitcoin.org" = hostConfig // {
+
+      virtualHosts."nixbitcoin.org" = homepageHostCfg // {
         forceSSL = true;
         enableACME = true;
       };
-      virtualHosts."_" = hostConfig;
-      virtualHosts."mempool.nixbitcoin.org" = {
-        forceSSL = true;
-        enableACME = true;
-        root = "/var/www/mempool/browser";
-        extraConfig = ''
-          add_header Cache-Control "public, no-transform";
-
-          add_header Vary Accept-Language;
-          add_header Vary Cookie;
-
-          location / {
-                  try_files /$lang/$uri /$lang/$uri/ $uri $uri/ /en-US/$uri @index-redirect;
-                  expires 10m;
-          }
-          location /resources {
-                  try_files /$lang/$uri /$lang/$uri/ $uri $uri/ /en-US/$uri @index-redirect;
-                  expires 1h;
-          }
-          location @index-redirect {
-                  rewrite (.*) /$lang/index.html;
-          }
-
-          location ~ ^/(ar|bg|bs|ca|cs|da|de|et|el|es|eo|eu|fa|fr|gl|ko|hr|id|it|he|ka|lv|lt|hu|mk|ms|nl|ja|nb|nn|pl|pt|pt-BR|ro|ru|sk|sl|sr|sh|fi|sv|th|tr|uk|vi|zh|hi)/resources/ {
-                  rewrite ^/[a-zA-Z-]*/resources/(.*) /en-US/resources/$1;
-          }
-          location ~ ^/(ar|bg|bs|ca|cs|da|de|et|el|es|eo|eu|fa|fr|gl|ko|hr|id|it|he|ka|lv|lt|hu|mk|ms|nl|ja|nb|nn|pl|pt|pt-BR|ro|ru|sk|sl|sr|sh|fi|sv|th|tr|uk|vi|zh|hi)/ {
-                  try_files $uri $uri/ /$1/index.html =404;
-          }
-
-          location = /api {
-                  try_files $uri $uri/ /en-US/index.html =404;
-          }
-          location = /api/ {
-                  try_files $uri $uri/ /en-US/index.html =404;
-          }
-
-          location /api/v1/ws {
-                  proxy_pass http://${config.services.mempool.backendAddress}:${toString config.services.mempool.backendPort}/;
-                  proxy_http_version 1.1;
-                  proxy_set_header Upgrade $http_upgrade;
-                  proxy_set_header Connection "Upgrade";
-          }
-          location /api/v1 {
-                  proxy_pass http://${config.services.mempool.backendAddress}:${toString config.services.mempool.backendPort}/api/v1;
-          }
-          location /api/ {
-                  proxy_pass http://${config.services.mempool.backendAddress}:${toString config.services.mempool.backendPort}/api/v1/;
-          }
-
-          location /ws {
-                  proxy_pass http://${config.services.mempool.backendAddress}:${toString config.services.mempool.backendPort}/;
-                  proxy_http_version 1.1;
-                  proxy_set_header Upgrade $http_upgrade;
-                  proxy_set_header Connection "Upgrade";
-          }
-          add_header Onion-Location http://m5ylnqzeqwjifgdp6cveveiwsaqodu444uiyjjz2vrmfhsfgyo6em3yd.onion$request_uri;
-        '';
-      };
+      # Used by Tor
+      virtualHosts."_" = homepageHostCfg;
     };
 
     services.tor.relay.onionServices.nginx = {

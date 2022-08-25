@@ -3,9 +3,11 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 let
-  memorySizeGiB = 64;
-
   hetznerDedicated = {
+    nixbitcoinorg.hardware = {
+      numCPUs = 12;
+      memorySizeGiB = 64;
+    };
     boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "sd_mod" ];
     boot.kernelModules = [ "kvm-amd" ];
     powerManagement.cpuFreqGovernor = "powersave";
@@ -13,6 +15,10 @@ let
   };
 
   hetznerCloud = {
+    nixbitcoinorg.hardware = {
+      numCPUs = 2;
+      memorySizeGiB = 2;
+    };
     boot.initrd.availableKernelModules = [ "ata_piix" "virtio_pci" "virtio_scsi" "xhci_pci" "sd_mod" "sr_mod" ];
   };
 
@@ -80,9 +86,4 @@ in
       { path = "/boot2"; devices = [ "/dev/sdb" ]; }
     ];
   };
-
-  services.postgresql.settings.shared_buffers = let
-    size = memorySizeGiB / 4;
-  in
-    assert size >= 1; "${toString size}GB";
 }

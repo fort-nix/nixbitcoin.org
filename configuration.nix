@@ -51,16 +51,18 @@
   };
   services.joinmarket-ob-watcher.enable = true;
 
-  services.mempool = {
-    enable = true;
-    electrumServer = "fulcrum";
-  };
   services.fulcrum = {
     enable = true;
     port = 50011;
   };
 
-  nix-bitcoin-org.website = {
+  services.mempool = {
+    enable = true;
+    electrumServer = "fulcrum";
+  };
+  nix-bitcoin.onionServices.mempool-frontend.enable = true;
+
+  nixbitcoin-org.website = {
     enable = true;
     donate.btcpayserverAppId = "3NKhG5wANegkfmXJ5x4ZNuSAB1z5";
   };
