@@ -31,7 +31,7 @@ in {
       # This prevents attackers from filling the cache and evicting valid entries
       # by requesting the same resource multiple times with different parameters.
       # The orderbook doesn't use query strings in URIs.
-      proxy_cache_key $scheme$uri;
+      proxy_cache_key $uri;
 
       # If there are more than one parallel requests to the same uncached ressource,
       # wait until the first request has populated the cache and then respond to
