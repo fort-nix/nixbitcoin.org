@@ -80,23 +80,6 @@ rec {
     services.clightning.plugins.clboss.enable = mkForce false;
   };
 
-  # Base scenario for containers
-  nixbitcoinorg-container = {
-    imports = [
-      # `hardened.nix` sets `config.security.lockKernelModules` which doesn't work
-      # in containers
-      nixbitcoinorg-non-hardened
-    ];
-    # This service fails if apparmor is not enabled in the host kernel
-    security.apparmor.enable = mkForce false;
-  };
-
-  # Disable the hardened preset to improve VM performance
-  nixbitcoinorg-non-hardened = {
-    imports = [ nixbitcoinorg ];
-    disabledModules = [ <nix-bitcoin/modules/presets/hardened.nix> ];
-  };
-
   # Include this to deactivate all features.
   # You can then re-activate specific features for quick testing.
   noFeatures = let
@@ -113,7 +96,7 @@ rec {
 
   website = { config, ... }: {
     imports = [
-      nixbitcoinorg-container
+      nixbitcoinorg
       noFeatures
     ];
     nixbitcoin-org.website.enable = mkForce true;

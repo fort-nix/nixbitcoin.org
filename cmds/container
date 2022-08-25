@@ -2,7 +2,7 @@
 set -euo pipefail
 
 args=(--check)
-scenario=nixbitcoinorg-container
+scenario=nixbitcoinorg
 if [[ $# > 0 && $1 != -* ]]; then
   scenario=$1
   shift

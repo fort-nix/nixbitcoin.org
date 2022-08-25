@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-scenario=nixbitcoinorg-container
+scenario=nixbitcoinorg
 case ${1-} in
   --website|-w)
     # The minimum required scenario for ../test.sh
