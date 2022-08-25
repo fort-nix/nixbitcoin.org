@@ -122,31 +122,42 @@ in {
           add_header Vary Accept-Language;
           add_header Vary Cookie;
 
-          location / {
-                  try_files /$lang/$uri /$lang/$uri/ $uri $uri/ /en-US/$uri @index-redirect;
-                  expires 10m;
+          # for exact / requests, redirect based on $lang
+          # cache redirect for 10 minutes
+          location = / {
+          	if ($lang != "") {
+          		return 302 $scheme://$host/$lang/;
+          	}
+          	try_files /en-US/index.html =404;
+          	expires 10m;
           }
+          # cache /resources/ for 1 week since they don't change often
           location /resources {
-                  try_files /$lang/$uri /$lang/$uri/ $uri $uri/ /en-US/$uri @index-redirect;
-                  expires 1h;
+          	try_files $uri /en-US/index.html;
+          	expires 1w;
           }
-          location @index-redirect {
-                  rewrite (.*) /$lang/index.html;
-          }
-
-          location ~ ^/(ar|bg|bs|ca|cs|da|de|et|el|es|eo|eu|fa|fr|gl|ko|hr|id|it|he|ka|lv|lt|hu|mk|ms|nl|ja|nb|nn|pl|pt|pt-BR|ro|ru|sk|sl|sr|sh|fi|sv|th|tr|uk|vi|zh|hi)/resources/ {
-                  rewrite ^/[a-zA-Z-]*/resources/(.*) /en-US/resources/$1;
-          }
-          location ~ ^/(ar|bg|bs|ca|cs|da|de|et|el|es|eo|eu|fa|fr|gl|ko|hr|id|it|he|ka|lv|lt|hu|mk|ms|nl|ja|nb|nn|pl|pt|pt-BR|ro|ru|sk|sl|sr|sh|fi|sv|th|tr|uk|vi|zh|hi)/ {
-                  try_files $uri $uri/ /$1/index.html =404;
+          # all other locations: cache 10 minutes since they change frequently
+          location / {
+          	try_files /$lang/$uri $uri /en-US/$uri /en-US/index.html =404;
+          	expires 10m;
           }
 
-          location = /api {
-                  try_files $uri $uri/ /en-US/index.html =404;
+          # cache files likes /<lang>/main.f40e91d908a068a2.js forever since they never change
+          location ~ ^/([a-z][a-z])/(.+\..+\.(js|css)) {
+          	try_files $uri =404;
+          	expires 1y;
           }
-          location = /api/ {
-                  try_files $uri $uri/ /en-US/index.html =404;
+          # cache files like /main.f40e91d908a068a2.js forever since they never change
+          location ~* ^/.+\..+\.(js|css) {
+          	try_files /$lang/$uri /en-US/$uri =404;
+          	expires 1y;
           }
+          # all other locations with lang prefix: cache for 10 minutes
+          location ~ ^/([a-z][a-z])/?$ {
+          	try_files $uri /$1/index.html /en-US/index.html =404;
+          	expires 10m;
+          }
+
 
           location /api/v1/ws {
                   proxy_pass http://${config.services.mempool.backendAddress}:${toString config.services.mempool.backendPort}/;
