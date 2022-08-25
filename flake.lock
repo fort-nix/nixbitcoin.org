@@ -38,11 +38,11 @@
         "nixpkgsUnstable": "nixpkgsUnstable"
       },
       "locked": {
-        "lastModified": 1658497690,
-        "narHash": "sha256-Im82Dctks9MDmrh7IlWFOOkpHB7wie7FGdantcT1nR4=",
+        "lastModified": 1661853642,
+        "narHash": "sha256-bulIA6HFjEtCDWBefzV45mcZtU/YeTpe23lBkREQllA=",
         "owner": "erikarvstedt",
         "repo": "nix-bitcoin",
-        "rev": "fa18b58646678d06fa08e8e40a8c157b1e489086",
+        "rev": "1aa4c76cfcedffecafb483b2e08a38ee3071bb75",
         "type": "github"
       },
       "original": {
