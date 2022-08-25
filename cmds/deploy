@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "${BASH_SOURCE[0]%/*}"
+
+echo
+echo "Copying flake"
+flakeStorePath=$(nix flake metadata --json .. | jq -r .path)
+# TODO-EXTERNAl
+# Fix $flakeStorePath GC race condition when this is merged:
+# https://github.com/NixOS/nix/issues/3121
+if ! ssh $remoteHost "[[ -d $flakeStorePath ]] "; then
+    nix copy --to ssh://$remoteHost $flakeStorePath
+fi
+
+echo
+echo "Building system (on remote server)"
+# Prevent remote GC of the system flake and its inputs by out-linking flakeInputs
+ssh -n $remoteHost "nix build --out-link /tmp/system -L $flakeStorePath#flakeInputs $flakeStorePath#systemDrv"
+
+echo
+./deploy-secrets
+
+echo
+echo "Switching to configuration"
+ssh -n $remoteHost "/tmp/system-1/bin/switch-to-configuration switch"

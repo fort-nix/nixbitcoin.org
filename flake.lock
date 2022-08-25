@@ -1,0 +1,146 @@
+{
+  "nodes": {
+    "blobs": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1604995301,
+        "narHash": "sha256-wcLzgLec6SGJA8fx1OEN1yV/Py5b+U5iyYpksUY/yLw=",
+        "owner": "simple-nixos-mailserver",
+        "repo": "blobs",
+        "rev": "2cccdf1ca48316f2cfd1c9a0017e8de5a7156265",
+        "type": "gitlab"
+      },
+      "original": {
+        "owner": "simple-nixos-mailserver",
+        "repo": "blobs",
+        "type": "gitlab"
+      }
+    },
+    "flake-utils": {
+      "locked": {
+        "lastModified": 1659877975,
+        "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "nix-bitcoin": {
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "nixpkgs": "nixpkgs",
+        "nixpkgsUnstable": "nixpkgsUnstable"
+      },
+      "locked": {
+        "lastModified": 1658497690,
+        "narHash": "sha256-Im82Dctks9MDmrh7IlWFOOkpHB7wie7FGdantcT1nR4=",
+        "owner": "erikarvstedt",
+        "repo": "nix-bitcoin",
+        "rev": "fa18b58646678d06fa08e8e40a8c157b1e489086",
+        "type": "github"
+      },
+      "original": {
+        "owner": "erikarvstedt",
+        "ref": "mempool-ea",
+        "repo": "nix-bitcoin",
+        "type": "github"
+      }
+    },
+    "nixos-mailserver": {
+      "inputs": {
+        "blobs": "blobs",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "nixpkgs-22_05": [
+          "nixpkgs"
+        ],
+        "utils": [
+          "nix-bitcoin",
+          "flake-utils"
+        ]
+      },
+      "locked": {
+        "lastModified": 1655930346,
+        "narHash": "sha256-ht56HHOzEhjeIgAv5ZNFjSVX/in1YlUs0HG9c1EUXTM=",
+        "owner": "simple-nixos-mailserver",
+        "repo": "nixos-mailserver",
+        "rev": "f535d8123c4761b2ed8138f3d202ea710a334a1d",
+        "type": "gitlab"
+      },
+      "original": {
+        "owner": "simple-nixos-mailserver",
+        "ref": "nixos-22.05",
+        "repo": "nixos-mailserver",
+        "type": "gitlab"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1661009065,
+        "narHash": "sha256-i+Q2ttGp4uOL3j0wEYP3MXLcu/4L/WbChxGQogiNSZo=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "9a91318fffec81ad009b73fd3b640d2541d87909",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-22.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-channel": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-yFi385E7BbQqBca6OLSPqJeekALECOFOcLID1ORn+jM=",
+        "type": "tarball",
+        "url": "https://releases.nixos.org/nixos/unstable/nixos-22.11pre403102.f034b5693a2/nixexprs.tar.xz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://releases.nixos.org/nixos/unstable/nixos-22.11pre403102.f034b5693a2/nixexprs.tar.xz"
+      }
+    },
+    "nixpkgsUnstable": {
+      "locked": {
+        "lastModified": 1661008273,
+        "narHash": "sha256-UpDqsGzUswIHG7FwzeIewjWlElF17UVLNbI2pwlbcBY=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "0cc6444e74cd21e8da8d81ef4cd778492e10f843",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nix-bitcoin": "nix-bitcoin",
+        "nixos-mailserver": "nixos-mailserver",
+        "nixpkgs": [
+          "nix-bitcoin",
+          "nixpkgs"
+        ],
+        "nixpkgs-channel": "nixpkgs-channel",
+        "nixpkgs-unstable": [
+          "nix-bitcoin",
+          "nixpkgsUnstable"
+        ]
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

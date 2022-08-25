@@ -4,8 +4,7 @@ cd "${BASH_SOURCE[0]%/*}"
 
 # Show the all nginx configuration files of the website config
 
-expr='((import ../test/eval-config.nix).config "website").environment.etc."nginx/nginx.conf".source'
-config=$(nix build --impure --no-link --json --expr "$expr" | jq -r '.[].outputs | .[]')
+config=$(nix build --no-link --print-out-paths '..#system.config.environment.etc."nginx/nginx.conf".source')
 commonConfig=$(cat "$config" | grep -ohP '(?<=include )/nix/store.*common.conf' | head -1)
 cat "$config"
 echo

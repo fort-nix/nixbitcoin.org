@@ -1,20 +1,24 @@
 { pkgs, lib, scenarios }:
 with lib;
+let
+  flake = builtins.getFlake (toString ./..);
+  # TODO-EXTERNAL:
+  # Remove this when https://github.com/NixOS/nixpkgs/pull/188289 has been merged
+  mkModulePath = path: /. + (builtins.unsafeDiscardStringContext path);
+in
 rec {
   # Included in all scenarios
   base = {
-    imports = [ <nix-bitcoin/test/lib/test-lib.nix> ];
+    imports = [ "${flake.inputs.nix-bitcoin}/test/lib/test-lib.nix" ];
   };
 
   nixbitcoinorg = { config, ... }: {
-    imports = [
-      ../configuration.nix
+    imports = flake.configModules ++ [
       scenarios.regtestBase
       disableFeatures
       ./btcpayserver-config
     ];
-    # Ignore hardware config that is specific to the production server
-    disabledModules = [ ../hardware.nix ];
+    disabledModules =  [ (mkModulePath "${flake}/hardware.nix") ];
 
     # Improve eval performance by reusing pkgs
     nixpkgs.pkgs = pkgs;
@@ -102,6 +106,7 @@ rec {
     nixbitcoin-org.website.enable = mkForce true;
     services.clightning.enable = mkForce true;
     services.btcpayserver.enable = mkForce true;
+    services.joinmarket.enable = mkForce true;
     # Required for btcpayserver currency rate fetching
     test.container.enableWAN = true;
     environment.variables.WANEnabled = "1";

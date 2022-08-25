@@ -1,7 +1,11 @@
+flakeInputs:
+
 { config, pkgs, lib, ... }:
 {
   imports = [
-    <nix-bitcoin/modules/presets/secure-node.nix>
+    flakeInputs.nix-bitcoin.nixosModules.default
+    "${flakeInputs.nix-bitcoin}/modules/presets/secure-node.nix"
+    flakeInputs.nixos-mailserver.outPath
 
     ./base.nix
     ./website
