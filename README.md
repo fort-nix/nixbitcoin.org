@@ -19,6 +19,10 @@ nix develop -c deploy
 
 `./run-test` runs the test. Requires root permissions because the test starts a container.
 
+#### Branches
+
+Branch `deployed` always contains the configuration that is currently deployed.
+
 #### Deployment
 To increase deployment speed, add a `ControlMaster` to your nixbitcoin.org config in `~/.ssh/config`:
 ```
