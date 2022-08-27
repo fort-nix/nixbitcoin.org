@@ -59,6 +59,12 @@ in {
       proxy_cache_lock_timeout 3m;
     }
 
+    # Disallow access to /rotateOb because this changes
+    # the default orderbook to display
+    location /orderbook/rotateOb {
+      return 301 /orderbook/;
+    }
+
     # Redirect old obwatcher path
     location /obwatcher {
       rewrite /obwatcher(.*) /orderbook$1 permanent;
