@@ -7,6 +7,10 @@ Deployment commands
 deploy
   Deploy system (build remotely)
 
+deploy-local-build
+  Deploy system (build locally)
+  This can be faster if the system has already been built locally.
+
 build
   Build system (locally)
 

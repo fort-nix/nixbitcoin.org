@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "${BASH_SOURCE[0]%/*}"
+
+push=
+if [[ ${1:-} == --push ]]; then
+    push=1
+fi
+
+echo
+echo "Building"
+system=$(./build)
+
+echo
+echo "Copying system"
+nix copy --to ssh://$remoteHost $system
+
+echo
+./deploy-secrets
+
+echo
+echo "Switching to configuration"
+ssh -n $remoteHost "$system/bin/switch-to-configuration switch"
+
+if [[ $push && -d ../.git ]]; then
+    echo
+    echo 'Pushing branch `deployed`'
+    git push -f git@github.com:fort-nix/nixbitcoin.org.git HEAD:deployed
+fi
