@@ -21,7 +21,7 @@
               ({ lib, modulesPath, ...}: {
                 imports = [
                   ./1-installer-system.nix
-                  "${modulesPath}/virtualisation/qemu-vm.nix"
+                  (modulesPath + "/virtualisation/qemu-vm.nix")
                 ];
                 users.users.root.password = "a";
                 services.getty.autologinUser = lib.mkForce "root";
