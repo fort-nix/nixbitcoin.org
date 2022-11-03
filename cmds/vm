@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-exec run-node -s nixbitcoinorg vm "$@"
+cd "${BASH_SOURCE[0]%/*}"
+nix run -L "..#tests.nixbitcoinorg.vm"

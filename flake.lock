@@ -1,0 +1,162 @@
+{
+  "nodes": {
+    "blobs": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1604995301,
+        "narHash": "sha256-wcLzgLec6SGJA8fx1OEN1yV/Py5b+U5iyYpksUY/yLw=",
+        "owner": "simple-nixos-mailserver",
+        "repo": "blobs",
+        "rev": "2cccdf1ca48316f2cfd1c9a0017e8de5a7156265",
+        "type": "gitlab"
+      },
+      "original": {
+        "owner": "simple-nixos-mailserver",
+        "repo": "blobs",
+        "type": "gitlab"
+      }
+    },
+    "extra-container": {
+      "inputs": {
+        "flake-utils": [
+          "nix-bitcoin",
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1667517617,
+        "narHash": "sha256-ULlUL4Mlvnqsnj0fY7JetOdsNXneE4PZWkZFqEea06o=",
+        "owner": "erikarvstedt",
+        "repo": "extra-container",
+        "rev": "e8b18c15c4539d33db82384c608ca1222956f4ef",
+        "type": "github"
+      },
+      "original": {
+        "owner": "erikarvstedt",
+        "ref": "container-checking",
+        "repo": "extra-container",
+        "type": "github"
+      }
+    },
+    "flake-utils": {
+      "locked": {
+        "lastModified": 1659877975,
+        "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "nix-bitcoin": {
+      "inputs": {
+        "extra-container": [
+          "extra-container"
+        ],
+        "flake-utils": "flake-utils",
+        "nixpkgs": "nixpkgs",
+        "nixpkgs-unstable": "nixpkgs-unstable"
+      },
+      "locked": {
+        "lastModified": 1667516572,
+        "narHash": "sha256-zEBMt3rGpU1p9z51rGuga3Eb/paiZzKfZ0BTA92SSyM=",
+        "owner": "erikarvstedt",
+        "repo": "nix-bitcoin",
+        "rev": "0955a15a6887a78e5296642c775c01d89778c56c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "erikarvstedt",
+        "ref": "mempool-ea",
+        "repo": "nix-bitcoin",
+        "type": "github"
+      }
+    },
+    "nixos-mailserver": {
+      "inputs": {
+        "blobs": "blobs",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "nixpkgs-22_05": [
+          "nixpkgs"
+        ],
+        "utils": [
+          "nix-bitcoin",
+          "flake-utils"
+        ]
+      },
+      "locked": {
+        "lastModified": 1655930346,
+        "narHash": "sha256-ht56HHOzEhjeIgAv5ZNFjSVX/in1YlUs0HG9c1EUXTM=",
+        "owner": "simple-nixos-mailserver",
+        "repo": "nixos-mailserver",
+        "rev": "f535d8123c4761b2ed8138f3d202ea710a334a1d",
+        "type": "gitlab"
+      },
+      "original": {
+        "owner": "simple-nixos-mailserver",
+        "ref": "nixos-22.05",
+        "repo": "nixos-mailserver",
+        "type": "gitlab"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1666528161,
+        "narHash": "sha256-PFOQSC0x4xPD1p/GZIbpKuoEBu6M8HnEOeNRiBUCELA=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "471d92178b978fcbad8db27c2e8a4e737d4e0e27",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-22.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-unstable": {
+      "locked": {
+        "lastModified": 1666570118,
+        "narHash": "sha256-MTXmIYowHM1wyIYyqPdBLia5SjGnxETv0YkIbDsbkx4=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "1e684b371cf05300bc2b432f958f285855bac8fb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "extra-container": "extra-container",
+        "nix-bitcoin": "nix-bitcoin",
+        "nixos-mailserver": "nixos-mailserver",
+        "nixpkgs": [
+          "nix-bitcoin",
+          "nixpkgs"
+        ],
+        "nixpkgs-unstable": [
+          "nix-bitcoin",
+          "nixpkgs-unstable"
+        ]
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

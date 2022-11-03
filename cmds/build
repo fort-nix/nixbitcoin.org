@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+cd "${BASH_SOURCE[0]%/*}"
+nix build --no-link --print-out-paths -L ..#systemDrv

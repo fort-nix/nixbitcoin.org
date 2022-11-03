@@ -1,23 +1,21 @@
-{ pkgs, lib, scenarios }:
+flake: lib:
 with lib;
+let
+  inherit (flake.inputs.nix-bitcoin.lib.test) scenarios;
+in
 rec {
   # Included in all scenarios
   base = {
-    imports = [ <nix-bitcoin/test/lib/test-lib.nix> ];
+    imports = [ (flake.inputs.nix-bitcoin + "/test/lib/test-lib.nix") ];
   };
 
   nixbitcoinorg = { config, ... }: {
-    imports = [
-      ../configuration.nix
+    imports = flake.configModules ++ [
       scenarios.regtestBase
       disableFeatures
       ./btcpayserver-config
     ];
-    # Ignore hardware config that is specific to the production server
-    disabledModules = [ ../hardware.nix ];
-
-    # Improve eval performance by reusing pkgs
-    nixpkgs.pkgs = pkgs;
+    disabledModules =  [ (flake + "/hardware.nix") ];
 
     nix-bitcoin.generateSecrets = true;
 
@@ -102,6 +100,7 @@ rec {
     nixbitcoin-org.website.enable = mkForce true;
     services.clightning.enable = mkForce true;
     services.btcpayserver.enable = mkForce true;
+    services.joinmarket.enable = mkForce true;
     # Required for btcpayserver currency rate fetching
     test.container.enableWAN = true;
     environment.variables.WANEnabled = "1";

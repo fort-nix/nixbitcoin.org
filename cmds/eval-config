@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+cd "${BASH_SOURCE[0]%/*}"
+drv=$(nix eval --raw ..#systemDrv.drvPath)
+# Print out path
+nix-store -q $drv
+# Print drv path
+echo $drv

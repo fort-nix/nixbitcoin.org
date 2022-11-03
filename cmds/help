@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+echo "
+Deployment commands
+===================
+
+deploy
+  Deploy system (build remotely)
+
+build
+  Build system (locally)
+
+eval-config
+  Evaluate system
+
+Test and debug commands
+=======================
+
+run-test
+  Run the test for this repo.
+  (Starts a container, so root privileges are required.)
+
+container, co
+  Run node in a container and start a shell for interacting with the container.
+  (Requires root privileges.)
+
+  Run scenario (defined in $(realpath --relative-to="$PWD" $root/test/scenarios.nix))
+    container website
+    co website
+
+  Run command in the container. Delete the container afterwards.
+    container website --run c systemctl status nginx
+
+  Run command on the host container while the container is running. Delete the container afterwards.
+    # Show the homepage source
+    container website --run bash -c 'curl \$ip'
+
+  Start and destroy container, show any failures that happened during startup
+    container --test|-t
+    container website -t
+
+    When startup failed, enter a container shell for debugging
+      container --test|-t --debug|-g
+
+    Demo a failing scenario
+      co fail -t
+
+  Run scenario and anaylze boot performance
+    co website --analyze|-a
+
+vm
+  Run node in a VM.
+  Hint: The VM is automatically powered off when logging out of the VM shell.
+
+website
+  Launch the node in a container, render the website as text, shutdown node.
+  (Requires root privileges.)
+
+nginx-conf
+  Print all nginx configuration files of the \`website\` scenario
+
+
+=> Also see $(realpath --relative-to="$PWD" $root/test/dev.sh) which includes snippets for developing and adhoc testing.
+
+=> This shell environment can be captured with direnv/lorri
+"

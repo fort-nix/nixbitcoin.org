@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+command=shell
 args=(--check)
 scenario=nixbitcoinorg
 if [[ $# > 0 && $1 != -* ]]; then
@@ -9,9 +10,9 @@ if [[ $# > 0 && $1 != -* ]]; then
 fi
 case ${1-} in
   --test|-t)
-    test=1
     shift
-    args=(--command test)
+    command=test
+    args=()
     ;;
 esac
 case ${1-} in
@@ -22,4 +23,13 @@ case ${1-} in
     ;;
 esac
 
-exec run-node -s "$scenario" container "${args[@]}" "$@"
+if ! nixosContainer=$(type -p nixos-container) \
+        || grep -q '"/etc/nixos-containers"' "$nixosContainer"; then
+    attr=container
+else
+    # NixOS <22.05
+    attr=containerLegacy
+fi
+
+cd "${BASH_SOURCE[0]%/*}"
+nix run -L "..#tests.$scenario.$attr" -- "$command" "${args[@]}" "$@"
