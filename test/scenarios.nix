@@ -1,23 +1,21 @@
-{ pkgs, lib, scenarios }:
+flake: lib:
 with lib;
+let
+  inherit (flake.inputs.nix-bitcoin.lib.test) scenarios;
+in
 rec {
   # Included in all scenarios
   base = {
-    imports = [ <nix-bitcoin/test/lib/test-lib.nix> ];
+    imports = [ (flake.inputs.nix-bitcoin + "/test/lib/test-lib.nix") ];
   };
 
   nixbitcoinorg = { config, ... }: {
-    imports = [
-      ../configuration.nix
+    imports = flake.configModules ++ [
       scenarios.regtestBase
       disableFeatures
       ./btcpayserver-config
     ];
-    # Ignore hardware config that is specific to the production server
-    disabledModules = [ ../hardware.nix ];
-
-    # Improve eval performance by reusing pkgs
-    nixpkgs.pkgs = pkgs;
+    disabledModules =  [ (flake + "/hardware.nix") ];
 
     nix-bitcoin.generateSecrets = true;
 
@@ -80,23 +78,6 @@ rec {
     services.clightning.plugins.clboss.enable = mkForce false;
   };
 
-  # Base scenario for containers
-  nixbitcoinorg-container = {
-    imports = [
-      # `hardened.nix` sets `config.security.lockKernelModules` which doesn't work
-      # in containers
-      nixbitcoinorg-non-hardened
-    ];
-    # This service fails if apparmor is not enabled in the host kernel
-    security.apparmor.enable = mkForce false;
-  };
-
-  # Disable the hardened preset to improve VM performance
-  nixbitcoinorg-non-hardened = {
-    imports = [ nixbitcoinorg ];
-    disabledModules = [ <nix-bitcoin/modules/presets/hardened.nix> ];
-  };
-
   # Include this to deactivate all features.
   # You can then re-activate specific features for quick testing.
   noFeatures = let
@@ -113,12 +94,13 @@ rec {
 
   website = { config, ... }: {
     imports = [
-      nixbitcoinorg-container
+      nixbitcoinorg
       noFeatures
     ];
     nixbitcoin-org.website.enable = mkForce true;
     services.clightning.enable = mkForce true;
     services.btcpayserver.enable = mkForce true;
+    services.joinmarket.enable = mkForce true;
     # Required for btcpayserver currency rate fetching
     test.container.enableWAN = true;
     environment.variables.WANEnabled = "1";

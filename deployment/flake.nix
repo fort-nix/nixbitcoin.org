@@ -1,4 +1,7 @@
 {
+  # TODO-EXTERNAL:
+  # When subflake handling in Nix has been fixed (https://github.com/NixOS/nix/issues/6352)
+  # derive all these inputs from the parent flake
   inputs.nix-bitcoin.url = "github:fort-nix/nix-bitcoin/release";
   inputs.nixpkgs.follows = "nix-bitcoin/nixpkgs";
   inputs.flake-utils.follows = "nix-bitcoin/flake-utils";
@@ -21,7 +24,7 @@
               ({ lib, modulesPath, ...}: {
                 imports = [
                   ./1-installer-system.nix
-                  "${modulesPath}/virtualisation/qemu-vm.nix"
+                  (modulesPath + "/virtualisation/qemu-vm.nix")
                 ];
                 users.users.root.password = "a";
                 services.getty.autologinUser = lib.mkForce "root";
@@ -45,13 +48,10 @@
             modules = [
               ../base.nix
               ../backup.nix
-              nix-bitcoin.nixosModule
-              ({lib, ... } :{
+              ../lib/deployment.nix
+              nix-bitcoin.nixosModules.default
+              ({lib, ... }: {
                 services.borgbackup.jobs.main.startAt = lib.mkForce [];
-                nix-bitcoin = {
-                  secretsDir = "/var/src/secrets";
-                  setupSecrets = true;
-                };
               })
             ];
           }).config.system.build.toplevel;

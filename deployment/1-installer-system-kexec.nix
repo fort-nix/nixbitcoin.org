@@ -3,7 +3,7 @@ with lib;
 {
   imports = [
     ./1-installer-system.nix
-    "${modulesPath}/installer/kexec/kexec-boot.nix"
+    (modulesPath + "/installer/kexec/kexec-boot.nix")
   ];
 
   # Undo settings of `profiles/installation-device.nix` that allow

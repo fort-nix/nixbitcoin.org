@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-scenario=nixbitcoinorg-container
+scenario=nixbitcoinorg
 case ${1-} in
   --website|-w)
     # The minimum required scenario for ../test.sh
@@ -13,4 +13,4 @@ case ${1-} in
     ;;
 esac
 
-exec container $scenario --run "${BASH_SOURCE[0]%/*}"/../test.sh "$@"
+exec container $scenario --run "${BASH_SOURCE[0]%/*}"/../test/test.sh "$@"

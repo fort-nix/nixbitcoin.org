@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "${BASH_SOURCE[0]%/*}"
+
+push=
+if [[ ${1:-} == --push ]]; then
+    push=1
+fi
+
+echo
+echo "Copying source"
+rsync -az --exclude='.git*' ../ $remoteHost:/tmp/nix-bitcoin
+
+echo
+echo "Building system (on remote server)"
+# Prevent remote GC of the system flake and its inputs by out-linking flakeInputs
+ssh -t $remoteHost "nix build -L --out-link /tmp/system path:///tmp/nix-bitcoin#systemDrv"
+
+echo
+./deploy-secrets
+
+echo
+echo "Switching to configuration"
+ssh -n $remoteHost "/tmp/system/bin/switch-to-configuration switch"
+
+if [[ $push && -d ../.git ]]; then
+    echo
+    echo 'Pushing branch `deployed`'
+    git push -f git@github.com:fort-nix/nixbitcoin.org.git HEAD:deployed
+fi
