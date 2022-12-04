@@ -11,6 +11,13 @@ deploy-local-build
   Deploy system (build locally)
   This can be faster if the system has already been built locally.
 
+deploy-instantiate-locally
+  Deploy system in this way:
+  - Instantiate the system locally
+  - Copy the derivation to the remote host
+  - Build system on the remote host
+  This allows using local flake inputs that aren't available on the remote host.
+
 build
   Build system (locally)
 
