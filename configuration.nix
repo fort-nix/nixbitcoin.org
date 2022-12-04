@@ -23,6 +23,9 @@ flakeInputs:
     i2p = true;
     tor.enforce = false;
     tor.proxy = false;
+    extraConfig = ''
+      mempoolfullrbf=1
+    '';
   };
 
   services.clightning = {
