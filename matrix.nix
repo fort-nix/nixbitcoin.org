@@ -152,12 +152,6 @@ in {
         echo '"'
       } > "${dataDir}/secret-email-config"
     '';
-    serviceConfig =
-      nbLib.defaultHardening //
-      nbLib.allowAllIPAddresses // {
-        ReadWritePaths = dataDir;
-        MemoryDenyWriteExecute = false;
-      };
   } // requireSecrets;
 
   services.nginx = {
