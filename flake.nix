@@ -1,12 +1,12 @@
 {
   inputs.nix-bitcoin = {
-    url = "github:erikarvstedt/nix-bitcoin/mempool-ea";
+    url = "github:erikarvstedt/nix-bitcoin/mempool-22.11";
     inputs.extra-container.follows = "extra-container";
   };
   inputs.nixos-mailserver = {
-    url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-22.05";
+    url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-22.11";
     inputs.nixpkgs.follows = "nixpkgs";
-    inputs.nixpkgs-22_05.follows = "nixpkgs";
+    inputs.nixpkgs-22_11.follows = "nixpkgs";
     inputs.utils.follows = "nix-bitcoin/flake-utils";
   };
   inputs.extra-container = {
