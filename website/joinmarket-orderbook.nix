@@ -73,10 +73,10 @@ in {
 
   systemd = mkIf cfg.enable {
     # Keep the orderbook cache up to date
-    services.orderbook-update-cache = {
+    services.orderbook-update-cache = rec {
       wantedBy = [ "multi-user.target" ];
-      requires = [ "nginx.service" ];
-      after = [ "nginx.service" ];
+      requires = [ "nginx.service" "joinmarket-ob-watcher.service" ];
+      after = requires;
       script = ''
         paths=(
           ""

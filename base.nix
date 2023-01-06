@@ -68,11 +68,6 @@ let
     networking.usePredictableInterfaceNames = false;
 
     nix = {
-      # TODO-EXTERNAL:
-      # Remove this when pkgs.nix has version >= 2.9.1, which fixes a bug
-      # related to building via SSH
-      package = pkgs.nixUnstable;
-
       settings.experimental-features = "nix-command flakes";
     };
 

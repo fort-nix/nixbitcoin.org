@@ -112,10 +112,4 @@ in
      # Generate a dummy file so that setup-secrets doesn't fail
      touch ssh-key-seedhost
   '';
-
-  # Use borg 1.2.1 (the latest 1.2.* release)
-  # TODO-EXTERNAL: Remove this when 1.2.1 has landed in nixpkgs stable
-  nixpkgs.overlays = [
-    (_: _: { inherit (config.nix-bitcoin.pkgs.pkgsUnstable) borgbackup; })
-  ];
 }
