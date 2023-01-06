@@ -29,7 +29,7 @@ To increase deployment speed, add a `ControlMaster` to your nixbitcoin.org confi
 Host nixbitcoin.org
 # ...
 ControlMaster auto
-ControlPath /tmp/ssh-connection-%k
+ControlPath /tmp/ssh-connection-%r@%k-%p
 ControlPersist 5m
 ```
 

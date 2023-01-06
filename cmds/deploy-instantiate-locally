@@ -3,10 +3,8 @@ set -euo pipefail
 
 cd "${BASH_SOURCE[0]%/*}"
 
-push=
-if [[ ${1:-} == --push ]]; then
-    push=1
-fi
+# Sets vars `push`, `action`
+source lib/parse-deploy-args.sh
 
 echo
 echo "Instantiating system"
@@ -25,7 +23,7 @@ ssh -n $remoteHost "nix build -L --out-link /tmp/system $drv"
 
 echo
 echo "Switching to configuration"
-ssh -n $remoteHost "/tmp/system/bin/switch-to-configuration switch"
+ssh -n $remoteHost "/tmp/system/bin/switch-to-configuration $action"
 
 if [[ $push && -d ../.git ]]; then
     echo
