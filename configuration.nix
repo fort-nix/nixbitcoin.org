@@ -77,6 +77,10 @@ flakeInputs:
   environment.shellAliases = {
     sudo = "doas";
   };
+  environment.variables = {
+    # Use 24h time format
+    LC_TIME = "C.UTF-8";
+  };
 
   nix-bitcoin.configVersion = "0.0.70";
 }
