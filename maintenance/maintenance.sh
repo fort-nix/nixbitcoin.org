@@ -49,7 +49,7 @@ zfs destroy rpool/root@pre-update
 # Start shell with SSH tunnels to services on nixbitcoin.org.
 # The tunnels are automatically closed on shell exit.
 systemd-run --user -u ssh-tunnels-nborg -tGd --setenv=PATH="$PATH" --setenv=SHLVL="$SHLVL" bash -c '
-  ssh -N -L 10000:169.254.1.29:3000 -L 10001:169.254.1.24:23000 nixbitcoin.org&
+  ssh -N -o ControlPath=none -L 10000:169.254.1.29:3000 -L 10001:169.254.1.24:23000 nixbitcoin.org&
   bash
 '
 
