@@ -30,6 +30,8 @@ flakeInputs:
 
   services.clightning = {
     enable = true;
+    tor.enforce = false;
+    tor.proxy = false;
     plugins.clboss.enable = true;
     extraConfig = ''
       alias=nixbitcoin.org
