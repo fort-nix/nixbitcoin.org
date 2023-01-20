@@ -1,0 +1,126 @@
+{
+  "nodes": {
+    "extra-container": {
+      "inputs": {
+        "flake-utils": [
+          "nix-bitcoin",
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nix-bitcoin",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1667229260,
+        "narHash": "sha256-+J7woVK3pnMwHvJSrB0kYKWqEB4yYDqBcFFg8IhIFhw=",
+        "owner": "erikarvstedt",
+        "repo": "extra-container",
+        "rev": "3fce6c52bad520110c570c8ec5f02e2e6b93ce68",
+        "type": "github"
+      },
+      "original": {
+        "owner": "erikarvstedt",
+        "repo": "extra-container",
+        "type": "github"
+      }
+    },
+    "flake-utils": {
+      "locked": {
+        "lastModified": 1667395993,
+        "narHash": "sha256-nuEHfE/LcWyuSWnS8t12N1wc105Qtau+/OdUAjtQ0rA=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "5aed5285a952e0b949eb3ba02c12fa4fcfef535f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "nix-bitcoin": {
+      "inputs": {
+        "extra-container": "extra-container",
+        "flake-utils": "flake-utils",
+        "nixpkgs": "nixpkgs",
+        "nixpkgs-unstable": "nixpkgs-unstable"
+      },
+      "locked": {
+        "lastModified": 1674223535,
+        "narHash": "sha256-DuEzBYTiqJq7kwbuSsargIbmstPQNIJGtzi7X07KF8Q=",
+        "owner": "erikarvstedt",
+        "repo": "nix-bitcoin",
+        "rev": "783bee9bb855d6377207575b6f66a13261bdd84a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "erikarvstedt",
+        "ref": "misc-12",
+        "repo": "nix-bitcoin",
+        "type": "github"
+      }
+    },
+    "nix-bitcoin-mempool": {
+      "inputs": {
+        "nix-bitcoin": [
+          "nix-bitcoin"
+        ]
+      },
+      "locked": {
+        "lastModified": 1674220035,
+        "narHash": "sha256-o4PI8iMGVfJY6AO2gY5spWSTIyYNxE6uA9Q98yINFOs=",
+        "owner": "erikarvstedt",
+        "repo": "nix-bitcoin-mempool",
+        "rev": "539e9694819671b4481c1c0ad7cfefd50b459bd3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "erikarvstedt",
+        "repo": "nix-bitcoin-mempool",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1671040593,
+        "narHash": "sha256-W5aZNwYBjaEaLifDWGEfecvnCiDkXjI26rHgidSftUM=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "170e39462b516bd1475ce9184f7bb93106d27c59",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-22.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-unstable": {
+      "locked": {
+        "lastModified": 1671095104,
+        "narHash": "sha256-BgI8tDJgORrKX9lF93enEDKP5WxIoVBt9+1zoGIfx7k=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "7634c3250b6870e76f2e611cb95b72392add9aef",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nix-bitcoin": "nix-bitcoin",
+        "nix-bitcoin-mempool": "nix-bitcoin-mempool"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

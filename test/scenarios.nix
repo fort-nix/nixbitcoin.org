@@ -56,6 +56,9 @@ rec {
         "element.nixbitcoin.org" = disableSSL;
         "mempool.nixbitcoin.org" = disableSSL;
         "synapse.nixbitcoin.org" = disableSSL;
+
+        "mempool-debug.nixbitcoin.org" = disableSSL;
+        "mempool-debug-tor.nixbitcoin.org" = disableSSL;
       };
     # Disable mailserver by default because it has no option for fast offline cert generation.
     mailserver.enable = mkForce false;
