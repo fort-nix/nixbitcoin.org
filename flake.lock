@@ -66,17 +66,37 @@
         "nixpkgs-unstable": "nixpkgs-unstable"
       },
       "locked": {
-        "lastModified": 1674145754,
-        "narHash": "sha256-JBmhAC/t1X5cPGRQjRzIaW//nPcHc/wkRNpISa90YHQ=",
+        "lastModified": 1674223535,
+        "narHash": "sha256-DuEzBYTiqJq7kwbuSsargIbmstPQNIJGtzi7X07KF8Q=",
         "owner": "erikarvstedt",
         "repo": "nix-bitcoin",
-        "rev": "7b8096de1920ef602252c7f9ac175607e5a90752",
+        "rev": "783bee9bb855d6377207575b6f66a13261bdd84a",
         "type": "github"
       },
       "original": {
         "owner": "erikarvstedt",
-        "ref": "mempool-ea",
+        "ref": "misc-12",
         "repo": "nix-bitcoin",
+        "type": "github"
+      }
+    },
+    "nix-bitcoin-mempool": {
+      "inputs": {
+        "nix-bitcoin": [
+          "nix-bitcoin"
+        ]
+      },
+      "locked": {
+        "lastModified": 1674220035,
+        "narHash": "sha256-o4PI8iMGVfJY6AO2gY5spWSTIyYNxE6uA9Q98yINFOs=",
+        "owner": "erikarvstedt",
+        "repo": "nix-bitcoin-mempool",
+        "rev": "539e9694819671b4481c1c0ad7cfefd50b459bd3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "erikarvstedt",
+        "repo": "nix-bitcoin-mempool",
         "type": "github"
       }
     },
@@ -95,11 +115,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1671659164,
-        "narHash": "sha256-DbpT+v1POwFOInbrDL+vMbYV3mVbTkMxmJ5j50QnOcA=",
+        "lastModified": 1669838593,
+        "narHash": "sha256-wR4SVRtgRcgz1FR2i6hRl+m0RerlgkIlXyQ8/XtzVWk=",
         "owner": "simple-nixos-mailserver",
         "repo": "nixos-mailserver",
-        "rev": "bc667fb6afc45f6cc2d118ab77658faf2227cffd",
+        "rev": "70a970f5a02b7febec1c3065e10c4155b99ecf86",
         "type": "gitlab"
       },
       "original": {
@@ -145,6 +165,7 @@
       "inputs": {
         "extra-container": "extra-container",
         "nix-bitcoin": "nix-bitcoin",
+        "nix-bitcoin-mempool": "nix-bitcoin-mempool",
         "nixos-mailserver": "nixos-mailserver",
         "nixpkgs": [
           "nix-bitcoin",

@@ -5,6 +5,7 @@ flakeInputs:
   imports = [
     flakeInputs.nix-bitcoin.nixosModules.default
     (flakeInputs.nix-bitcoin + "/modules/presets/secure-node.nix")
+    flakeInputs.nix-bitcoin-mempool.nixosModules.default
     flakeInputs.nixos-mailserver.outPath
 
     ./base.nix
@@ -68,6 +69,10 @@ flakeInputs:
   services.mempool = {
     enable = true;
     electrumServer = "fulcrum";
+    tor = {
+      proxy = true;
+      enforce = true;
+    };
   };
   nix-bitcoin.onionServices.mempool-frontend.enable = true;
 
