@@ -47,15 +47,15 @@ rec {
     security.acme = mkForce {};
     services.nginx.virtualHosts =
       let
-        disableACME = {
-          enableACME = mkForce false;
+        disableSSL = {
           forceSSL = mkForce false;
+          enableACME = mkForce false;
         };
       in {
-        "nixbitcoin.org" = disableACME;
-        "element.nixbitcoin.org" = disableACME;
-        "mempool.nixbitcoin.org" = disableACME;
-        "synapse.nixbitcoin.org" = disableACME;
+        "nixbitcoin.org" = disableSSL;
+        "element.nixbitcoin.org" = disableSSL;
+        "mempool.nixbitcoin.org" = disableSSL;
+        "synapse.nixbitcoin.org" = disableSSL;
       };
     # Disable mailserver by default because it has no option for fast offline cert generation.
     mailserver.enable = mkForce false;
