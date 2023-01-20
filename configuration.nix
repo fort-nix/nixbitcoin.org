@@ -81,6 +81,8 @@ flakeInputs:
     donate.btcpayserverAppId = "3NKhG5wANegkfmXJ5x4ZNuSAB1z5";
   };
 
+  programs.extra-container.enable = true;
+
   environment.shellAliases = {
     sudo = "doas";
   };
