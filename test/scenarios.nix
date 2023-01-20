@@ -106,6 +106,13 @@ rec {
     environment.variables.WANEnabled = "1";
   };
 
+  withWAN = {
+    imports = [
+      nixbitcoinorg
+    ];
+    test.container.enableWAN = true;
+  };
+
   # To demonstrate failures in the test runner
   fail = { config, ... }: {
     systemd.services.long = {
