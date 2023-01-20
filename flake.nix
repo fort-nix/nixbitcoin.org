@@ -1,6 +1,6 @@
 {
   inputs.nix-bitcoin = {
-    url = "github:erikarvstedt/nix-bitcoin/mempool-22.11";
+    url = "github:erikarvstedt/nix-bitcoin/mempool-ea";
     inputs.extra-container.follows = "extra-container";
   };
   inputs.nixos-mailserver = {

@@ -84,5 +84,5 @@ flakeInputs:
     LC_TIME = "C.UTF-8";
   };
 
-  nix-bitcoin.configVersion = "0.0.70";
+  nix-bitcoin.configVersion = "0.0.85";
 }
