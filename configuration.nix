@@ -14,12 +14,6 @@ flakeInputs:
     ./backup.nix
   ];
 
-  services.zfs.autoScrub = {
-    enable = true;
-    interval = "monthly";
-  };
-
-  nix-bitcoin.onionServices.bitcoind.public = true;
   services.bitcoind = {
     i2p = true;
     tor.enforce = false;
@@ -28,6 +22,7 @@ flakeInputs:
       mempoolfullrbf=1
     '';
   };
+  nix-bitcoin.onionServices.bitcoind.public = true;
 
   services.clightning = {
     enable = true;
@@ -41,10 +36,10 @@ flakeInputs:
   nix-bitcoin.onionServices.clightning.public = true;
   systemd.services.clightning.serviceConfig.TimeoutStartSec = "5m";
 
-  services.rtl.enable = true;
-  services.rtl.nodes.clightning.enable = true;
-
-  services.electrs.enable = true;
+  services.rtl = {
+    enable = true;
+    nodes.clightning.enable = true;
+  };
 
   services.btcpayserver = {
     enable = true;
@@ -53,13 +48,13 @@ flakeInputs:
   };
   nix-bitcoin.onionServices.btcpayserver.enable = true;
 
-  nix-bitcoin.netns-isolation.enable = true;
-
   services.joinmarket = {
     enable = true;
     yieldgenerator.enable = true;
   };
   services.joinmarket-ob-watcher.enable = true;
+
+  services.electrs.enable = true;
 
   services.fulcrum = {
     enable = true;
@@ -79,6 +74,13 @@ flakeInputs:
   nixbitcoin-org.website = {
     enable = true;
     donate.btcpayserverAppId = "3NKhG5wANegkfmXJ5x4ZNuSAB1z5";
+  };
+
+  nix-bitcoin.netns-isolation.enable = true;
+
+  services.zfs.autoScrub = {
+    enable = true;
+    interval = "monthly";
   };
 
   environment.shellAliases = {
