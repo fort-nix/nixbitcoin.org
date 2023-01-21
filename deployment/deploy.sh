@@ -73,7 +73,7 @@ deployInstallerSystem() {(
 deployInstallerSystem
 
 # Wait until the new SSH fingerprint appears
-# Expected fingerprint
+# Show expected fingerprint
 ssh-keygen -lf <(ssh-keygen -yf <(gpg --decrypt ../secrets/client-side/ssh-host-key.gpg 2>/dev/null))
 # Fetch actual fingerprint
 ssh-keygen -lf <(ssh-keyscan nixbitcoin.org 2>/dev/null | grep -iw ed25519)
