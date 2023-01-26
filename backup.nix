@@ -5,7 +5,10 @@ let
   secretsDir = config.nix-bitcoin.secretsDir;
 in
 {
-  services.zfs.autoSnapshot.enable = true;
+  services.zfs.autoSnapshot = {
+    enable = true;
+    monthly = 3;
+  };
 
   # Only use daily, weekly, monthly ZFS snapshots
   systemd.timers = {
