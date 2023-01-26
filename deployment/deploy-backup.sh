@@ -33,8 +33,8 @@ if [[ ! $XDG_RUNTIME_DIR ]]; then
 fi
 export secrets=$XDG_RUNTIME_DIR/borg-secrets
 mkdir -p $secrets
-install -m 600 <(gpg --decrypt ../secrets/nixbitcoin.org/ssh-key-seedhost.gpg) $secrets/ssh-key-seedhost
-install -m 600 <(gpg --decrypt ../secrets/nixbitcoin.org/backup-encryption-password.gpg) $secrets/backup-encryption-password
+install -m 600 <(gpg --decrypt ../secrets/nix-bitcoin/ssh-key-seedhost.gpg) $secrets/ssh-key-seedhost
+install -m 600 <(gpg --decrypt ../secrets/nix-bitcoin/backup-encryption-password.gpg) $secrets/backup-encryption-password
 
 export BORG_REPO=nixbitcoin@freak.seedhost.eu:borg-backup
 export BORG_RSH="ssh -i $secrets/ssh-key-seedhost"
