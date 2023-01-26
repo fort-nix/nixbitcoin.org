@@ -145,8 +145,8 @@ ssh nixbitcoin.org 'rsync -ahz --info=progress2 backup-server:/temp/var/lib/ /va
 # Copy backup-related secrets
 gpg --decrypt ../secrets/nix-bitcoin/backup-encryption-password.gpg 2>/dev/null | \
     ssh nixbitcoin.org 'install -D -m 600 <(cat) /var/src/secrets/backup-encryption-password'
-gpg --decrypt ../secrets/nix-bitcoin/ssh-key-seedhost.gpg 2>/dev/null | \
-    ssh nixbitcoin.org 'install -D -m 600 <(cat) /var/src/secrets/ssh-key-seedhost'
+gpg --decrypt ../secrets/nix-bitcoin/ssh-key-backup.gpg 2>/dev/null | \
+    ssh nixbitcoin.org 'install -D -m 600 <(cat) /var/src/secrets/ssh-key-backup'
 
 deployBaseSystemWithBackups() {(
   set -euxo pipefail

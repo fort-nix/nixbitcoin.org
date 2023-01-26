@@ -23,7 +23,15 @@ in
     after = requires;
   };
 
-  programs.ssh.knownHosts."freak.seedhost.eu".publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBD2TmdE89ZD4XshcIcXZPLFC/nDxZdAr9yrH2/2OCNKEo/Ex60y8TQjp93isjdDj7Grf/GpW60OONfXTFe0r5iM=";
+  programs.ssh = {
+    knownHosts."zh2896.rsync.net".publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBLR2uz+YLn2KiQK0Luu8rhfWS6LHgUfGAWB1j8rM2MKn4KZ2/LhIX1CYkPKMTPxHr6mzayeL1T1hyJIylxXv0BY=";
+    extraConfig = ''
+      Host rsync.net
+      HostName zh2896.rsync.net
+      User zh2896
+      IdentityFile /var/src/secrets/ssh-key-backup
+    '';
+  };
 
   services.borgbackup.jobs = {
     main = {
@@ -73,18 +81,14 @@ in
         "var/lib/systemd"
       ];
 
-      repo = "nixbitcoin@freak.seedhost.eu:borg-backup";
+      repo = "rsync.net:borg-backup";
       doInit = false;
       encryption = {
         mode = "repokey";
         passCommand = "cat ${secretsDir}/backup-encryption-password";
       };
       environment = {
-        BORG_RSH = "ssh -i ${secretsDir}/ssh-key-seedhost";
-        # TODO-EXTERNAL: Use this definition when the borg job wrapper script
-        # has been fixed in the borgbackup.nix NixOS module
-        # BORG_REMOTE_PATH = "$HOME/.local/bin/borg";
-        BORG_REMOTE_PATH = "/home34/nixbitcoin/.local/bin/borg";
+        BORG_REMOTE_PATH = "borg1";
       };
       compression = "zstd";
       extraCreateArgs = "--stats"; # Print stats after backup
@@ -105,7 +109,7 @@ in
 
   nix-bitcoin.secrets = {
     backup-encryption-password.user = "root";
-    ssh-key-seedhost = {
+    ssh-key-backup = {
       user = "root";
       permissions = "400";
     };
@@ -113,6 +117,6 @@ in
   nix-bitcoin.generateSecretsCmds.backups = ''
      makePasswordSecret backup-encryption-password
      # Generate a dummy file so that setup-secrets doesn't fail
-     touch ssh-key-seedhost
+     touch ssh-key-backup
   '';
 }
