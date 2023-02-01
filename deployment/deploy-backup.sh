@@ -18,11 +18,8 @@ ssh -t rsync.net passwd
 ssh rsync.net quota
 ssh rsync.net borg1 --version
 
-#―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
-# 2. Init borg backup repo
-
-# `borg-job-main` is defined by `services.borgbackup.jobs` in ../backup.nix
-borg-job-main init --encryption=repokey --storage-quota=100G
+# Done. The borg repo is automatically initialized when the backup service
+# (defined in ../backup.nix) runs.
 
 #―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 # Debug: Manually init a repo
@@ -45,6 +42,7 @@ debugCmds() {
     # Delete repo
     ssh rsync.net 'rm -rf borg-backup'
 
+    # `borg-job-main` is defined by `services.borgbackup.jobs` in ../backup.nix
     borg-job-main info
     borg-job-main list
 }

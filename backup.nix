@@ -82,7 +82,6 @@ in
       ];
 
       repo = "rsync.net:borg-backup";
-      doInit = false;
       encryption = {
         mode = "repokey";
         passCommand = "cat ${secretsDir}/backup-encryption-password";
@@ -92,6 +91,7 @@ in
       };
       compression = "zstd";
       extraCreateArgs = "--stats"; # Print stats after backup
+      extraInitArgs = "--storage-quota=100G";
       prune.keep = {
         within = "1d"; # Keep all archives from the last day
         daily = 4;
