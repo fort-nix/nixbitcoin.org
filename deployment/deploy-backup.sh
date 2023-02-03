@@ -1,59 +1,48 @@
-##
-## Warning: This is a very rough sketch
-##
+# Run these commands on nixbitcoin.org
 
 #―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
-# 1. Deploy borg binary on seedhost
+# 1. Add pubkey auth to rsync.net
 
-TMPDIR=$(mktemp -d)
-export GNUPGHOME=$TMPDIR
+# This uses `programs.ssh` settings in ../backup.nix
 
-# fetch dev key (tw@waldmann-edv.de)
-gpg --recv-keys --keyserver hkps://keyserver.ubuntu.com 9F88FB52FAF7B393
+ssh-keygen -y -f /var/src/secrets/ssh-key-backup > /tmp/authorized_keys
+rsync --chmod=400 /tmp/authorized_keys rsync.net:.ssh/authorized_keys
+rm /tmp/authorized_keys
 
-# Download `linuxold` release which is compatible with the glibc version on seedhost
-curl -L https://github.com/borgbackup/borg/releases/download/1.2.1/borg-linuxold64 -O
-curl -L https://github.com/borgbackup/borg/releases/download/1.2.1/borg-linuxold64.asc -O
-gpg --verify borg-linuxold64.asc
+# Set new passwd
+ssh -t rsync.net passwd
 
-rm -rf $TMPDIR
+# Test login
+# Interactive login is unavailable on rsync.net
+# Supported cmds: https://www.rsync.net/resources/howto/remote_commands.html
+ssh rsync.net quota
+ssh rsync.net borg1 --version
+
+# Done. The borg repo is automatically initialized when the backup service
+# (defined in ../backup.nix) runs.
 
 #―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
-# 2. Init borg backup repo on seedhost
+# Debug: Manually init a repo
 
 # Run the following commands in a nix shell
-nix shell nixpkgs/29399e5ad1660668b61247c99894fc2fb97b4e74#borgbackup
+nix shell n#borgbackup
 
 # Ensure borg version is >= 1.2.1
 borg --version
 
-if [[ ! $XDG_RUNTIME_DIR ]]; then
-    echo 'Error: Missing env var XDG_RUNTIME_DIR'
-    return 1
-fi
-export secrets=$XDG_RUNTIME_DIR/borg-secrets
-mkdir -p $secrets
-install -m 600 <(gpg --decrypt ../secrets/nixbitcoin.org/ssh-key-seedhost.gpg) $secrets/ssh-key-seedhost
-install -m 600 <(gpg --decrypt ../secrets/nixbitcoin.org/backup-encryption-password.gpg) $secrets/backup-encryption-password
-
-export BORG_REPO=nixbitcoin@freak.seedhost.eu:borg-backup
-export BORG_RSH="ssh -i $secrets/ssh-key-seedhost"
-export BORG_REMOTE_PATH='$HOME/.local/bin/borg'
-export BORG_PASSCOMMAND="cat $secrets/backup-encryption-password"
-borg init --encryption=repokey --storage-quota=400G
+export BORG_REPO=rsync.net:borg-backup
+export BORG_REMOTE_PATH='borg1'
+export BORG_PASSCOMMAND="cat /var/src/secrets/backup-encryption-password"
+borg init --encryption=repokey --storage-quota=100G
 
 debugCmds() {
-    borg info
-
-    ssh freak.seedhost.eu 'ls -alt'
-    ssh freak.seedhost.eu 'ls -al borg-backup'
-    ssh freak.seedhost.eu 'ls -al borg-backup/data'
+    ssh rsync.net 'ls -alt'
+    ssh rsync.net 'ls -al borg-backup'
+    ssh rsync.net 'ls -al borg-backup/data'
     # Delete repo
-    ssh freak.seedhost.eu 'rm -rf borg-backup'
+    ssh rsync.net 'rm -rf borg-backup'
 
-    # This can be run on nixbitoin.org to manage the backup
-    borg-job-main ...
+    # `borg-job-main` is defined by `services.borgbackup.jobs` in ../backup.nix
+    borg-job-main info
     borg-job-main list
 }
-
-rm -rf $secrets

@@ -73,7 +73,7 @@ deployInstallerSystem() {(
 deployInstallerSystem
 
 # Wait until the new SSH fingerprint appears
-# Expected fingerprint
+# Show expected fingerprint
 ssh-keygen -lf <(ssh-keygen -yf <(gpg --decrypt ../secrets/client-side/ssh-host-key.gpg 2>/dev/null))
 # Fetch actual fingerprint
 ssh-keygen -lf <(ssh-keyscan nixbitcoin.org 2>/dev/null | grep -iw ed25519)
@@ -143,10 +143,10 @@ ssh nixbitcoin.org 'rsync -ahz --info=progress2 backup-server:/temp/var/lib/ /va
 # TODO: Streamline this deployment step when switching to flakes for the main system deployment
 
 # Copy backup-related secrets
-gpg --decrypt ../secrets/nixbitcoin.org/backup-encryption-password.gpg 2>/dev/null | \
+gpg --decrypt ../secrets/nix-bitcoin/backup-encryption-password.gpg 2>/dev/null | \
     ssh nixbitcoin.org 'install -D -m 600 <(cat) /var/src/secrets/backup-encryption-password'
-gpg --decrypt ../secrets/nixbitcoin.org/ssh-key-seedhost.gpg 2>/dev/null | \
-    ssh nixbitcoin.org 'install -D -m 600 <(cat) /var/src/secrets/ssh-key-seedhost'
+gpg --decrypt ../secrets/nix-bitcoin/ssh-key-backup.gpg 2>/dev/null | \
+    ssh nixbitcoin.org 'install -D -m 600 <(cat) /var/src/secrets/ssh-key-backup'
 
 deployBaseSystemWithBackups() {(
   set -euxo pipefail

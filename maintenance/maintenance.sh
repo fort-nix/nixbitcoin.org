@@ -54,7 +54,7 @@ systemd-run --user -u ssh-tunnels-nborg -tGd --setenv=PATH="$PATH" --setenv=SHLV
 '
 
 # RTL
-gpg --decrypt ../secrets/nixbitcoin.org/rtl-password.gpg 2>/dev/null
+gpg --decrypt ../secrets/nix-bitcoin/rtl-password.gpg 2>/dev/null
 xdg-open http://localhost:10000
 # btcpayserver
 gpg --decrypt ../secrets/client-side/btcpayserver-credentials.gpg 2>/dev/null
