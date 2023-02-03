@@ -1,10 +1,10 @@
 {
   inputs.nix-bitcoin = {
-    url = "github:erikarvstedt/nix-bitcoin/misc-12";
+    url = "github:fort-nix/nix-bitcoin/release";
     inputs.extra-container.follows = "extra-container";
   };
   inputs.nix-bitcoin-mempool = {
-    url = "github:erikarvstedt/nix-bitcoin-mempool";
+    url = "github:fort-nix/nix-bitcoin-mempool/release";
     inputs.nix-bitcoin.follows = "nix-bitcoin";
   };
   inputs.nixos-mailserver = {
