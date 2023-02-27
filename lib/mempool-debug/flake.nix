@@ -79,6 +79,7 @@
         enable = true;
         frontend.enable = false;
         electrumServer = "fulcrum";
+        autoRestartInterval = null;
       };
 
       networking.firewall.allowedTCPPorts = [ config.services.mempool.port ];
