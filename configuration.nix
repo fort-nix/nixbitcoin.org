@@ -47,6 +47,12 @@ flakeInputs:
     lbtc = true;
   };
   nix-bitcoin.onionServices.btcpayserver.enable = true;
+  # Don't require `liquidd.service` so that btcp can stay online while liquidd is
+  # shutting down/restarting, which can take up to 30 min.
+  systemd.services.nbxplorer = rec {
+    requires = lib.mkForce [ "bitcoind.service" "postgresql.service" ];
+    after = requires;
+  };
 
   services.joinmarket = {
     enable = true;
