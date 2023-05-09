@@ -12,11 +12,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1667229260,
-        "narHash": "sha256-+J7woVK3pnMwHvJSrB0kYKWqEB4yYDqBcFFg8IhIFhw=",
+        "lastModified": 1679648217,
+        "narHash": "sha256-aq2J5Hj5IE8X8X/7v3n0wcv8n+FLzzENbcCF9xqhxAc=",
         "owner": "erikarvstedt",
         "repo": "extra-container",
-        "rev": "3fce6c52bad520110c570c8ec5f02e2e6b93ce68",
+        "rev": "40c73f5e3292e73d6ce91625d9751be84fde17cb",
         "type": "github"
       },
       "original": {
@@ -26,12 +26,15 @@
       }
     },
     "flake-utils": {
+      "inputs": {
+        "systems": "systems"
+      },
       "locked": {
-        "lastModified": 1667395993,
-        "narHash": "sha256-nuEHfE/LcWyuSWnS8t12N1wc105Qtau+/OdUAjtQ0rA=",
+        "lastModified": 1681202837,
+        "narHash": "sha256-H+Rh19JDwRtpVPAWp64F+rlEtxUWBAQW28eAi3SRSzg=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "5aed5285a952e0b949eb3ba02c12fa4fcfef535f",
+        "rev": "cfacdce06f30d2b68473a46042957675eebb3401",
         "type": "github"
       },
       "original": {
@@ -48,16 +51,15 @@
         "nixpkgs-unstable": "nixpkgs-unstable"
       },
       "locked": {
-        "lastModified": 1674223535,
-        "narHash": "sha256-DuEzBYTiqJq7kwbuSsargIbmstPQNIJGtzi7X07KF8Q=",
-        "owner": "erikarvstedt",
+        "lastModified": 1683615899,
+        "narHash": "sha256-aUZ7D2zEQooOLDqi9xuQ0BTeixgH8CoM4uBmlOLhgMA=",
+        "owner": "fort-nix",
         "repo": "nix-bitcoin",
-        "rev": "783bee9bb855d6377207575b6f66a13261bdd84a",
+        "rev": "d9baa2e1087a819ea3818249c2ca59c89c2bca93",
         "type": "github"
       },
       "original": {
-        "owner": "erikarvstedt",
-        "ref": "misc-12",
+        "owner": "fort-nix",
         "repo": "nix-bitcoin",
         "type": "github"
       }
@@ -69,26 +71,26 @@
         ]
       },
       "locked": {
-        "lastModified": 1674220035,
-        "narHash": "sha256-o4PI8iMGVfJY6AO2gY5spWSTIyYNxE6uA9Q98yINFOs=",
-        "owner": "erikarvstedt",
+        "lastModified": 1683645911,
+        "narHash": "sha256-SxtZgUomqGkEZ4Rn1H97hyxvlDRKrve2Tj3JCiJ4Qn4=",
+        "owner": "fort-nix",
         "repo": "nix-bitcoin-mempool",
-        "rev": "539e9694819671b4481c1c0ad7cfefd50b459bd3",
+        "rev": "402a8a6de1eb6d20d2b36e13d3461e1b85f0bbef",
         "type": "github"
       },
       "original": {
-        "owner": "erikarvstedt",
+        "owner": "fort-nix",
         "repo": "nix-bitcoin-mempool",
         "type": "github"
       }
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1671040593,
-        "narHash": "sha256-W5aZNwYBjaEaLifDWGEfecvnCiDkXjI26rHgidSftUM=",
+        "lastModified": 1683207485,
+        "narHash": "sha256-gs+PHt/y/XQB7S8+YyBLAM8LjgYpPZUVFQBwpFSmJro=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "170e39462b516bd1475ce9184f7bb93106d27c59",
+        "rev": "cc45a3f8c98e1c33ca996e3504adefbf660a72d1",
         "type": "github"
       },
       "original": {
@@ -100,11 +102,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1671095104,
-        "narHash": "sha256-BgI8tDJgORrKX9lF93enEDKP5WxIoVBt9+1zoGIfx7k=",
+        "lastModified": 1683353485,
+        "narHash": "sha256-Skp5El3egmoXPiINWjnoW0ktVfB7PR/xc4F4bhD+BJY=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "7634c3250b6870e76f2e611cb95b72392add9aef",
+        "rev": "caf436a52b25164b71e0d48b671127ac2e2a5b75",
         "type": "github"
       },
       "original": {
@@ -118,6 +120,21 @@
       "inputs": {
         "nix-bitcoin": "nix-bitcoin",
         "nix-bitcoin-mempool": "nix-bitcoin-mempool"
+      }
+    },
+    "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
       }
     }
   },

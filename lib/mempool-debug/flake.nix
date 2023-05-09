@@ -1,7 +1,7 @@
 {
-  inputs.nix-bitcoin.url = "github:erikarvstedt/nix-bitcoin/misc-12";
+  inputs.nix-bitcoin.url = "github:fort-nix/nix-bitcoin";
   inputs.nix-bitcoin-mempool = {
-    url = "github:erikarvstedt/nix-bitcoin-mempool";
+    url = "github:fort-nix/nix-bitcoin-mempool";
     inputs.nix-bitcoin.follows = "nix-bitcoin";
   };
 
