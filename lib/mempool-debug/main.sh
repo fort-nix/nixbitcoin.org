@@ -49,7 +49,8 @@ c curl example.com
 # Query mempool backend
 nixos-container run mempool -- curl http://localhost:8999/api/v1/blocks/1 | jq
 curl http://10.10.0.2:8999/api/v1/blocks/1 | jq
-nixos-container run mempool -- curl http://localhost:8999/api/v1/address/1CGG9qVq2P6F7fo6sZExvNq99Jv2GDpaLE | jq
+nixos-container run mempool -- curl http://localhost:8999/api/v1/address/1CGG9qVq2P6F7fo6sZExvNq99Jv2GDpaLE
+nixos-container run mempool-tor -- curl http://localhost:8999/api/v1/address/1CGG9qVq2P6F7fo6sZExvNq99Jv2GDpaLE
 # Query fulcrum
 echo '{"method": "server.version", "id": 0 }' | nixos-container run mempool -- nc 169.254.1.31 50011 | head -1 | jq
 
@@ -59,10 +60,10 @@ curl -fsS -H "Host: mempool-debug.nixbitcoin.org" http://169.254.1.21/api/v1/blo
 curl -fsS -H "Host: mempool-debug.nixbitcoin.org" http://169.254.1.21/api/v1/blocks/1 | jq
 curl -fsS -H "Host: mempool-debug.nixbitcoin.org" http://169.254.1.21/api/address/1CGG9qVq2P6F7fo6sZExvNq99Jv2GDpaLE | jq
 
-curl -fsS -H "Host: mempool-debug-tor.nixbitcoin.org" 169.254.1.21
-curl -fsS -H "Host: mempool-debug-tor.nixbitcoin.org" http://169.254.1.21/api/v1/blocks/tip/height | jq
-curl -fsS -H "Host: mempool-debug-tor.nixbitcoin.org" http://169.254.1.21/api/v1/blocks/1 | jq
-curl -fsS -H "Host: mempool-debug-tor.nixbitcoin.org" http://169.254.1.21/api/address/1CGG9qVq2P6F7fo6sZExvNq99Jv2GDpaLE | jq
+curl -fsS -L -H "Host: mempool-debug-tor.nixbitcoin.org" 169.254.1.21
+curl -fsS -L -H "Host: mempool-debug-tor.nixbitcoin.org" http://169.254.1.21/api/v1/blocks/tip/height
+curl -fsS -L -H "Host: mempool-debug-tor.nixbitcoin.org" http://169.254.1.21/api/v1/blocks/1
+curl -fsS -H "Host: mempool-debug-tor.nixbitcoin.org" http://169.254.1.21/api/address/1CGG9qVq2P6F7fo6sZExvNq99Jv2GDpaLE
 
 # Locally, over SSL. Only works on nixbitcoin.org
 curl -k -fsS -H "Host: mempool-debug-tor.nixbitcoin.org" https://169.254.1.21/api/v1/blocks/tip/height | jq
