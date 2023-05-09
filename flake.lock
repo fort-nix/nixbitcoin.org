@@ -90,11 +90,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1675459021,
-        "narHash": "sha256-+nE233JS79YtPyhDxgQd1xH2ozlgNuI1k0Z0oa3K5P8=",
+        "lastModified": 1683645911,
+        "narHash": "sha256-SxtZgUomqGkEZ4Rn1H97hyxvlDRKrve2Tj3JCiJ4Qn4=",
         "owner": "fort-nix",
         "repo": "nix-bitcoin-mempool",
-        "rev": "9804041c8473cdacae2b58029bdb31e718f2420b",
+        "rev": "402a8a6de1eb6d20d2b36e13d3461e1b85f0bbef",
         "type": "github"
       },
       "original": {
