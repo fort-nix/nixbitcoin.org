@@ -69,16 +69,16 @@
         "nixpkgs-unstable": "nixpkgs-unstable"
       },
       "locked": {
-        "lastModified": 1683488602,
-        "narHash": "sha256-0zdi0Pe+B52dF7RD64PZ91BMqsyAgFqdGKgrVMq0miY=",
-        "owner": "fort-nix",
+        "lastModified": 1685620951,
+        "narHash": "sha256-DPWS4Ygz2Q+clQVmNg9+qKFWgdztHz0aExLkf/ABwg4=",
+        "owner": "erikarvstedt",
         "repo": "nix-bitcoin",
-        "rev": "30c874de014311b9c0de7860c338558a7e60dfb8",
+        "rev": "c3ed23a4ea22ea7abbe809be2ef85336b61572cc",
         "type": "github"
       },
       "original": {
-        "owner": "fort-nix",
-        "ref": "release",
+        "owner": "erikarvstedt",
+        "ref": "update-nixpkgs48-ea-3",
         "repo": "nix-bitcoin",
         "type": "github"
       }
@@ -135,11 +135,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1683207485,
-        "narHash": "sha256-gs+PHt/y/XQB7S8+YyBLAM8LjgYpPZUVFQBwpFSmJro=",
+        "lastModified": 1685215858,
+        "narHash": "sha256-IRMFoDXA6cYx3ifVw3B2JcC4JrjT5v7tRAx2vro2Ffs=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "cc45a3f8c98e1c33ca996e3504adefbf660a72d1",
+        "rev": "ba6e4ddeb3e8ad3f3e3bec63dafbc9fe558729bb",
         "type": "github"
       },
       "original": {
@@ -151,11 +151,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1683353485,
-        "narHash": "sha256-Skp5El3egmoXPiINWjnoW0ktVfB7PR/xc4F4bhD+BJY=",
+        "lastModified": 1685317056,
+        "narHash": "sha256-XyG7iSSrgqsnT90GZOvWWbJheagWvSon4LOwjGGFq6c=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "caf436a52b25164b71e0d48b671127ac2e2a5b75",
+        "rev": "6b554aae1cf48cb39d4a61a51f826859027a93e2",
         "type": "github"
       },
       "original": {

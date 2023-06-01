@@ -1,6 +1,6 @@
 {
   inputs.nix-bitcoin = {
-    url = "github:fort-nix/nix-bitcoin/release";
+    url = "github:erikarvstedt/nix-bitcoin/update-nixpkgs48-ea-3";
     inputs.extra-container.follows = "extra-container";
   };
   inputs.nix-bitcoin-mempool = {

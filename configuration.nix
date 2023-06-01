@@ -29,6 +29,7 @@ flakeInputs:
     tor.enforce = false;
     tor.proxy = false;
     plugins.clboss.enable = true;
+    plugins.clboss.acknowledgeDeprecation = true;
     extraConfig = ''
       alias=nixbitcoin.org
     '';
