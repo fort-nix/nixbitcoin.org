@@ -19,7 +19,7 @@ case ${1-} in
   --analyze|-a)
     analyze=1
     shift
-    args=(--check --run systemd-analyze critical-chain)
+    args=(--check --run c systemd-analyze critical-chain)
     ;;
 esac
 
