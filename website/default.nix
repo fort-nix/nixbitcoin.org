@@ -72,6 +72,7 @@ in {
       enableReload = true;
       recommendedProxySettings = true;
       recommendedGzipSettings = true;
+      recommendedBrotliSettings = true;
       recommendedOptimisation = true;
       recommendedTlsSettings = true;
       appendConfig = ''

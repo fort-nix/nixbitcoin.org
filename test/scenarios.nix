@@ -63,7 +63,7 @@ rec {
     # Disable mailserver by default because it has no option for fast offline cert generation.
     mailserver.enable = mkForce false;
     # To test the mailserver, enable the mailserver and uncomment the line below:
-    # mailserver.certificateScheme = mkForce 2;
+    # mailserver.certificateScheme = mkForce "selfsigned";
 
     # joinmarket-ob-watcher doesn't work in regtest mode or requires a synced
     # bitcoind node on mainnet

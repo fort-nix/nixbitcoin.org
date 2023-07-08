@@ -22,7 +22,7 @@ let
 
     services.openssh = {
       enable = true;
-      passwordAuthentication = false;
+      settings.PasswordAuthentication = false;
       hostKeys = lib.mkForce [
         {
           path = "/etc/ssh/ssh_host_ed25519_key";
@@ -56,7 +56,7 @@ let
       pv
     ];
 
-    boot.cleanTmpDir = true;
+    boot.tmp.cleanOnBoot = true;
     documentation.nixos.enable = false; # Speeds up evaluation
 
     nix.gc = {

@@ -87,6 +87,8 @@ flakeInputs:
 
   programs.extra-container.enable = true;
 
+  services.postgresql.enableJIT = true;
+
   services.zfs.autoScrub = {
     enable = true;
     interval = "monthly";

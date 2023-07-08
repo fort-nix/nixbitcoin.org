@@ -1,14 +1,14 @@
 {
   inputs.nix-bitcoin = {
-    url = "github:erikarvstedt/nix-bitcoin/update-nixpkgs48-ea-3";
+    url = "github:erikarvstedt/nix-bitcoin/nixos-23.05";
     inputs.extra-container.follows = "extra-container";
   };
   inputs.nix-bitcoin-mempool = {
-    url = "github:fort-nix/nix-bitcoin-mempool/release";
+    url = "github:fort-nix/nix-bitcoin-mempool/nixos-23.05";
     inputs.nix-bitcoin.follows = "nix-bitcoin";
   };
   inputs.nixos-mailserver = {
-    url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-22.11";
+    url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-23.05";
     inputs.nixpkgs.follows = "nixpkgs";
     inputs.nixpkgs-22_11.follows = "nixpkgs";
     inputs.utils.follows = "nix-bitcoin/flake-utils";

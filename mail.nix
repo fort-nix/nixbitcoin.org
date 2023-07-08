@@ -7,7 +7,7 @@
 
     localDnsResolver = false;
 
-    certificateScheme = 3;
+    certificateScheme = "acme-nginx";
 
     virusScanning = false;
   };
