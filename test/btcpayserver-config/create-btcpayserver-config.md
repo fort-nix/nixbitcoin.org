@@ -68,7 +68,7 @@ c runuser -u postgres -- pg_dump -C btcpaydb > data/db.sql
 
 # Copy login cookie
 # This fixed login cookie is valid in all btcpayserver instances
-rsync -a /var/lib/containers/nb-test/var/lib/btcpayserver/*.xml data/data-dir
+rsync -a /var/lib/nixos-containers/nb-test/var/lib/btcpayserver/*.xml data/data-dir
 
 # Exit container shell
 exit
