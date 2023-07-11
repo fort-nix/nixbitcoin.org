@@ -35,7 +35,7 @@ else
   burstLimitIgnoreInternalResponse=1
 fi
 
-assertBurstLimit 5 POST http://$ip/donate
+assertBurstLimit 5 POST http://$ip/donate/multi
 restartNginx
 
 echo "Success"

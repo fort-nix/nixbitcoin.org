@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 11.13
--- Dumped by pg_dump version 11.13
+-- Dumped from database version 11.20
+-- Dumped by pg_dump version 11.20
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -65,7 +65,8 @@ CREATE TABLE public."ApiKeys" (
     "Type" integer DEFAULT 0 NOT NULL,
     "UserId" character varying(50),
     "Label" text,
-    "Blob" bytea
+    "Blob" bytea,
+    "Blob2" jsonb
 );
 
 
@@ -192,11 +193,29 @@ CREATE TABLE public."AspNetUsers" (
     "UserName" character varying(256),
     "RequiresEmailConfirmation" boolean DEFAULT false NOT NULL,
     "Created" timestamp with time zone,
-    "DisabledNotifications" text
+    "DisabledNotifications" text,
+    "Blob" bytea,
+    "Blob2" jsonb
 );
 
 
 ALTER TABLE public."AspNetUsers" OWNER TO btcpayserver;
+
+--
+-- Name: CustodianAccount; Type: TABLE; Schema: public; Owner: btcpayserver
+--
+
+CREATE TABLE public."CustodianAccount" (
+    "Id" character varying(50) NOT NULL,
+    "StoreId" character varying(50) NOT NULL,
+    "CustodianCode" character varying(50) NOT NULL,
+    "Name" character varying(50),
+    "Blob" bytea,
+    "Blob2" jsonb
+);
+
+
+ALTER TABLE public."CustodianAccount" OWNER TO btcpayserver;
 
 --
 -- Name: Fido2Credentials; Type: TABLE; Schema: public; Owner: btcpayserver
@@ -207,7 +226,8 @@ CREATE TABLE public."Fido2Credentials" (
     "Name" text,
     "ApplicationUserId" text,
     "Blob" bytea,
-    "Type" integer NOT NULL
+    "Type" integer NOT NULL,
+    "Blob2" jsonb
 );
 
 
@@ -229,19 +249,19 @@ CREATE TABLE public."Files" (
 ALTER TABLE public."Files" OWNER TO btcpayserver;
 
 --
--- Name: HistoricalAddressInvoices; Type: TABLE; Schema: public; Owner: btcpayserver
+-- Name: Forms; Type: TABLE; Schema: public; Owner: btcpayserver
 --
 
-CREATE TABLE public."HistoricalAddressInvoices" (
-    "InvoiceDataId" text NOT NULL,
-    "Address" text NOT NULL,
-    "Assigned" timestamp with time zone NOT NULL,
-    "UnAssigned" timestamp with time zone,
-    "CryptoCode" text
+CREATE TABLE public."Forms" (
+    "Id" text NOT NULL,
+    "Name" text,
+    "StoreId" text,
+    "Config" jsonb,
+    "Public" boolean NOT NULL
 );
 
 
-ALTER TABLE public."HistoricalAddressInvoices" OWNER TO btcpayserver;
+ALTER TABLE public."Forms" OWNER TO btcpayserver;
 
 --
 -- Name: InvoiceEvents; Type: TABLE; Schema: public; Owner: btcpayserver
@@ -265,7 +285,7 @@ ALTER TABLE public."InvoiceEvents" OWNER TO btcpayserver;
 CREATE TABLE public."InvoiceSearches" (
     "Id" integer NOT NULL,
     "InvoiceDataId" character varying(255),
-    "Value" character varying(512)
+    "Value" text
 );
 
 
@@ -298,8 +318,8 @@ ALTER SEQUENCE public."InvoiceSearches_Id_seq" OWNED BY public."InvoiceSearches"
 --
 
 CREATE TABLE public."InvoiceWebhookDeliveries" (
-    "InvoiceId" character varying(255) NOT NULL,
-    "DeliveryId" character varying(100) NOT NULL
+    "InvoiceId" text NOT NULL,
+    "DeliveryId" text NOT NULL
 );
 
 
@@ -316,15 +336,30 @@ CREATE TABLE public."Invoices" (
     "CustomerEmail" text,
     "ExceptionStatus" text,
     "ItemCode" text,
-    "OrderId" character varying(100),
+    "OrderId" text,
     "Status" text,
     "StoreDataId" text,
     "Archived" boolean DEFAULT false NOT NULL,
-    "CurrentRefundId" text
+    "CurrentRefundId" text,
+    "Blob2" jsonb
 );
 
 
 ALTER TABLE public."Invoices" OWNER TO btcpayserver;
+
+--
+-- Name: LightningAddresses; Type: TABLE; Schema: public; Owner: btcpayserver
+--
+
+CREATE TABLE public."LightningAddresses" (
+    "Username" text NOT NULL,
+    "StoreDataId" text NOT NULL,
+    "Blob" bytea,
+    "Blob2" jsonb
+);
+
+
+ALTER TABLE public."LightningAddresses" OWNER TO btcpayserver;
 
 --
 -- Name: Notifications; Type: TABLE; Schema: public; Owner: btcpayserver
@@ -336,7 +371,8 @@ CREATE TABLE public."Notifications" (
     "ApplicationUserId" character varying(50) NOT NULL,
     "NotificationType" character varying(100) NOT NULL,
     "Seen" boolean NOT NULL,
-    "Blob" bytea
+    "Blob" bytea,
+    "Blob2" jsonb
 );
 
 
@@ -408,7 +444,8 @@ CREATE TABLE public."PaymentRequests" (
     "Status" integer NOT NULL,
     "Blob" bytea,
     "Created" timestamp with time zone DEFAULT '1970-01-01 00:00:00+00'::timestamp with time zone NOT NULL,
-    "Archived" boolean DEFAULT false NOT NULL
+    "Archived" boolean DEFAULT false NOT NULL,
+    "Blob2" jsonb
 );
 
 
@@ -422,11 +459,29 @@ CREATE TABLE public."Payments" (
     "Id" text NOT NULL,
     "Blob" bytea,
     "InvoiceDataId" text,
-    "Accounted" boolean DEFAULT false NOT NULL
+    "Accounted" boolean DEFAULT false NOT NULL,
+    "Blob2" jsonb,
+    "Type" text
 );
 
 
 ALTER TABLE public."Payments" OWNER TO btcpayserver;
+
+--
+-- Name: PayoutProcessors; Type: TABLE; Schema: public; Owner: btcpayserver
+--
+
+CREATE TABLE public."PayoutProcessors" (
+    "Id" text NOT NULL,
+    "StoreId" text,
+    "PaymentMethod" text,
+    "Processor" text,
+    "Blob" bytea,
+    "Blob2" jsonb
+);
+
+
+ALTER TABLE public."PayoutProcessors" OWNER TO btcpayserver;
 
 --
 -- Name: Payouts; Type: TABLE; Schema: public; Owner: btcpayserver
@@ -440,7 +495,8 @@ CREATE TABLE public."Payouts" (
     "PaymentMethodId" character varying(20) NOT NULL,
     "Destination" text,
     "Blob" bytea,
-    "Proof" bytea
+    "Proof" bytea,
+    "StoreDataId" text
 );
 
 
@@ -505,11 +561,38 @@ ALTER TABLE public."Refunds" OWNER TO btcpayserver;
 
 CREATE TABLE public."Settings" (
     "Id" text NOT NULL,
-    "Value" text
+    "Value" jsonb
 );
 
 
 ALTER TABLE public."Settings" OWNER TO btcpayserver;
+
+--
+-- Name: StoreRoles; Type: TABLE; Schema: public; Owner: btcpayserver
+--
+
+CREATE TABLE public."StoreRoles" (
+    "Id" text NOT NULL,
+    "StoreDataId" text,
+    "Role" text NOT NULL,
+    "Permissions" text[] NOT NULL
+);
+
+
+ALTER TABLE public."StoreRoles" OWNER TO btcpayserver;
+
+--
+-- Name: StoreSettings; Type: TABLE; Schema: public; Owner: btcpayserver
+--
+
+CREATE TABLE public."StoreSettings" (
+    "Name" text NOT NULL,
+    "StoreId" text NOT NULL,
+    "Value" jsonb
+);
+
+
+ALTER TABLE public."StoreSettings" OWNER TO btcpayserver;
 
 --
 -- Name: StoreWebhooks; Type: TABLE; Schema: public; Owner: btcpayserver
@@ -534,8 +617,8 @@ CREATE TABLE public."Stores" (
     "StoreCertificate" bytea,
     "StoreName" text,
     "StoreWebsite" text,
-    "StoreBlob" bytea,
-    "DerivationStrategies" text,
+    "StoreBlob" jsonb,
+    "DerivationStrategies" jsonb,
     "DefaultCrypto" text
 );
 
@@ -573,6 +656,36 @@ CREATE TABLE public."UserStore" (
 ALTER TABLE public."UserStore" OWNER TO btcpayserver;
 
 --
+-- Name: WalletObjectLinks; Type: TABLE; Schema: public; Owner: btcpayserver
+--
+
+CREATE TABLE public."WalletObjectLinks" (
+    "WalletId" text NOT NULL,
+    "AType" text NOT NULL,
+    "AId" text NOT NULL,
+    "BType" text NOT NULL,
+    "BId" text NOT NULL,
+    "Data" jsonb
+);
+
+
+ALTER TABLE public."WalletObjectLinks" OWNER TO btcpayserver;
+
+--
+-- Name: WalletObjects; Type: TABLE; Schema: public; Owner: btcpayserver
+--
+
+CREATE TABLE public."WalletObjects" (
+    "WalletId" text NOT NULL,
+    "Type" text NOT NULL,
+    "Id" text NOT NULL,
+    "Data" jsonb
+);
+
+
+ALTER TABLE public."WalletObjects" OWNER TO btcpayserver;
+
+--
 -- Name: WalletTransactions; Type: TABLE; Schema: public; Owner: btcpayserver
 --
 
@@ -603,10 +716,11 @@ ALTER TABLE public."Wallets" OWNER TO btcpayserver;
 --
 
 CREATE TABLE public."WebhookDeliveries" (
-    "Id" character varying(25) NOT NULL,
-    "WebhookId" character varying(25) NOT NULL,
+    "Id" text NOT NULL,
+    "WebhookId" text NOT NULL,
     "Timestamp" timestamp with time zone NOT NULL,
-    "Blob" bytea NOT NULL
+    "Pruned" boolean NOT NULL,
+    "Blob" jsonb NOT NULL
 );
 
 
@@ -618,7 +732,8 @@ ALTER TABLE public."WebhookDeliveries" OWNER TO btcpayserver;
 
 CREATE TABLE public."Webhooks" (
     "Id" character varying(25) NOT NULL,
-    "Blob" bytea NOT NULL
+    "Blob" bytea NOT NULL,
+    "Blob2" jsonb
 );
 
 
@@ -655,7 +770,7 @@ COPY public."AddressInvoices" ("Address", "InvoiceDataId", "CreatedTime") FROM s
 -- Data for Name: ApiKeys; Type: TABLE DATA; Schema: public; Owner: btcpayserver
 --
 
-COPY public."ApiKeys" ("Id", "StoreId", "Type", "UserId", "Label", "Blob") FROM stdin;
+COPY public."ApiKeys" ("Id", "StoreId", "Type", "UserId", "Label", "Blob", "Blob2") FROM stdin;
 \.
 
 
@@ -664,8 +779,7 @@ COPY public."ApiKeys" ("Id", "StoreId", "Type", "UserId", "Label", "Blob") FROM 
 --
 
 COPY public."Apps" ("Id", "AppType", "Created", "Name", "Settings", "StoreDataId", "TagAllInvoices") FROM stdin;
-qJ1NExmDYQLr6MoyZFypeeFgLNj	PointOfSale	2021-11-04 15:47:32.44889+00	donate	{"Title":"Donate","Currency":"USD","Template":"{}\\n","EnableShoppingCart":false,"DefaultView":0,"ShowCustomAmount":true,"ShowDiscount":true,"EnableTips":true,"RequiresRefundEmail":0,"ButtonText":"Buy for {0}","CustomButtonText":"Pay","CustomTipText":"Do you want to leave a tip?","CustomTipPercentages":[15,18,20],"CustomCSSLink":null,"EmbeddedCSS":null,"Description":null,"NotificationUrl":null,"RedirectUrl":null,"RedirectAutomatically":null}	9Bf5g2uHFaN21N2ub62fuNCUPrrmiyYSnT4a5iCniHCo	f
-3UPqaCWn98kHQkt8jmqW2wbfVM3H	PointOfSale	2021-11-04 15:47:54.21221+00	donate_lnurl	{"Title":"Donate","Currency":"USD","Template":"donate:\\n  title: Donate\\n  price_type: topup\\n  disabled: false\\n","EnableShoppingCart":false,"DefaultView":3,"ShowCustomAmount":true,"ShowDiscount":true,"EnableTips":true,"RequiresRefundEmail":0,"ButtonText":"Buy for {0}","CustomButtonText":"Pay","CustomTipText":"Do you want to leave a tip?","CustomTipPercentages":[15,18,20],"CustomCSSLink":null,"EmbeddedCSS":null,"Description":null,"NotificationUrl":null,"RedirectUrl":null,"RedirectAutomatically":null}	9Bf5g2uHFaN21N2ub62fuNCUPrrmiyYSnT4a5iCniHCo	f
+qJ1NExmDYQLr6MoyZFypeeFgLNj	PointOfSale	2021-11-04 15:47:32.44889+00	donate	{"Title":"Donate","Currency":"USD","Template":"[]","EnableShoppingCart":false,"DefaultView":0,"ShowCustomAmount":true,"ShowDiscount":true,"EnableTips":true,"RequiresRefundEmail":0,"FormId":null,"ButtonText":"Buy for {0}","CustomButtonText":"Pay","CustomTipText":"Do you want to leave a tip?","CustomTipPercentages":[15,18,20],"CustomCSSLink":null,"EmbeddedCSS":null,"Description":null,"NotificationUrl":null,"RedirectUrl":null,"RedirectAutomatically":null,"CheckoutType":0}	9Bf5g2uHFaN21N2ub62fuNCUPrrmiyYSnT4a5iCniHCo	f
 \.
 
 
@@ -723,8 +837,16 @@ COPY public."AspNetUserTokens" ("UserId", "LoginProvider", "Name", "Value") FROM
 -- Data for Name: AspNetUsers; Type: TABLE DATA; Schema: public; Owner: btcpayserver
 --
 
-COPY public."AspNetUsers" ("Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName", "RequiresEmailConfirmation", "Created", "DisabledNotifications") FROM stdin;
-3031b3fb-7750-4f2c-9ff2-18b61e701071	0	96581895-5458-4d5d-b26a-cd8a051a3253	a@a.a	f	t	\N	A@A.A	A@A.A	AQAAAAEAACcQAAAAEN3oFCaQvUlP15ily3WyIlZw4lMbl7BAdu37Fosa24ZFFj4ghNNP6Y2XWkTpgUDvaA==	\N	f	VG2XBRML5VA5EBD5M4ASS26RARTEW5MO	f	a@a.a	f	2021-11-04 15:46:07.412282+00	\N
+COPY public."AspNetUsers" ("Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName", "RequiresEmailConfirmation", "Created", "DisabledNotifications", "Blob", "Blob2") FROM stdin;
+3031b3fb-7750-4f2c-9ff2-18b61e701071	0	96581895-5458-4d5d-b26a-cd8a051a3253	a@a.a	f	t	\N	A@A.A	A@A.A	AQAAAAEAACcQAAAAEN3oFCaQvUlP15ily3WyIlZw4lMbl7BAdu37Fosa24ZFFj4ghNNP6Y2XWkTpgUDvaA==	\N	f	VG2XBRML5VA5EBD5M4ASS26RARTEW5MO	f	a@a.a	f	2021-11-04 15:46:07.412282+00	\N	\\x	{"showInvoiceStatusChangeHint": true}
+\.
+
+
+--
+-- Data for Name: CustodianAccount; Type: TABLE DATA; Schema: public; Owner: btcpayserver
+--
+
+COPY public."CustodianAccount" ("Id", "StoreId", "CustodianCode", "Name", "Blob", "Blob2") FROM stdin;
 \.
 
 
@@ -732,7 +854,7 @@ COPY public."AspNetUsers" ("Id", "AccessFailedCount", "ConcurrencyStamp", "Email
 -- Data for Name: Fido2Credentials; Type: TABLE DATA; Schema: public; Owner: btcpayserver
 --
 
-COPY public."Fido2Credentials" ("Id", "Name", "ApplicationUserId", "Blob", "Type") FROM stdin;
+COPY public."Fido2Credentials" ("Id", "Name", "ApplicationUserId", "Blob", "Type", "Blob2") FROM stdin;
 \.
 
 
@@ -745,10 +867,10 @@ COPY public."Files" ("Id", "FileName", "StorageFileName", "Timestamp", "Applicat
 
 
 --
--- Data for Name: HistoricalAddressInvoices; Type: TABLE DATA; Schema: public; Owner: btcpayserver
+-- Data for Name: Forms; Type: TABLE DATA; Schema: public; Owner: btcpayserver
 --
 
-COPY public."HistoricalAddressInvoices" ("InvoiceDataId", "Address", "Assigned", "UnAssigned", "CryptoCode") FROM stdin;
+COPY public."Forms" ("Id", "Name", "StoreId", "Config", "Public") FROM stdin;
 \.
 
 
@@ -780,7 +902,15 @@ COPY public."InvoiceWebhookDeliveries" ("InvoiceId", "DeliveryId") FROM stdin;
 -- Data for Name: Invoices; Type: TABLE DATA; Schema: public; Owner: btcpayserver
 --
 
-COPY public."Invoices" ("Id", "Blob", "Created", "CustomerEmail", "ExceptionStatus", "ItemCode", "OrderId", "Status", "StoreDataId", "Archived", "CurrentRefundId") FROM stdin;
+COPY public."Invoices" ("Id", "Blob", "Created", "CustomerEmail", "ExceptionStatus", "ItemCode", "OrderId", "Status", "StoreDataId", "Archived", "CurrentRefundId", "Blob2") FROM stdin;
+\.
+
+
+--
+-- Data for Name: LightningAddresses; Type: TABLE DATA; Schema: public; Owner: btcpayserver
+--
+
+COPY public."LightningAddresses" ("Username", "StoreDataId", "Blob", "Blob2") FROM stdin;
 \.
 
 
@@ -788,7 +918,7 @@ COPY public."Invoices" ("Id", "Blob", "Created", "CustomerEmail", "ExceptionStat
 -- Data for Name: Notifications; Type: TABLE DATA; Schema: public; Owner: btcpayserver
 --
 
-COPY public."Notifications" ("Id", "Created", "ApplicationUserId", "NotificationType", "Seen", "Blob") FROM stdin;
+COPY public."Notifications" ("Id", "Created", "ApplicationUserId", "NotificationType", "Seen", "Blob", "Blob2") FROM stdin;
 \.
 
 
@@ -828,7 +958,7 @@ COPY public."PayjoinLocks" ("Id") FROM stdin;
 -- Data for Name: PaymentRequests; Type: TABLE DATA; Schema: public; Owner: btcpayserver
 --
 
-COPY public."PaymentRequests" ("Id", "StoreDataId", "Status", "Blob", "Created", "Archived") FROM stdin;
+COPY public."PaymentRequests" ("Id", "StoreDataId", "Status", "Blob", "Created", "Archived", "Blob2") FROM stdin;
 \.
 
 
@@ -836,7 +966,15 @@ COPY public."PaymentRequests" ("Id", "StoreDataId", "Status", "Blob", "Created",
 -- Data for Name: Payments; Type: TABLE DATA; Schema: public; Owner: btcpayserver
 --
 
-COPY public."Payments" ("Id", "Blob", "InvoiceDataId", "Accounted") FROM stdin;
+COPY public."Payments" ("Id", "Blob", "InvoiceDataId", "Accounted", "Blob2", "Type") FROM stdin;
+\.
+
+
+--
+-- Data for Name: PayoutProcessors; Type: TABLE DATA; Schema: public; Owner: btcpayserver
+--
+
+COPY public."PayoutProcessors" ("Id", "StoreId", "PaymentMethod", "Processor", "Blob", "Blob2") FROM stdin;
 \.
 
 
@@ -844,7 +982,7 @@ COPY public."Payments" ("Id", "Blob", "InvoiceDataId", "Accounted") FROM stdin;
 -- Data for Name: Payouts; Type: TABLE DATA; Schema: public; Owner: btcpayserver
 --
 
-COPY public."Payouts" ("Id", "Date", "PullPaymentDataId", "State", "PaymentMethodId", "Destination", "Blob", "Proof") FROM stdin;
+COPY public."Payouts" ("Id", "Date", "PullPaymentDataId", "State", "PaymentMethodId", "Destination", "Blob", "Proof", "StoreDataId") FROM stdin;
 \.
 
 
@@ -885,10 +1023,29 @@ COPY public."Refunds" ("InvoiceDataId", "PullPaymentDataId") FROM stdin;
 --
 
 COPY public."Settings" ("Id", "Value") FROM stdin;
-BTCPayServer.Services.MigrationSettings	{"MigrateHotwalletProperty2":true,"MigrateU2FToFIDO2":true,"UnreachableStoreCheck":true,"DeprecatedLightningConnectionStringCheck":true,"ConvertMultiplierToSpread":true,"ConvertNetworkFeeProperty":true,"ConvertCrowdfundOldSettings":true,"ConvertWalletKeyPathRoots":true,"CheckedFirstRun":true,"PaymentMethodCriteria":true,"TransitionToStoreBlobAdditionalData":true,"TransitionInternalNodeConnectionString":true,"MigratedInvoiceTextSearchPages":null,"MigrateAppCustomOption":true,"MigratePayoutDestinationId":true}
-BTCPayServer.Services.ThemeSettings	{"CustomTheme":false,"CustomThemeCssUri":null,"CssUri":"/main/themes/default.css","FirstRun":false}
-BTCPayServer.Services.PoliciesSettings	{"RequiresConfirmedEmail":false,"LockSubscription":true,"DiscourageSearchEngines":false,"AllowLightningInternalNodeForAll":false,"AllowHotWalletForAll":false,"AllowHotWalletRPCImportForAll":false,"CheckForNewVersions":false,"DisableInstantNotifications":false,"DisableStoresToUseServerEmailSettings":false,"DisableNonAdminCreateUserApi":false,"DisableSSHService":false,"RootAppId":null,"RootAppType":null,"BlockExplorerLinks":[],"DomainToAppMapping":[]}
-BTCPayServer.HostedServices.RatesHostedService+ExchangeRatesCache	{"Created":1636040935,"States":[]}
+BTCPayServer.Services.ThemeSettings	{"CssUri": "/main/themes/default.css", "FirstRun": false, "CustomTheme": false, "CustomThemeCssUri": null}
+BTCPayServer.Services.PoliciesSettings	{"RootAppId": null, "RootAppType": null, "LockSubscription": true, "DisableSSHService": false, "BlockExplorerLinks": [], "DomainToAppMapping": [], "CheckForNewVersions": false, "AllowHotWalletForAll": false, "RequiresConfirmedEmail": false, "DiscourageSearchEngines": false, "DisableInstantNotifications": false, "DisableNonAdminCreateUserApi": false, "AllowHotWalletRPCImportForAll": false, "AllowLightningInternalNodeForAll": false, "DisableStoresToUseServerEmailSettings": false}
+BTCPayServer.Services.MigrationSettings	{"CheckedFirstRun": true, "AddStoreToPayout": true, "MigrateU2FToFIDO2": true, "AddInitialUserBlob": true, "MigrateAppYmlToJson": true, "MigrateWalletColors": true, "PaymentMethodCriteria": true, "FixMappedDomainAppType": true, "MigrateAppCustomOption": true, "ConvertMultiplierToSpread": true, "ConvertNetworkFeeProperty": true, "ConvertWalletKeyPathRoots": true, "MigrateHotwalletProperty2": true, "MigratedTransactionLabels": 2147483647, "FileSystemStorageAsDefault": true, "FixSeqAfterSqliteMigration": true, "MigratePayoutDestinationId": true, "ConvertCrowdfundOldSettings": true, "LighingAddressSettingRename": true, "MigratedInvoiceTextSearchPages": null, "LighingAddressDatabaseMigration": true, "MigrateEmailServerDisableTLSCerts": true, "TransitionToStoreBlobAdditionalData": true, "TransitionInternalNodeConnectionString": true, "DeprecatedLightningConnectionStringCheck": true}
+BTCPayServer.HostedServices.RatesHostedService+ExchangeRatesCache	{"States": [], "Created": 1689088885}
+BTCPayServer.Storage.Models.StorageSettings	{"Provider": 3, "ConfigurationStr": "{\\n  \\"ContainerName\\": \\"\\"\\n}"}
+\.
+
+
+--
+-- Data for Name: StoreRoles; Type: TABLE DATA; Schema: public; Owner: btcpayserver
+--
+
+COPY public."StoreRoles" ("Id", "StoreDataId", "Role", "Permissions") FROM stdin;
+Owner	\N	Owner	{btcpay.store.canmodifystoresettings,btcpay.store.cantradecustodianaccount,btcpay.store.canwithdrawfromcustodianaccount,btcpay.store.candeposittocustodianaccount}
+Guest	\N	Guest	{btcpay.store.canviewstoresettings,btcpay.store.canmodifyinvoices,btcpay.store.canviewcustodianaccounts,btcpay.store.candeposittocustodianaccount}
+\.
+
+
+--
+-- Data for Name: StoreSettings; Type: TABLE DATA; Schema: public; Owner: btcpayserver
+--
+
+COPY public."StoreSettings" ("Name", "StoreId", "Value") FROM stdin;
 \.
 
 
@@ -905,7 +1062,7 @@ COPY public."StoreWebhooks" ("StoreId", "WebhookId") FROM stdin;
 --
 
 COPY public."Stores" ("Id", "DerivationStrategy", "SpeedPolicy", "StoreCertificate", "StoreName", "StoreWebsite", "StoreBlob", "DerivationStrategies", "DefaultCrypto") FROM stdin;
-9Bf5g2uHFaN21N2ub62fuNCUPrrmiyYSnT4a5iCniHCo	\N	0	\N	nix-bitcoin	\N	\\x7b226e6574776f726b4665654d6f6465223a224e65766572222c227265717569726573526566756e64456d61696c223a66616c73652c226c696768746e696e67416d6f756e74496e5361746f736869223a66616c73652c226c696768746e696e6750726976617465526f75746548696e7473223a66616c73652c226f6e436861696e576974684c6e496e766f69636546616c6c6261636b223a66616c73652c226c617a795061796d656e744d6574686f6473223a66616c73652c2272656469726563744175746f6d61746963616c6c79223a66616c73652c2273686f775265636f6d6d656e646564466565223a747275652c227265636f6d6d656e646564466565426c6f636b546172676574223a312c2264656661756c7443757272656e6379223a22555344222c2264656661756c7443757272656e63795061697273223a5b5d2c2264656661756c744c616e67223a22656e222c226d6f6e69746f72696e6745787069726174696f6e223a36302c22696e766f69636545787069726174696f6e223a31352c22737072656164223a302e302c2270726566657272656445786368616e6765223a22636f696e6765636b6f222c227061796d656e744d6574686f644372697465726961223a5b5d2c22637573746f6d435353223a6e756c6c2c22637573746f6d4c6f676f223a6e756c6c2c2268746d6c5469746c65223a6e756c6c2c226175746f4465746563744c616e6775616765223a66616c73652c2272617465536372697074696e67223a66616c73652c2272617465536372697074223a6e756c6c2c22616e796f6e6543616e496e766f696365223a66616c73652c226c696768746e696e674465736372697074696f6e54656d706c617465223a225061696420746f207b53746f72654e616d657d20284f726465722049443a207b4f7264657249647d29222c227061796d656e74546f6c6572616e6365223a302e302c226578636c756465645061796d656e744d6574686f6473223a5b5d2c22656d61696c53657474696e6773223a6e756c6c2c227061794a6f696e456e61626c6564223a66616c73652c2268696e7473223a7b2277616c6c6574223a66616c73652c226c696768746e696e67223a66616c73657d7d	{\n  "BTC": {\n    "signingKey": "tpubDCBShd2ofpNtXwNhRTze1AcYAYF2AU1SGMMf5M9RGaCADxF93JfcWQY4PL5xUMcg2vpQ16wWG6yv1bAHsaHwt7yFPC4X4VvPAnXhXjZMJ5A",\n    "source": "NBXplorerGenerated",\n    "isHotWallet": true,\n    "accountDerivation": "tpubDCBShd2ofpNtXwNhRTze1AcYAYF2AU1SGMMf5M9RGaCADxF93JfcWQY4PL5xUMcg2vpQ16wWG6yv1bAHsaHwt7yFPC4X4VvPAnXhXjZMJ5A",\n    "accountOriginal": "tpubDCBShd2ofpNtXwNhRTze1AcYAYF2AU1SGMMf5M9RGaCADxF93JfcWQY4PL5xUMcg2vpQ16wWG6yv1bAHsaHwt7yFPC4X4VvPAnXhXjZMJ5A",\n    "accountKeySettings": [\n      {\n        "rootFingerprint": "83c60b64",\n        "accountKeyPath": "84'/1'/0'",\n        "accountKey": "tpubDCBShd2ofpNtXwNhRTze1AcYAYF2AU1SGMMf5M9RGaCADxF93JfcWQY4PL5xUMcg2vpQ16wWG6yv1bAHsaHwt7yFPC4X4VvPAnXhXjZMJ5A"\n      }\n    ],\n    "label": null\n  },\n  "LBTC": {\n    "signingKey": "tpubDDh9MBDCHM5Jx4wqNM1umSVnSbS6RrsTrj1FMLgdJExe76pKX5WTgB3MnhvxCNzWGQXiFLkeurNLJM1U5BWsTxsvfkotnJPirvGjwTRruwA",\n    "source": "NBXplorerGenerated",\n    "isHotWallet": true,\n    "accountDerivation": "tpubDDh9MBDCHM5Jx4wqNM1umSVnSbS6RrsTrj1FMLgdJExe76pKX5WTgB3MnhvxCNzWGQXiFLkeurNLJM1U5BWsTxsvfkotnJPirvGjwTRruwA",\n    "accountOriginal": "tpubDDh9MBDCHM5Jx4wqNM1umSVnSbS6RrsTrj1FMLgdJExe76pKX5WTgB3MnhvxCNzWGQXiFLkeurNLJM1U5BWsTxsvfkotnJPirvGjwTRruwA",\n    "accountKeySettings": [\n      {\n        "rootFingerprint": "78098787",\n        "accountKeyPath": "84'/1'/0'",\n        "accountKey": "tpubDDh9MBDCHM5Jx4wqNM1umSVnSbS6RrsTrj1FMLgdJExe76pKX5WTgB3MnhvxCNzWGQXiFLkeurNLJM1U5BWsTxsvfkotnJPirvGjwTRruwA"\n      }\n    ],\n    "label": null\n  },\n  "BTC_LightningLike": {\n    "CryptoCode": "BTC",\n    "DisableBOLT11PaymentOption": false,\n    "InternalNodeRef": "Internal Node"\n  },\n  "BTC_LNURLPAY": {\n    "CryptoCode": "BTC",\n    "UseBech32Scheme": true,\n    "EnableForStandardInvoices": true,\n    "LUD12Enabled": false\n  }\n}	\N
+9Bf5g2uHFaN21N2ub62fuNCUPrrmiyYSnT4a5iCniHCo	\N	0	\N	nix-bitcoin	\N	{"hints": {"wallet": false, "lightning": false}, "spread": 0.0, "cssFileId": null, "customCSS": null, "htmlTitle": null, "brandColor": null, "customLogo": null, "emailRules": null, "logoFileId": null, "rateScript": null, "defaultLang": "en", "checkoutType": "V1", "emailSettings": null, "rateScripting": false, "networkFeeMode": "Never", "payJoinEnabled": false, "receiptOptions": {"showQR": true, "enabled": true, "showPayments": true}, "defaultCurrency": "USD", "showStoreHeader": true, "storeSupportUrl": null, "anyoneCanInvoice": true, "celebratePayment": true, "paymentTolerance": 0.0, "invoiceExpiration": 15, "preferredExchange": "coingecko", "autoDetectLanguage": false, "lazyPaymentMethods": false, "showRecommendedFee": true, "requiresRefundEmail": false, "defaultCurrencyPairs": [], "monitoringExpiration": 60, "paymentMethodCriteria": [], "redirectAutomatically": false, "showPayInWalletButton": true, "displayExpirationTimer": 5, "excludedPaymentMethods": [], "lightningAmountInSatoshi": false, "recommendedFeeBlockTarget": 1, "lightningPrivateRouteHints": false, "lightningDescriptionTemplate": "Paid to {StoreName} (Order ID: {OrderId})", "onChainWithLnInvoiceFallback": false}	{"BTC": {"label": null, "source": "NBXplorerGenerated", "signingKey": "tpubDCBShd2ofpNtXwNhRTze1AcYAYF2AU1SGMMf5M9RGaCADxF93JfcWQY4PL5xUMcg2vpQ16wWG6yv1bAHsaHwt7yFPC4X4VvPAnXhXjZMJ5A", "isHotWallet": true, "accountOriginal": "tpubDCBShd2ofpNtXwNhRTze1AcYAYF2AU1SGMMf5M9RGaCADxF93JfcWQY4PL5xUMcg2vpQ16wWG6yv1bAHsaHwt7yFPC4X4VvPAnXhXjZMJ5A", "accountDerivation": "tpubDCBShd2ofpNtXwNhRTze1AcYAYF2AU1SGMMf5M9RGaCADxF93JfcWQY4PL5xUMcg2vpQ16wWG6yv1bAHsaHwt7yFPC4X4VvPAnXhXjZMJ5A", "accountKeySettings": [{"accountKey": "tpubDCBShd2ofpNtXwNhRTze1AcYAYF2AU1SGMMf5M9RGaCADxF93JfcWQY4PL5xUMcg2vpQ16wWG6yv1bAHsaHwt7yFPC4X4VvPAnXhXjZMJ5A", "accountKeyPath": "84'/1'/0'", "rootFingerprint": "83c60b64"}]}, "LBTC": {"label": null, "source": "NBXplorerGenerated", "signingKey": "tpubDDh9MBDCHM5Jx4wqNM1umSVnSbS6RrsTrj1FMLgdJExe76pKX5WTgB3MnhvxCNzWGQXiFLkeurNLJM1U5BWsTxsvfkotnJPirvGjwTRruwA", "isHotWallet": true, "accountOriginal": "tpubDDh9MBDCHM5Jx4wqNM1umSVnSbS6RrsTrj1FMLgdJExe76pKX5WTgB3MnhvxCNzWGQXiFLkeurNLJM1U5BWsTxsvfkotnJPirvGjwTRruwA", "accountDerivation": "tpubDDh9MBDCHM5Jx4wqNM1umSVnSbS6RrsTrj1FMLgdJExe76pKX5WTgB3MnhvxCNzWGQXiFLkeurNLJM1U5BWsTxsvfkotnJPirvGjwTRruwA", "accountKeySettings": [{"accountKey": "tpubDDh9MBDCHM5Jx4wqNM1umSVnSbS6RrsTrj1FMLgdJExe76pKX5WTgB3MnhvxCNzWGQXiFLkeurNLJM1U5BWsTxsvfkotnJPirvGjwTRruwA", "accountKeyPath": "84'/1'/0'", "rootFingerprint": "78098787"}]}, "BTC_LNURLPAY": {"CryptoCode": "BTC", "LUD12Enabled": false, "UseBech32Scheme": true, "EnableForStandardInvoices": true}, "BTC_LightningLike": {"CryptoCode": "BTC", "InternalNodeRef": "Internal Node", "DisableBOLT11PaymentOption": false}}	\N
 \.
 
 
@@ -923,6 +1080,22 @@ COPY public."U2FDevices" ("Id", "Name", "KeyHandle", "PublicKey", "AttestationCe
 
 COPY public."UserStore" ("ApplicationUserId", "StoreDataId", "Role") FROM stdin;
 3031b3fb-7750-4f2c-9ff2-18b61e701071	9Bf5g2uHFaN21N2ub62fuNCUPrrmiyYSnT4a5iCniHCo	Owner
+\.
+
+
+--
+-- Data for Name: WalletObjectLinks; Type: TABLE DATA; Schema: public; Owner: btcpayserver
+--
+
+COPY public."WalletObjectLinks" ("WalletId", "AType", "AId", "BType", "BId", "Data") FROM stdin;
+\.
+
+
+--
+-- Data for Name: WalletObjects; Type: TABLE DATA; Schema: public; Owner: btcpayserver
+--
+
+COPY public."WalletObjects" ("WalletId", "Type", "Id", "Data") FROM stdin;
 \.
 
 
@@ -946,7 +1119,7 @@ COPY public."Wallets" ("Id", "Blob") FROM stdin;
 -- Data for Name: WebhookDeliveries; Type: TABLE DATA; Schema: public; Owner: btcpayserver
 --
 
-COPY public."WebhookDeliveries" ("Id", "WebhookId", "Timestamp", "Blob") FROM stdin;
+COPY public."WebhookDeliveries" ("Id", "WebhookId", "Timestamp", "Pruned", "Blob") FROM stdin;
 \.
 
 
@@ -954,7 +1127,7 @@ COPY public."WebhookDeliveries" ("Id", "WebhookId", "Timestamp", "Blob") FROM st
 -- Data for Name: Webhooks; Type: TABLE DATA; Schema: public; Owner: btcpayserver
 --
 
-COPY public."Webhooks" ("Id", "Blob") FROM stdin;
+COPY public."Webhooks" ("Id", "Blob", "Blob2") FROM stdin;
 \.
 
 
@@ -1003,6 +1176,22 @@ COPY public."__EFMigrationsHistory" ("MigrationId", "ProductVersion") FROM stdin
 20201228225040_AddingInvoiceSearchesTable	3.1.19
 20210314092253_Fido2Credentials	3.1.19
 20211021085011_RemovePayoutDestinationConstraint	3.1.19
+20211125081400_AddUserBlob	6.0.9
+20220115184620_AddCustodianAccountData	6.0.9
+20220311135252_AddPayoutProcessors	6.0.9
+20220414132313_AddLightningAddress	6.0.9
+20220518061525_invoice_created_idx	6.0.9
+20220523022603_remove_historical_addresses	6.0.9
+20220610090843_AddSettingsToStore	6.0.9
+20220929132704_label	6.0.9
+20221128062447_jsonb	6.0.9
+20230123062447_migrateoldratesource	6.0.9
+20230125085242_AddForms	6.0.9
+20230130040047_blob2	6.0.9
+20230130062447_jsonb2	6.0.9
+20230315062447_fixmaxlength	6.0.9
+20230504125505_StoreRoles	6.0.9
+20230529135505_WebhookDeliveriesCleanup	6.0.9
 \.
 
 
@@ -1094,6 +1283,14 @@ ALTER TABLE ONLY public."AspNetUsers"
 
 
 --
+-- Name: CustodianAccount PK_CustodianAccount; Type: CONSTRAINT; Schema: public; Owner: btcpayserver
+--
+
+ALTER TABLE ONLY public."CustodianAccount"
+    ADD CONSTRAINT "PK_CustodianAccount" PRIMARY KEY ("Id");
+
+
+--
 -- Name: Fido2Credentials PK_Fido2Credentials; Type: CONSTRAINT; Schema: public; Owner: btcpayserver
 --
 
@@ -1110,11 +1307,11 @@ ALTER TABLE ONLY public."Files"
 
 
 --
--- Name: HistoricalAddressInvoices PK_HistoricalAddressInvoices; Type: CONSTRAINT; Schema: public; Owner: btcpayserver
+-- Name: Forms PK_Forms; Type: CONSTRAINT; Schema: public; Owner: btcpayserver
 --
 
-ALTER TABLE ONLY public."HistoricalAddressInvoices"
-    ADD CONSTRAINT "PK_HistoricalAddressInvoices" PRIMARY KEY ("InvoiceDataId", "Address");
+ALTER TABLE ONLY public."Forms"
+    ADD CONSTRAINT "PK_Forms" PRIMARY KEY ("Id");
 
 
 --
@@ -1147,6 +1344,14 @@ ALTER TABLE ONLY public."InvoiceWebhookDeliveries"
 
 ALTER TABLE ONLY public."Invoices"
     ADD CONSTRAINT "PK_Invoices" PRIMARY KEY ("Id");
+
+
+--
+-- Name: LightningAddresses PK_LightningAddresses; Type: CONSTRAINT; Schema: public; Owner: btcpayserver
+--
+
+ALTER TABLE ONLY public."LightningAddresses"
+    ADD CONSTRAINT "PK_LightningAddresses" PRIMARY KEY ("Username");
 
 
 --
@@ -1206,6 +1411,14 @@ ALTER TABLE ONLY public."Payments"
 
 
 --
+-- Name: PayoutProcessors PK_PayoutProcessors; Type: CONSTRAINT; Schema: public; Owner: btcpayserver
+--
+
+ALTER TABLE ONLY public."PayoutProcessors"
+    ADD CONSTRAINT "PK_PayoutProcessors" PRIMARY KEY ("Id");
+
+
+--
 -- Name: Payouts PK_Payouts; Type: CONSTRAINT; Schema: public; Owner: btcpayserver
 --
 
@@ -1254,6 +1467,22 @@ ALTER TABLE ONLY public."Settings"
 
 
 --
+-- Name: StoreRoles PK_StoreRoles; Type: CONSTRAINT; Schema: public; Owner: btcpayserver
+--
+
+ALTER TABLE ONLY public."StoreRoles"
+    ADD CONSTRAINT "PK_StoreRoles" PRIMARY KEY ("Id");
+
+
+--
+-- Name: StoreSettings PK_StoreSettings; Type: CONSTRAINT; Schema: public; Owner: btcpayserver
+--
+
+ALTER TABLE ONLY public."StoreSettings"
+    ADD CONSTRAINT "PK_StoreSettings" PRIMARY KEY ("StoreId", "Name");
+
+
+--
 -- Name: StoreWebhooks PK_StoreWebhooks; Type: CONSTRAINT; Schema: public; Owner: btcpayserver
 --
 
@@ -1283,6 +1512,22 @@ ALTER TABLE ONLY public."U2FDevices"
 
 ALTER TABLE ONLY public."UserStore"
     ADD CONSTRAINT "PK_UserStore" PRIMARY KEY ("ApplicationUserId", "StoreDataId");
+
+
+--
+-- Name: WalletObjectLinks PK_WalletObjectLinks; Type: CONSTRAINT; Schema: public; Owner: btcpayserver
+--
+
+ALTER TABLE ONLY public."WalletObjectLinks"
+    ADD CONSTRAINT "PK_WalletObjectLinks" PRIMARY KEY ("WalletId", "AType", "AId", "BType", "BId");
+
+
+--
+-- Name: WalletObjects PK_WalletObjects; Type: CONSTRAINT; Schema: public; Owner: btcpayserver
+--
+
+ALTER TABLE ONLY public."WalletObjects"
+    ADD CONSTRAINT "PK_WalletObjects" PRIMARY KEY ("WalletId", "Type", "Id");
 
 
 --
@@ -1389,6 +1634,13 @@ CREATE INDEX "IX_AspNetUserRoles_RoleId" ON public."AspNetUserRoles" USING btree
 
 
 --
+-- Name: IX_CustodianAccount_StoreId; Type: INDEX; Schema: public; Owner: btcpayserver
+--
+
+CREATE INDEX "IX_CustodianAccount_StoreId" ON public."CustodianAccount" USING btree ("StoreId");
+
+
+--
 -- Name: IX_Fido2Credentials_ApplicationUserId; Type: INDEX; Schema: public; Owner: btcpayserver
 --
 
@@ -1403,6 +1655,13 @@ CREATE INDEX "IX_Files_ApplicationUserId" ON public."Files" USING btree ("Applic
 
 
 --
+-- Name: IX_Forms_StoreId; Type: INDEX; Schema: public; Owner: btcpayserver
+--
+
+CREATE INDEX "IX_Forms_StoreId" ON public."Forms" USING btree ("StoreId");
+
+
+--
 -- Name: IX_InvoiceSearches_InvoiceDataId; Type: INDEX; Schema: public; Owner: btcpayserver
 --
 
@@ -1414,6 +1673,13 @@ CREATE INDEX "IX_InvoiceSearches_InvoiceDataId" ON public."InvoiceSearches" USIN
 --
 
 CREATE INDEX "IX_InvoiceSearches_Value" ON public."InvoiceSearches" USING btree ("Value");
+
+
+--
+-- Name: IX_Invoices_Created; Type: INDEX; Schema: public; Owner: btcpayserver
+--
+
+CREATE INDEX "IX_Invoices_Created" ON public."Invoices" USING btree ("Created");
 
 
 --
@@ -1435,6 +1701,13 @@ CREATE INDEX "IX_Invoices_OrderId" ON public."Invoices" USING btree ("OrderId");
 --
 
 CREATE INDEX "IX_Invoices_StoreDataId" ON public."Invoices" USING btree ("StoreDataId");
+
+
+--
+-- Name: IX_LightningAddresses_StoreDataId; Type: INDEX; Schema: public; Owner: btcpayserver
+--
+
+CREATE INDEX "IX_LightningAddresses_StoreDataId" ON public."LightningAddresses" USING btree ("StoreDataId");
 
 
 --
@@ -1480,6 +1753,13 @@ CREATE INDEX "IX_Payments_InvoiceDataId" ON public."Payments" USING btree ("Invo
 
 
 --
+-- Name: IX_PayoutProcessors_StoreId; Type: INDEX; Schema: public; Owner: btcpayserver
+--
+
+CREATE INDEX "IX_PayoutProcessors_StoreId" ON public."PayoutProcessors" USING btree ("StoreId");
+
+
+--
 -- Name: IX_Payouts_Destination_State; Type: INDEX; Schema: public; Owner: btcpayserver
 --
 
@@ -1501,6 +1781,13 @@ CREATE INDEX "IX_Payouts_State" ON public."Payouts" USING btree ("State");
 
 
 --
+-- Name: IX_Payouts_StoreDataId; Type: INDEX; Schema: public; Owner: btcpayserver
+--
+
+CREATE INDEX "IX_Payouts_StoreDataId" ON public."Payouts" USING btree ("StoreDataId");
+
+
+--
 -- Name: IX_PullPayments_StoreId; Type: INDEX; Schema: public; Owner: btcpayserver
 --
 
@@ -1515,6 +1802,13 @@ CREATE INDEX "IX_Refunds_PullPaymentDataId" ON public."Refunds" USING btree ("Pu
 
 
 --
+-- Name: IX_StoreRoles_StoreDataId_Role; Type: INDEX; Schema: public; Owner: btcpayserver
+--
+
+CREATE UNIQUE INDEX "IX_StoreRoles_StoreDataId_Role" ON public."StoreRoles" USING btree ("StoreDataId", "Role");
+
+
+--
 -- Name: IX_U2FDevices_ApplicationUserId; Type: INDEX; Schema: public; Owner: btcpayserver
 --
 
@@ -1526,6 +1820,27 @@ CREATE INDEX "IX_U2FDevices_ApplicationUserId" ON public."U2FDevices" USING btre
 --
 
 CREATE INDEX "IX_UserStore_StoreDataId" ON public."UserStore" USING btree ("StoreDataId");
+
+
+--
+-- Name: IX_WalletObjectLinks_WalletId_BType_BId; Type: INDEX; Schema: public; Owner: btcpayserver
+--
+
+CREATE INDEX "IX_WalletObjectLinks_WalletId_BType_BId" ON public."WalletObjectLinks" USING btree ("WalletId", "BType", "BId");
+
+
+--
+-- Name: IX_WalletObjects_Type_Id; Type: INDEX; Schema: public; Owner: btcpayserver
+--
+
+CREATE INDEX "IX_WalletObjects_Type_Id" ON public."WalletObjects" USING btree ("Type", "Id");
+
+
+--
+-- Name: IX_WebhookDeliveries_Timestamp; Type: INDEX; Schema: public; Owner: btcpayserver
+--
+
+CREATE INDEX "IX_WebhookDeliveries_Timestamp" ON public."WebhookDeliveries" USING btree ("Timestamp") WHERE ("Pruned" IS FALSE);
 
 
 --
@@ -1630,6 +1945,14 @@ ALTER TABLE ONLY public."AspNetUserTokens"
 
 
 --
+-- Name: CustodianAccount FK_CustodianAccount_Stores_StoreId; Type: FK CONSTRAINT; Schema: public; Owner: btcpayserver
+--
+
+ALTER TABLE ONLY public."CustodianAccount"
+    ADD CONSTRAINT "FK_CustodianAccount_Stores_StoreId" FOREIGN KEY ("StoreId") REFERENCES public."Stores"("Id") ON DELETE CASCADE;
+
+
+--
 -- Name: Fido2Credentials FK_Fido2Credentials_AspNetUsers_ApplicationUserId; Type: FK CONSTRAINT; Schema: public; Owner: btcpayserver
 --
 
@@ -1646,11 +1969,11 @@ ALTER TABLE ONLY public."Files"
 
 
 --
--- Name: HistoricalAddressInvoices FK_HistoricalAddressInvoices_Invoices_InvoiceDataId; Type: FK CONSTRAINT; Schema: public; Owner: btcpayserver
+-- Name: Forms FK_Forms_Stores_StoreId; Type: FK CONSTRAINT; Schema: public; Owner: btcpayserver
 --
 
-ALTER TABLE ONLY public."HistoricalAddressInvoices"
-    ADD CONSTRAINT "FK_HistoricalAddressInvoices_Invoices_InvoiceDataId" FOREIGN KEY ("InvoiceDataId") REFERENCES public."Invoices"("Id") ON DELETE CASCADE;
+ALTER TABLE ONLY public."Forms"
+    ADD CONSTRAINT "FK_Forms_Stores_StoreId" FOREIGN KEY ("StoreId") REFERENCES public."Stores"("Id") ON DELETE CASCADE;
 
 
 --
@@ -1702,6 +2025,14 @@ ALTER TABLE ONLY public."Invoices"
 
 
 --
+-- Name: LightningAddresses FK_LightningAddresses_Stores_StoreDataId; Type: FK CONSTRAINT; Schema: public; Owner: btcpayserver
+--
+
+ALTER TABLE ONLY public."LightningAddresses"
+    ADD CONSTRAINT "FK_LightningAddresses_Stores_StoreDataId" FOREIGN KEY ("StoreDataId") REFERENCES public."Stores"("Id") ON DELETE CASCADE;
+
+
+--
 -- Name: Notifications FK_Notifications_AspNetUsers_ApplicationUserId; Type: FK CONSTRAINT; Schema: public; Owner: btcpayserver
 --
 
@@ -1734,11 +2065,27 @@ ALTER TABLE ONLY public."Payments"
 
 
 --
+-- Name: PayoutProcessors FK_PayoutProcessors_Stores_StoreId; Type: FK CONSTRAINT; Schema: public; Owner: btcpayserver
+--
+
+ALTER TABLE ONLY public."PayoutProcessors"
+    ADD CONSTRAINT "FK_PayoutProcessors_Stores_StoreId" FOREIGN KEY ("StoreId") REFERENCES public."Stores"("Id") ON DELETE CASCADE;
+
+
+--
 -- Name: Payouts FK_Payouts_PullPayments_PullPaymentDataId; Type: FK CONSTRAINT; Schema: public; Owner: btcpayserver
 --
 
 ALTER TABLE ONLY public."Payouts"
     ADD CONSTRAINT "FK_Payouts_PullPayments_PullPaymentDataId" FOREIGN KEY ("PullPaymentDataId") REFERENCES public."PullPayments"("Id") ON DELETE CASCADE;
+
+
+--
+-- Name: Payouts FK_Payouts_Stores_StoreDataId; Type: FK CONSTRAINT; Schema: public; Owner: btcpayserver
+--
+
+ALTER TABLE ONLY public."Payouts"
+    ADD CONSTRAINT "FK_Payouts_Stores_StoreDataId" FOREIGN KEY ("StoreDataId") REFERENCES public."Stores"("Id") ON DELETE CASCADE;
 
 
 --
@@ -1774,6 +2121,22 @@ ALTER TABLE ONLY public."Refunds"
 
 
 --
+-- Name: StoreRoles FK_StoreRoles_Stores_StoreDataId; Type: FK CONSTRAINT; Schema: public; Owner: btcpayserver
+--
+
+ALTER TABLE ONLY public."StoreRoles"
+    ADD CONSTRAINT "FK_StoreRoles_Stores_StoreDataId" FOREIGN KEY ("StoreDataId") REFERENCES public."Stores"("Id") ON DELETE CASCADE;
+
+
+--
+-- Name: StoreSettings FK_StoreSettings_Stores_StoreId; Type: FK CONSTRAINT; Schema: public; Owner: btcpayserver
+--
+
+ALTER TABLE ONLY public."StoreSettings"
+    ADD CONSTRAINT "FK_StoreSettings_Stores_StoreId" FOREIGN KEY ("StoreId") REFERENCES public."Stores"("Id") ON DELETE CASCADE;
+
+
+--
 -- Name: StoreWebhooks FK_StoreWebhooks_Stores_StoreId; Type: FK CONSTRAINT; Schema: public; Owner: btcpayserver
 --
 
@@ -1806,11 +2169,35 @@ ALTER TABLE ONLY public."UserStore"
 
 
 --
+-- Name: UserStore FK_UserStore_StoreRoles_Role; Type: FK CONSTRAINT; Schema: public; Owner: btcpayserver
+--
+
+ALTER TABLE ONLY public."UserStore"
+    ADD CONSTRAINT "FK_UserStore_StoreRoles_Role" FOREIGN KEY ("Role") REFERENCES public."StoreRoles"("Id");
+
+
+--
 -- Name: UserStore FK_UserStore_Stores_StoreDataId; Type: FK CONSTRAINT; Schema: public; Owner: btcpayserver
 --
 
 ALTER TABLE ONLY public."UserStore"
     ADD CONSTRAINT "FK_UserStore_Stores_StoreDataId" FOREIGN KEY ("StoreDataId") REFERENCES public."Stores"("Id") ON DELETE CASCADE;
+
+
+--
+-- Name: WalletObjectLinks FK_WalletObjectLinks_WalletObjects_WalletId_AType_AId; Type: FK CONSTRAINT; Schema: public; Owner: btcpayserver
+--
+
+ALTER TABLE ONLY public."WalletObjectLinks"
+    ADD CONSTRAINT "FK_WalletObjectLinks_WalletObjects_WalletId_AType_AId" FOREIGN KEY ("WalletId", "AType", "AId") REFERENCES public."WalletObjects"("WalletId", "Type", "Id") ON DELETE CASCADE;
+
+
+--
+-- Name: WalletObjectLinks FK_WalletObjectLinks_WalletObjects_WalletId_BType_BId; Type: FK CONSTRAINT; Schema: public; Owner: btcpayserver
+--
+
+ALTER TABLE ONLY public."WalletObjectLinks"
+    ADD CONSTRAINT "FK_WalletObjectLinks_WalletObjects_WalletId_BType_BId" FOREIGN KEY ("WalletId", "BType", "BId") REFERENCES public."WalletObjects"("WalletId", "Type", "Id") ON DELETE CASCADE;
 
 
 --

@@ -81,6 +81,7 @@ flakeInputs:
   nixbitcoin-org.website = {
     enable = true;
     donate.btcpayserverAppId = "3NKhG5wANegkfmXJ5x4ZNuSAB1z5";
+    donate.btcpayserverPayButtonId = "3omKK79tAqxUSTHhAvXXcc2UocDjQTHXgdD71bzr93Ja";
   };
 
   nix-bitcoin.netns-isolation.enable = true;

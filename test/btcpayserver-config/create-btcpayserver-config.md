@@ -2,13 +2,13 @@
 
 This config is required to host a website donation page on a test node.
 
-These instructions have been tested with btcpayserver version v1.3.1.
+These instructions have been tested with btcpayserver version v1.10.4.
 
 
 ## 1. Start container shell
 
 ```sh
-nix-shell ../../shell.nix --command container
+nix develop -c container website
 ```
 
 ## 2. Configure btcpayserver
@@ -34,33 +34,28 @@ runuser -u $SUDO_USER -- xdg-open http://$ip:23000/btcpayserver
 
 ### Manual settings
 
-1. Configure Store:
-- Stores -> nix-bitcoin -> Settings
-  - Section `Wallet`
-    BTC, LBTC -> Setup: Create hot wallets for BTC, LBTC
-  - Section `Lightning`
-    - BTC -> Setup: Choose internal node for for BTC
-    - BTC -> Settings -> Enable lnurl
+1. Configure Wallets:
+- Left menu: Wallets -> Bitcoin
+  - Setup: Create hot wallets for BTC, LBTC
+- Left menu: Wallets -> Lightning
+  - 'Use internal node', Save
+  - Enable LNURL: On
+  - LNURL Classic Mode: On
+  - Save
 
 2. Create Apps
-- Store: 'nix-bitcoin', App type: 'Point of sale', Name: 'donate'
+- Left menu: Plugins -> 'Point of Sale' -> Name: 'donate'
   - Display Title: Donate
   - Manually remove all products
+  - 'User can input custom amount': On
   - Save
-- Store: 'nix-bitcoin', App type: 'Point of sale', Name: 'donate_lnurl'
-  - Display Title: Donate
-  - Manually remove all products
-  - Create a single product
-    - Title: Donate
-    - Price: Custom
-  - Point of Sale Style: Print
-  - Save
+- Left menu: Plugins -> Pay Button' -> Enable
 
 
 ## 4. Save data
 Run the following in the container shell
 ```bash
-mkdir -p data/data-dir
+mkdir -p ./data/data-dir
 c systemctl stop btcpayserver
 
 # Export db

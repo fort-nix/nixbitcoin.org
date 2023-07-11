@@ -11,6 +11,7 @@ run-test
 run-test --website
 
 
+#―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 ### Website
 ## Run the following commands in a container shell:
 co website
@@ -26,8 +27,18 @@ runuser -u $(logname) -- xdg-open http://$ip:23000/btcpayserver
 runuser -u $(logname) -- xdg-open http://$ip/donate
 
 # Create invoice
-curl -v -L -X POST -d '' $ip/donate
+curl -v -L -X POST -d '' $ip/donate/multi
 
 source ./test-lib.sh
 # Show invoices
 btcpAPI get stores/$(btcpAPI get stores | jq -r '.[].id')/invoices
+
+## LNURL
+curl -i $ip:23000/btcpayserver/BTC/UILNURL/9Bf5g2uHFaN21N2ub62fuNCUPrrmiyYSnT4a5iCniHCo/pay
+curl -i $ip/donate/lightning
+curl -fsS $ip/donate/lightning | jq
+# Create invoice
+curl -fsS $(curl -fsS $ip/donate/lightning | jq -r .callback)?amount=1000 | jq
+
+curl -i $ip/.well-known/lnurlp/myuser
+curl -fsS $ip/.well-known/lnurlp/myuser | jq
