@@ -25,7 +25,6 @@ in {
   # Limit systemd log retention for privacy reasons
   services.journald.extraConfig = ''
     MaxRetentionSec=24h
-    MaxFileSec=7day
   '';
 
   nix-bitcoin.netns-isolation.services = {
