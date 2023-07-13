@@ -133,7 +133,10 @@ in {
     '';
 
     nix-bitcoin.pkgOverlays = super: self: {
-      # btcpayserver 1.10.4 pre-release, required for LNURL
+      # btcpayserver 1.10.4 pre-release.
+      # This adds support for LNURL payment requests with payer-defined
+      # amounts (minSendable != maxSendable) which is required for donations.
+      # This feature is available via `Pay Button`.
       # TODO-EXTERNAL: Remove this when included in nixpkgs
       btcpayserver = self.pinned.pkgs.callPackage ./../../pkgs/btcpayserver {};
     };
