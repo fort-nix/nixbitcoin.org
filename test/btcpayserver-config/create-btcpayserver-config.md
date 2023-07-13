@@ -1,6 +1,6 @@
 # Create and export a btcpayserver test config
 
-This config is required to host a website donation page on a test node.
+This config is required to host the website donation page on a test node.
 
 These instructions have been tested with btcpayserver version v1.10.4.
 
@@ -15,32 +15,34 @@ nix develop -c container website
 
 ### 2.1 Automated settings
 Run the following in the container shell to create a user
-(email: `a@a.a`, password: `aaaaaa`) and a store named `nix-bitcoin`.
+(email: `a@a.a`, password: `aaaaaa`) and a store named `donations`.
 
 ```bash
-post() {
+call_api() {
    curl -sS -H "Content-Type: application/json" -X post --user "a@a.a:aaaaaa"  -d "$2" "$ip:23000/btcpayserver/api/v1/$1" | jq
 }
-post users '{"email": "a@a.a", "password": "aaaaaa", "isAdministrator": true}'
-post stores '{"name": "nix-bitcoin"}'
+call_api users '{"email": "a@a.a", "password": "aaaaaa", "isAdministrator": true}'
+call_api stores '{"name": "donations"}'
 ```
 
 ### 2.2 Manual settings via the web interface
 
 Run the following in the container shell to open the web interface
 ```sh
-runuser -u $SUDO_USER -- xdg-open http://$ip:23000/btcpayserver
+runuser -u $(logname) -- xdg-open http://$ip:23000/btcpayserver
 ```
 
 ### Manual settings
 
 1. Configure Wallets:
 - Left menu: Wallets -> Bitcoin
-  - Setup: Create hot wallets for BTC, LBTC
+  - Setup: Create hot wallets for BTC, LBTC (Liquid)
 - Left menu: Wallets -> Lightning
   - 'Use internal node', Save
-  - Enable LNURL: On
-  - LNURL Classic Mode: On
+  - Settings:
+    - Description template of the lightning invoice: "nix-bitcoin donation"
+    - Enable LNURL: On
+    - LNURL Classic Mode: On
   - Save
 
 2. Create Apps
