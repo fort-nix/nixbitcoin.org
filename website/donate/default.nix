@@ -18,7 +18,7 @@ let
 
   cfg = config.nixbitcoin-org.website.donate;
 
-  mkPage = import ./make-donation-page.nix { pkgs = config.nix-bitcoin.pkgs.pinned.pkgsUnstable; };
+  mkPage = import ./make-donation-page.nix { inherit pkgs; };
 
   webpageFile = "/var/cache/nginx/donate.htm";
 
