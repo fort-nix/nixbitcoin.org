@@ -70,8 +70,7 @@ def main(invoice_donation_page_url,
     html = re.sub(r'<h1.*?>Donate</h1>', logo, html, count=1)
     # Insert as last child of <div class="card ...">
     html = re.sub(r'\n(.*?</div>\s*</div>\s*</main>)', f"\n\n{lnurl_section}\n\\1", html, count=1)
-    html = re.sub(r'Custom Amount', "Create Invoice", html, count=1)
-    html = re.sub(r'Create Invoice', "Donate", html, count=1)
+    html = re.sub(r'Custom Amount',  "Donate", html, count=1)
     html = re.sub(r'Create invoice to pay custom amount', "Supports On-Chain, Lightning, Liquid", html, count=1)
 
     # For local debugging
