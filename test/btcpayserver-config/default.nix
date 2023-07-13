@@ -12,7 +12,6 @@ in
 {
   nixbitcoin-org.website.donate = {
     btcpayserverAppId = lib.mkForce "qJ1NExmDYQLr6MoyZFypeeFgLNj";
-    btcpayserverPayButtonId = lib.mkForce "9Bf5g2uHFaN21N2ub62fuNCUPrrmiyYSnT4a5iCniHCo";
   };
 
   systemd.services.importBtcpayserverConfig = rec {

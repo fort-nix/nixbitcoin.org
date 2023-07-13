@@ -51,7 +51,9 @@ runuser -u $(logname) -- xdg-open http://$ip:23000/btcpayserver
   - Manually remove all products
   - 'User can input custom amount': On
   - Save
-- Left menu: Plugins -> Pay Button' -> Enable
+- Left menu: Plugins -> Lightning Address -> Add Address
+  - Username: donate
+  - Save
 
 
 ## 4. Save data

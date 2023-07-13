@@ -34,7 +34,7 @@ source ./test-lib.sh
 btcpAPI get stores/$(btcpAPI get stores | jq -r '.[].id')/invoices
 
 ## LNURL
-curl -i $ip:23000/btcpayserver/BTC/UILNURL/9Bf5g2uHFaN21N2ub62fuNCUPrrmiyYSnT4a5iCniHCo/pay
+curl -i $ip:23000/btcpayserver/.well-known/lnurlp/donate
 curl -i $ip/donate/lightning
 curl -fsS $ip/donate/lightning | jq
 # Create invoice

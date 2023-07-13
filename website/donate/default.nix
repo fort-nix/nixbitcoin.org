@@ -10,9 +10,6 @@ let
       btcpayserverAppId = mkOption {
         type = types.str;
       };
-      btcpayserverPayButtonId = mkOption {
-        type = types.str;
-      };
     };
   };
 
@@ -21,8 +18,6 @@ let
   mkPage = import ./make-donation-page.nix { inherit pkgs; };
 
   webpageFile = "/var/cache/nginx/donate.htm";
-
-  lnurlPath = "/btcpayserver/BTC/UILNURL/${cfg.btcpayserverPayButtonId}/pay";
 
   btcpayserverAddress = with config.services.btcpayserver; "${address}:${toString port}";
 in {
@@ -74,14 +69,14 @@ in {
         rewrite ^ /btcpayserver/apps/${cfg.btcpayserverAppId}/pos;
       }
 
-      # Forward the LUD-06 lnurl location to btcpayserver
+      # Forward the LUD-06 LNURL location to btcpayserver
       location = /donate/lightning {
-        rewrite ^ ${lnurlPath};
+        rewrite ^ /btcpayserver/.well-known/lnurlp/donate;
       }
 
       # Forward all LUD-16 lightning addresses (*@nixbitcoin.org) to btcpayserver
       location /.well-known/lnurlp/ {
-        rewrite ^ ${lnurlPath};
+        rewrite ^ /btcpayserver/.well-known/lnurlp/donate;
       }
 
       location /btcpayserver/ {
@@ -96,15 +91,12 @@ in {
 
         ## Add extra rate limits for invoice generation
 
-        # 1. Rate-limit the paybutton app used for lnurl
-        location /btcpayserver/BTC/UILNURL/${cfg.btcpayserverPayButtonId} {
+        # 1. Rate-limit LNURL invoice creation
+        location /btcpayserver/BTC/UILNURL/pay/lnaddress/donate {
           return 590;
         }
         # An alias
-        location /btcpayserver/BTC/LNURL/${cfg.btcpayserverPayButtonId} {
-          return 590;
-        }
-        location /btcpayserver/api/v1/invoices {
+        location /btcpayserver/BTC/LNURL/pay/lnaddress/donate {
           return 590;
         }
 
@@ -134,9 +126,8 @@ in {
 
     nix-bitcoin.pkgOverlays = super: self: {
       # btcpayserver 1.10.4 pre-release.
-      # This adds support for LNURL payment requests with payer-defined
-      # amounts (minSendable != maxSendable) which is required for donations.
-      # This feature is available via `Pay Button`.
+      # This includes https://github.com/btcpayserver/btcpayserver/pull/5117
+      # which simplifies the rate limiting settings.
       # TODO-EXTERNAL: Remove this when included in nixpkgs
       btcpayserver = self.pinned.pkgs.callPackage ./../../pkgs/btcpayserver {};
     };
