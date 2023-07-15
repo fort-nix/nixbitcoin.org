@@ -45,9 +45,6 @@ let
     # Refused connections are happening constantly on a public server and can be ignored
     networking.firewall.logRefusedConnections = false;
 
-    # Fixes caching bugs present in glibc's nsncd
-    services.nscd.enableNsncd = true;
-
     environment.systemPackages = with pkgs; [
       htop
       tree
