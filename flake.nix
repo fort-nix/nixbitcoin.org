@@ -1,6 +1,6 @@
 {
   inputs.nix-bitcoin = {
-    url = "github:erikarvstedt/nix-bitcoin/nixos-23.05";
+    url = "github:fort-nix/nix-bitcoin/nixos-23.05";
     inputs.extra-container.follows = "extra-container";
   };
   inputs.nix-bitcoin-mempool = {
