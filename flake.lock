@@ -85,38 +85,17 @@
         "nixpkgs-unstable": "nixpkgs-unstable"
       },
       "locked": {
-        "lastModified": 1690663306,
-        "narHash": "sha256-W0FGaSmnXUJa54T5c2SMHyAG3i/U2CJo9IMGFiCv74U=",
-        "owner": "fort-nix",
+        "lastModified": 1691350844,
+        "narHash": "sha256-3Wn4ac2vqxaqT3K7mPBK5WvMx1O6JcwBY6iQFNud+o8=",
+        "owner": "erikarvstedt",
         "repo": "nix-bitcoin",
-        "rev": "2e53fd2e512872684f0619ac1540b7f229dbd206",
+        "rev": "fcd0ab9213bcbc52e86fc4f0c65fe87b3cc8ac32",
         "type": "github"
       },
       "original": {
-        "owner": "fort-nix",
-        "ref": "nixos-23.05",
+        "owner": "erikarvstedt",
+        "ref": "mempool-ea",
         "repo": "nix-bitcoin",
-        "type": "github"
-      }
-    },
-    "nix-bitcoin-mempool": {
-      "inputs": {
-        "nix-bitcoin": [
-          "nix-bitcoin"
-        ]
-      },
-      "locked": {
-        "lastModified": 1689506065,
-        "narHash": "sha256-DDcsN+wVwG81uVA8qNOf8yGjeAwHZVykJZ97+oeWb7M=",
-        "owner": "fort-nix",
-        "repo": "nix-bitcoin-mempool",
-        "rev": "7c21fb82bc686c448eb0fc2840ed0b1830fe75c8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "fort-nix",
-        "ref": "nixos-23.05",
-        "repo": "nix-bitcoin-mempool",
         "type": "github"
       }
     },
@@ -202,7 +181,6 @@
       "inputs": {
         "extra-container": "extra-container",
         "nix-bitcoin": "nix-bitcoin",
-        "nix-bitcoin-mempool": "nix-bitcoin-mempool",
         "nixos-mailserver": "nixos-mailserver",
         "nixpkgs": [
           "nix-bitcoin",

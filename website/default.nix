@@ -32,8 +32,6 @@ in {
     ./donate
     ./joinmarket-orderbook.nix
     ./mempool.nix
-    ./mempool-debug.nix
-    ./mempool-debug-tor.nix
   ];
 
   inherit options;

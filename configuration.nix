@@ -5,7 +5,6 @@ flakeInputs:
   imports = [
     flakeInputs.nix-bitcoin.nixosModules.default
     (flakeInputs.nix-bitcoin + "/modules/presets/secure-node.nix")
-    flakeInputs.nix-bitcoin-mempool.nixosModules.default
     flakeInputs.nixos-mailserver.outPath
 
     ./base.nix
