@@ -151,6 +151,8 @@ in {
         echo '"'
       } > "${dataDir}/secret-email-config"
     '';
+
+    serviceConfig.TimeoutStartSec = "5m";
   } // requireSecrets;
 
   services.nginx = {
