@@ -125,9 +125,10 @@ in {
     '';
 
     nix-bitcoin.pkgOverlays = super: self: {
-      # btcpayserver 1.10.4 pre-release.
-      # This includes https://github.com/btcpayserver/btcpayserver/pull/5117
-      # which simplifies the rate limiting settings.
+      # btcpayserver 1.11.* pre-release
+      # - includes https://github.com/btcpayserver/btcpayserver/pull/5117
+      #   which simplifies the rate limiting settings.
+      # - avoids bugs present in 1.11.2, like https://github.com/btcpayserver/btcpayserver/issues/5230
       # TODO-EXTERNAL: Remove this when included in nixpkgs
       btcpayserver = self.pinned.pkgs.callPackage ./../../pkgs/btcpayserver {};
     };
