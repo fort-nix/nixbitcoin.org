@@ -59,6 +59,8 @@ xdg-open http://localhost:10000
 # btcpayserver
 gpg --decrypt ../secrets/client-side/btcpayserver-credentials.gpg 2>/dev/null
 xdg-open http://localhost:10001/btcpayserver
+# Show donations
+xdg-open http://localhost:10001/btcpayserver/stores/3omKK79tAqxUSTHhAvXXcc2UocDjQTHXgdD71bzr93Ja/invoices?searchTerm=status%3Asettled
 
 #―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 # Backups
