@@ -22,11 +22,11 @@ if [[ ! -e $cachedEnv ]]; then
 fi
 
 args='{
-  "invoice_donation_page_url": "http://10.225.255.2/donate/multi",
-  "title": "Donate - nix-bitcoin",
   "lnurl_plaintext": "https://nixbitcoin.org/donate/lightning",
   "lightning_address": "test@nixbitcoin.org",
   "root_url": "http://10.225.255.2",
-  "output_file": "donate.htm"
+  "btcpayserver_app_id": "btcpappid",
+  "html_template": "site/donate-template.html",
+  "output_file": "site/donate.htm"
 }'
 ARGS="$args" $cachedEnv/bin/python make-donation-page.py

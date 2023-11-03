@@ -16,12 +16,14 @@ let
 in {
   inherit python;
 
-  mkServiceArgs = args: {
-    ExecStart = ''
-      ${python}/bin/python ${./make-donation-page.py}
-    '';
-    environment.ARGS = builtins.toJSON (args // {
-      html_template = ./donate-lnurl-template.html;
+  mkDonationPage = args: pkgs.runCommand "donate" {
+    ARGS = builtins.toJSON (args // {
+      html_template = ./site/donate-template.html;
+      output_file = "index.html";
     });
-  };
+  } ''
+    install -m400 -D ${./site/site.css} $out/site.css
+    cd $out
+    ${python}/bin/python ${./make-donation-page.py}
+  '';
 }

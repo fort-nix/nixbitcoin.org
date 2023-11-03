@@ -15,41 +15,19 @@ let
 
   cfg = config.nixbitcoin-org.website.donate;
 
-  mkPage = import ./make-donation-page.nix { inherit pkgs; };
-
-  webpageFile = "/var/cache/nginx/donate.htm";
+  inherit (import ./make-donation-page.nix { inherit pkgs; }) mkDonationPage;
 
   btcpayserverAddress = with config.services.btcpayserver; "${address}:${toString port}";
+
+  donationPage = mkDonationPage {
+    lnurl_plaintext = "https://nixbitcoin.org/donate/lightning";
+    lightning_address = "donate@nixbitcoin.org";
+    btcpayserver_app_id = cfg.btcpayserverAppId;
+  };
 in {
   inherit options;
 
   config = {
-    systemd.services = mkIf config.nixbitcoin-org.website.enable {
-      # Fetches the invoice-based btcpayserver donation page and amends it
-      # with LNURL payment info.
-      make-donation-page = let
-        args = mkPage.mkServiceArgs {
-          output_file = webpageFile;
-          title = "Donate - nix-bitcoin";
-          invoice_donation_page_url = "http://${config.nixbitcoin-org.website.nginxAddress}/donate/multi";
-          lnurl_plaintext = "https://nixbitcoin.org/donate/lightning";
-          lightning_address = "donate@nixbitcoin.org";
-        };
-      in rec {
-        requires = [ "btcpayserver.service" "nginx.service" ];
-        wantedBy = requires ++ [ "multi-user.target" ];
-        bindsTo = requires;
-        after = requires;
-        inherit (args) environment;
-        serviceConfig = {
-          User = config.services.nginx.user;
-          inherit (args) ExecStart;
-          Restart = "on-failure";
-          RestartSec = "30s";
-        };
-      };
-    };
-
     # Clearnet: Allow 2 invoices per minute and IP, with a burst limit of 5.
     # Tor: Allow 30 invoices per minute, with a burst limit of 5.
     #
@@ -62,11 +40,11 @@ in {
     nixbitcoin-org.website.homepageHostConfig = ''
       location = /donate {
         default_type "text/html";
-        alias ${webpageFile};
+        alias ${donationPage}/index.html;
       }
 
-      location = /donate/multi {
-        rewrite ^ /btcpayserver/apps/${cfg.btcpayserverAppId}/pos;
+      location = /site.css {
+        alias ${donationPage}/site.css;
       }
 
       # Forward the LUD-06 LNURL location to btcpayserver
@@ -100,7 +78,7 @@ in {
           return 590;
         }
 
-        # 2. Rate-limit the regular app (/donate/multi)
+        # 2. Rate-limit the regular app
         # GET requests to this location only return the donation interface.
         # Add extra rate limiting only for POST requests where invoice generation happens.
         #
