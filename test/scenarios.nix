@@ -38,6 +38,13 @@ rec {
       # Add source NAT to the bridge address because the btcpayserver netns doesn't allow connections to external addresses.
       iptables -w -t nat -A nixos-nat-post -p tcp -d ${address} -j SNAT --to-source ${netnsBridgeIp}
     '';
+
+    # Enable testing btcpayserver rate-limiting
+    nixbitcoin-org.website.homepageHostConfig = ''
+      location = /donate/test-rate-limit {
+        rewrite ^ /btcpayserver/apps/${config.nixbitcoin-org.website.donate.btcpayserverAppId}/pos;
+      }
+    '';
   };
 
   # Disable features that should only run in production or that

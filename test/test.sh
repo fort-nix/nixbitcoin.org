@@ -10,7 +10,7 @@ set -euo pipefail
 cd "${BASH_SOURCE[0]%/*}"
 source ./test-lib.sh
 
-trap 'echo Error at line $LINENO' ERR
+trap 'echo "Error at ${BASH_SOURCE[0]}:$LINENO"' ERR
 
 echo -n "Wait until btcpayserver serves content..."
 while [[ $(getStatusCode http://$ip/donate) != 200 ]]; do
@@ -35,7 +35,7 @@ else
   burstLimitIgnoreInternalResponse=1
 fi
 
-assertBurstLimit 5 POST http://$ip/donate/multi
+assertBurstLimit 5 POST http://$ip/donate/test-rate-limit
 restartNginx
 
 echo "Success"
