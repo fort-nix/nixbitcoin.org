@@ -1,6 +1,6 @@
 {
   inputs.nix-bitcoin = {
-    url = "github:fort-nix/nix-bitcoin";
+    url = "github:erikarvstedt/nix-bitcoin/nixos-23.11";
     inputs.extra-container.follows = "extra-container";
   };
   inputs.nixos-mailserver = {
