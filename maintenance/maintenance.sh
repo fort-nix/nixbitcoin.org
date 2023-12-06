@@ -97,7 +97,7 @@ borg-job-main extract --stdout ::$(borg-job-main list --short | tail -1) var/lib
 # See also: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading
 
 # The system state version that postgresql should be updated to
-newSystemStateVersion=22.05
+newSystemStateVersion=23.05
 
 # Build script
 drv=$(nix eval --raw ../deployment#lib --apply "lib: (lib.postgresql.updateSystem \"$newSystemStateVersion\").drvPath")
@@ -121,10 +121,10 @@ ssh nixbitcoin.org 'systemctl status postgresql'
 # Run recommended analyzer script
 schema=$(nix eval --raw ../deployment#lib.postgresql.systemPostgresqlSchema)
 echo $schema
-ssh nixbitcoin.org "sudo -u postgres /var/lib/postgresql/$schema/analyze_new_cluster.sh"
+ssh nixbitcoin.org "doas -u postgres /var/lib/postgresql/$schema/analyze_new_cluster.sh"
 
 # Delete old data dir
-ssh nixbitcoin.org "sudo -u postgres /var/lib/postgresql/$schema/delete_old_cluster.sh"
+ssh nixbitcoin.org "doas -u postgres /var/lib/postgresql/$schema/delete_old_cluster.sh"
 
 ssh nixbitcoin.org 'ls -al /var/lib/postgresql'
 

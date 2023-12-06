@@ -13,9 +13,9 @@ rec {
 
   install -d -m 700 -o postgres -g postgres "$newData"
   cd "$newData"
-  sudo -u postgres $newBin/initdb -D "$newData"
+  doas -u postgres $newBin/initdb -D "$newData"
 
-  sudo -u postgres $newBin/pg_upgrade \
+  doas -u postgres $newBin/pg_upgrade \
     --old-datadir "$oldData" --new-datadir "$newData" \
     --old-bindir $oldBin --new-bindir $newBin \
     --jobs $(nproc) \

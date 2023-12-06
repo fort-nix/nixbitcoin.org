@@ -71,7 +71,7 @@ let
       settings.experimental-features = "nix-command flakes";
     };
 
-    system.stateVersion = "20.09";
+    system.stateVersion = "23.05";
   };
 
   hardwareConfig = {
