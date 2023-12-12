@@ -19,7 +19,7 @@ echo
 
 echo
 echo "Building system on remote host"
-ssh -n $remoteHost "nix build -L --out-link /tmp/system $drv"
+ssh -n $remoteHost "nix build -L --out-link /tmp/system $drv^*"
 
 echo
 echo "Switching to configuration"
