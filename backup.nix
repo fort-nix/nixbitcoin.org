@@ -7,15 +7,16 @@ in
 {
   services.zfs.autoSnapshot = {
     enable = true;
-    monthly = 3;
+    daily = 1;
   };
 
-  # Only use daily, weekly, monthly ZFS snapshots
+  # Don't auto-run snapshots
   systemd.timers = {
     zfs-snapshot-frequent.enable = false;
     zfs-snapshot-hourly.enable = false;
-    # The daily snapshot is run by borgbackup-job-main.service
     zfs-snapshot-daily.enable = false;
+    zfs-snapshot-monthly.enable = false;
+    zfs-snapshot-weekly.enable = false;
   };
 
   systemd.services.borgbackup-job-main = rec {
