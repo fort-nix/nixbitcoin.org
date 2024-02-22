@@ -68,7 +68,7 @@ in {
     settings = {
       server_name = "nixbitcoin.org";
       public_baseurl = "https://synapse.nixbitcoin.org";
-      enable_registration = true;
+      enable_registration = false;
       database.args = {
         database = "matrix-synapse";
         user = "matrix-synapse";

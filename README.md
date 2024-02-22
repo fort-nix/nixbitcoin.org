@@ -10,6 +10,7 @@ for [nixbitcoin.org](https://nixbitcoin.org)
   - Liquid on-chain
 - Matrix Synapse homeserver ([src](./matrix.nix)) with email registrations
   via a self-hosted [mailserver](https://gitlab.com/simple-nixos-mailserver/nixos-mailserver).
+  Public registrations are now disabled due to disk storage demands which are out of scope for this project.
 
 #### Requirements
 
