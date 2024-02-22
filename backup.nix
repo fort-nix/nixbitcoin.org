@@ -65,6 +65,8 @@ in
         "var/lib/duplicity"
         "var/lib/onion-addresses"
         "var/lib/containers"
+        # Exclude matrix-synapse
+        "var/lib/postgresql/${config.services.postgresql.package.psqlSchema}/base/16403"
 
         "var/lib/i2pd"
         "var/lib/redis"
