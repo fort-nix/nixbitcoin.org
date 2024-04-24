@@ -58,6 +58,13 @@ flakeInputs:
     yieldgenerator.enable = true;
   };
   services.joinmarket-ob-watcher.enable = true;
+  # ob-watcher gets buggy after running for a while, so periodically restart
+  systemd.services.joinmarket-ob-watcher = rec {
+    serviceConfig = {
+      Restart = lib.mkForce "always";
+      RuntimeMaxSec = "1 week";
+    };
+  };
 
   services.electrs.enable = true;
 
