@@ -46,33 +46,32 @@ in
 
   boot.supportedFilesystems = [ "zfs" ];
 
-  # Not needed
-  systemd.services.zfs-mount.enable = false;
-
   # TODO-EXTERNAL:
   # The filesystem definitions below can be replaced with zfs `mountpoint` attributes when
   # https://github.com/NixOS/nixpkgs/issues/62644 has been implemented
-  fileSystems."/" = {
-    device = "rpool/root";
-    fsType = "zfs";
+  fileSystems = {
+    "/" = {
+      device = "rpool/root";
+      fsType = "zfs";
+    };
+    "/nix" = {
+      device = "rpool/nix";
+      fsType = "zfs";
+    };
+    "/boot1" = {
+      device = "/dev/disk/by-label/boot1";
+      fsType = "vfat";
+      options = nonessentialDevice;
+    };
+    "/boot2" = {
+      device = "/dev/disk/by-label/boot2";
+      fsType = "vfat";
+      options = nonessentialDevice;
+    };
   };
 
-  fileSystems."/nix" = {
-    device = "rpool/nix";
-    fsType = "zfs";
-  };
-
-  fileSystems."/boot1" = {
-    device = "/dev/disk/by-label/boot1";
-    fsType = "vfat";
-    options = nonessentialDevice;
-  };
-
-  fileSystems."/boot2" = {
-    device = "/dev/disk/by-label/boot2";
-    fsType = "vfat";
-    options = nonessentialDevice;
-  };
+  # Auto-mounting is not needed due to the manual mount settings (`fileSystems.*`)
+  systemd.services.zfs-mount.enable = false;
 
   swapDevices = [
     { device = "/dev/disk/by-label/swap1"; options = nonessentialDevice; }
