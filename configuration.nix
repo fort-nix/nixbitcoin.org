@@ -99,9 +99,6 @@ flakeInputs:
     interval = "monthly";
   };
 
-  environment.shellAliases = {
-    sudo = "doas";
-  };
   environment.variables = {
     # Use 24h time format
     LC_TIME = "C.UTF-8";
