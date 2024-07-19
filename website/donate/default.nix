@@ -24,6 +24,8 @@ let
     lightning_address = "donate@nixbitcoin.org";
     btcpayserver_app_id = cfg.btcpayserverAppId;
   };
+
+  nbLib = config.nix-bitcoin.lib;
 in {
   inherit options;
 
@@ -101,5 +103,32 @@ in {
         proxy_pass http://${btcpayserverAddress};
       }
     '';
+
+    # After a while of inactivity btcpayserver responds very slowly to new invoice
+    # requests.
+    # Fix this by periodically requesting an invoice.
+    systemd = {
+      services.btcpayserver-warmup-invoice = rec {
+        wantedBy = [ "multi-user.target" ];
+        requires = [ "btcpayserver.service" ];
+        after = requires;
+        path = with pkgs; [ curl jq ];
+        script = ''
+          curl -i -fsS '${btcpayserverAddress}/btcpayserver/apps/${cfg.btcpayserverAppId}/pos' \
+            --data-raw  'requiresRefundEmail=InheritFromStore&amount=1.234'
+        '';
+        serviceConfig = nbLib.defaultHardening // nbLib.allowLocalIPAddresses // {
+          user = "nobody";
+        };
+      };
+      timers.btcpayserver-warmup-invoice = {
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          # Run every 6h
+          OnUnitActiveSec = "6h";
+          AccuracySec = "10m";
+        };
+      };
+    };
   };
 }
