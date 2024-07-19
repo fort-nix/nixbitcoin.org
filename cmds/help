@@ -21,6 +21,9 @@ deploy-instantiate-locally
 build
   Build system (locally)
 
+build-remotely
+  Build system on the remote host
+
 eval-config
   Evaluate system
 

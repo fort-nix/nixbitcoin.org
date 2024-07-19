@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "${BASH_SOURCE[0]%/*}"
+
+echo
+echo "Copying source"
+rsync -az --exclude='.git*' ../ $remoteHost:/tmp/nix-bitcoin
+
+echo
+echo "Building system (on remote server)"
+ssh -t $remoteHost $(printf "%q " nix build -L --out-link /tmp/system path:///tmp/nix-bitcoin#systemDrv "$@")

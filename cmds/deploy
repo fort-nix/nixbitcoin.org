@@ -3,20 +3,13 @@ set -euo pipefail
 
 cd "${BASH_SOURCE[0]%/*}"
 
-# Sets vars `push`, `action`
-source lib/parse-deploy-args.sh
-
-echo
-echo "Copying source"
-rsync -az --exclude='.git*' ../ $remoteHost:/tmp/nix-bitcoin
-
-echo
-echo "Building system (on remote server)"
-# Prevent remote GC of the system flake and its inputs by out-linking flakeInputs
-ssh -t $remoteHost "nix build -L --out-link /tmp/system path:///tmp/nix-bitcoin#systemDrv"
+./build-remotely
 
 echo
 ./deploy-secrets
+
+# Sets vars `push`, `action`
+source lib/parse-deploy-args.sh
 
 echo
 echo "Switching to configuration"
