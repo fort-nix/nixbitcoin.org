@@ -4,13 +4,8 @@ let
 in
 { pkgs ? nixpkgsUnstable.legacyPackages.${builtins.currentSystem} }:
 let
-  py = pkgs.python3;
-  pyPkgs = import ./python-packages.nix;
-
-  lnurl = py.pkgs.callPackage pyPkgs.lnurl {};
-
-  python = py.withPackages (ps: with ps; [
-    lnurl
+  python = pkgs.python3.withPackages (ps: with ps; [
+    bech32
     qrcode
   ]);
 in {

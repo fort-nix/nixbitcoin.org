@@ -10,7 +10,7 @@ cd "${BASH_SOURCE[0]%/*}"
 hash=$(
   {
     echo "$NIX_PATH"
-    cat make-donation-page.nix python-packages.nix
+    cat make-donation-page.nix
   } | sha1sum | cut -f1 -d' '
 )
 

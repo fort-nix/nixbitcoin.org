@@ -1,5 +1,4 @@
 import json
-import lnurl as Lnurl
 import os
 import qrcode
 import qrcode.image.svg
@@ -7,16 +6,22 @@ import re
 import sys
 from pathlib import Path
 from string import Template
+from bech32 import bech32_encode, convertbits
 
 def create_lnurl_data(lnurl_plaintext, bg_color='#f5f5f7'):
-    # TODO-EXTERNAL:
+    # gTODO-EXTERNAL:
     # Switch to LUD-17 (plaintext URL instead of bech32 encoding) when it's widely supported
     # https://github.com/lnurl/luds
-    lnurl = f"lightning:{Lnurl.encode(lnurl_plaintext).lower()}"
+    lnurl = f"lightning:{encode_lnurl(lnurl_plaintext).lower()}"
     return {
         'lnurl': lnurl,
         'lnurl_qrcode': make_qrcode(lnurl, bg_color)
     }
+
+def encode_lnurl(url):
+  bytes = convertbits(url.encode("utf-8"), 8, 5, True)
+  assert bytes
+  return bech32_encode("lnurl", bytes)
 
 def make_qrcode(lnurl_encoded, bg_color):
     img = qrcode.make(lnurl_encoded, image_factory=qrcode.image.svg.SvgPathImage)
