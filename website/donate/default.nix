@@ -84,7 +84,7 @@ in {
         #
         location /btcpayserver/apps/${cfg.btcpayserverAppId} {
           if ($request_method = POST) {
-            # Return to a named location (@btcp) because `if` statements
+            # Return to a named location (@btcp_limit_post) because `if` statements
             # inside location blocks may only return or rewrite.
             return 590;
           }
