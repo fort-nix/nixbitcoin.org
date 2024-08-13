@@ -109,7 +109,6 @@ in {
     # Fix this by periodically requesting an invoice.
     systemd = {
       services.btcpayserver-warmup-invoice = rec {
-        wantedBy = [ "multi-user.target" ];
         requires = [ "btcpayserver.service" ];
         after = requires;
         path = with pkgs; [ curl jq ];
@@ -126,7 +125,6 @@ in {
         timerConfig = {
           # Run every 6h
           OnUnitActiveSec = "6h";
-          AccuracySec = "10m";
         };
       };
     };
