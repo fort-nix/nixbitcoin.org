@@ -17,8 +17,10 @@ flakeInputs:
     i2p = true;
     tor.enforce = false;
     tor.proxy = false;
+    rpc.threads = lib.mkForce 20;
     extraConfig = ''
       mempoolfullrbf=1
+      rpcworkqueue=32
     '';
   };
   nix-bitcoin.onionServices.bitcoind.public = true;
