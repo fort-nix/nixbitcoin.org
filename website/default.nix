@@ -167,7 +167,7 @@ in {
 
     # Allow HTTP(S) connections to nginx from outside netns
     systemd.services.netns-nginx.postStart = ''
-      ${pkgs.iproute}/bin/ip netns exec nb-nginx ${config.networking.firewall.package}/bin/iptables \
+      ${pkgs.iproute2}/bin/ip netns exec nb-nginx ${config.networking.firewall.package}/bin/iptables \
         -w -A INPUT -p TCP -m multiport --dports 80,443 -j ACCEPT
     '';
 

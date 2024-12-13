@@ -1,6 +1,6 @@
 {
   inputs.nix-bitcoin = {
-    url = "github:erikarvstedt/nix-bitcoin?ref=clnrest";
+    url = "github:erikarvstedt/nix-bitcoin?ref=nixos-24.11";
     inputs.extra-container.follows = "extra-container";
   };
   inputs.nixos-mailserver = {
