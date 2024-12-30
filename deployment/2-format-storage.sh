@@ -15,8 +15,8 @@ mountStorage() {
     fi
     mount -t zfs -o x-mount.mkdir rpool/root /mnt
     mount -t zfs -o x-mount.mkdir rpool/nix /mnt/nix
-    mount -o x-mount.mkdir ${disk1}2 /mnt/boot1
-    mount -o x-mount.mkdir ${disk2}2 /mnt/boot2
+    mount -o umask=077 -o x-mount.mkdir ${disk1}2 /mnt/boot1
+    mount -o umask=077 -o x-mount.mkdir ${disk2}2 /mnt/boot2
 }
 
 if [[ ${1:-} == remount ]]; then
