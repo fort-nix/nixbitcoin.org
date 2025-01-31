@@ -6,8 +6,7 @@
   inputs.nixos-mailserver = {
     url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-24.11";
     inputs.nixpkgs.follows = "nixpkgs";
-    inputs.nixpkgs-24_05.follows = "nixpkgs";
-    inputs.utils.follows = "nix-bitcoin/flake-utils";
+    inputs.nixpkgs-24_11.follows = "nixpkgs";
   };
   inputs.extra-container = {
     url = "github:erikarvstedt/extra-container/container-checking";
