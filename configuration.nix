@@ -13,6 +13,11 @@ flakeInputs:
     ./backup.nix
   ];
 
+  # Limit systemd log retention for privacy reasons
+  services.journald.extraConfig = ''
+    MaxRetentionSec=36h
+  '';
+
   services.bitcoind = {
     i2p = true;
     tor.enforce = false;

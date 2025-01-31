@@ -22,11 +22,6 @@ let
 in {
   imports = [ ./mail.nix ];
 
-  # Limit systemd log retention for privacy reasons
-  services.journald.extraConfig = ''
-    MaxRetentionSec=36h
-  '';
-
   nix-bitcoin.netns-isolation.services = {
     matrix-synapse = {
       id = 28;
