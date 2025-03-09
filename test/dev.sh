@@ -27,7 +27,7 @@ runuser -u $(logname) -- xdg-open http://$ip:23000/btcpayserver
 runuser -u $(logname) -- xdg-open http://$ip/donate
 
 # Create invoice
-curl -v -L -X POST -d '' $ip/donate/multi
+curl -v -L -X POST -d '' $ip/donate/test-rate-limit
 
 source ./test-lib.sh
 # Show invoices
