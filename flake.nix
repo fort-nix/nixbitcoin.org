@@ -1,7 +1,8 @@
 {
   inputs.nix-bitcoin = {
-    url = "github:fort-nix/nix-bitcoin";
+    url = "github:erikarvstedt/nix-bitcoin?ref=btcpayserver-2";
     inputs.extra-container.follows = "extra-container";
+    inputs.nixpkgs-unstable.url = "github:erikarvstedt/nixpkgs?ref=btcpayserver-2.0.7";
   };
   inputs.nixos-mailserver = {
     url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-24.11";

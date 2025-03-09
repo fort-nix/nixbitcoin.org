@@ -85,15 +85,16 @@
         "nixpkgs-unstable": "nixpkgs-unstable"
       },
       "locked": {
-        "lastModified": 1739709805,
-        "narHash": "sha256-8/OuhPELneYOtncScsPrAwmlzBNSAFotoTKd6JxU6OA=",
-        "owner": "fort-nix",
+        "lastModified": 1741529913,
+        "narHash": "sha256-2HmfH31tB8U861TsjPUTLEpwRoxHMEVUaa5X8nen9to=",
+        "owner": "erikarvstedt",
         "repo": "nix-bitcoin",
-        "rev": "bff10a66e50f6a3387b3e5acbbdf2519c624e8bc",
+        "rev": "4632d61b0f25a455b44ad0133d6837c3847de86e",
         "type": "github"
       },
       "original": {
-        "owner": "fort-nix",
+        "owner": "erikarvstedt",
+        "ref": "btcpayserver-2",
         "repo": "nix-bitcoin",
         "type": "github"
       }
@@ -142,16 +143,16 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1739451785,
-        "narHash": "sha256-3ebRdThRic9bHMuNi2IAA/ek9b32bsy8F5R4SvGTIog=",
-        "owner": "NixOS",
+        "lastModified": 1741531386,
+        "narHash": "sha256-1UHOqDmBtKoSbUBFLOZeS0NOXx3/QmhbziEAt//Fpg4=",
+        "owner": "erikarvstedt",
         "repo": "nixpkgs",
-        "rev": "1128e89fd5e11bb25aedbfc287733c6502202ea9",
+        "rev": "ac8bbfe70b224630459bc4ea4731993b9c62fd96",
         "type": "github"
       },
       "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
+        "owner": "erikarvstedt",
+        "ref": "btcpayserver-2.0.7",
         "repo": "nixpkgs",
         "type": "github"
       }
