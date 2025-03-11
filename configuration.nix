@@ -51,7 +51,6 @@ flakeInputs:
     enable = true;
     lightningBackend = "clightning";
     lbtc = true;
-    package = config.nix-bitcoin.pkgs.pinned.pkgsUnstable.btcpayserver;
   };
   nix-bitcoin.onionServices.btcpayserver.enable = true;
   # Don't require `liquidd.service` so that btcp can stay online while liquidd is
