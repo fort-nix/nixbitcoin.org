@@ -68,6 +68,8 @@ in
         "var/lib/containers"
         # Exclude matrix-synapse
         "var/lib/postgresql/${config.services.postgresql.package.psqlSchema}/base/16403"
+        # Only contains mempool
+        "var/lib/mysql"
 
         "var/lib/i2pd"
         "var/lib/redis"
