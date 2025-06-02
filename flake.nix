@@ -1,12 +1,12 @@
 {
   inputs.nix-bitcoin = {
-    url = "github:fort-nix/nix-bitcoin";
+    url = "github:erikarvstedt/nix-bitcoin?ref=nixos-25.05";
     inputs.extra-container.follows = "extra-container";
   };
   inputs.nixos-mailserver = {
-    url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-24.11";
+    url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-25.05";
     inputs.nixpkgs.follows = "nixpkgs";
-    inputs.nixpkgs-24_11.follows = "nixpkgs";
+    inputs.nixpkgs-25_05.follows = "nixpkgs";
   };
   inputs.extra-container = {
     url = "github:erikarvstedt/extra-container/container-checking";
