@@ -9,7 +9,7 @@ from string import Template
 from bech32 import bech32_encode, convertbits
 
 def create_lnurl_data(lnurl_plaintext, bg_color='#f5f5f7'):
-    # gTODO-EXTERNAL:
+    # TODO-EXTERNAL:
     # Switch to LUD-17 (plaintext URL instead of bech32 encoding) when it's widely supported
     # https://github.com/lnurl/luds
     lnurl = f"lightning:{encode_lnurl(lnurl_plaintext).lower()}"

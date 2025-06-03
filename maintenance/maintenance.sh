@@ -85,7 +85,7 @@ borg-job-main list ::$(borg-job-main list --short | tail -1) var/lib/clightning
 backups=$(borg-job-main list --short); borg-job-main diff ::$(<<<"$backups" tail -2 | head -1) $(<<<"$backups" tail -1)
 
 ## restore files
-# restore a path from last backup (dry-run)
+# restore a path from last backup (dry-run). writes files to PWD.
 borg-job-main extract --dry-run --progress --list ::$(borg-job-main list --short | tail -1) var/lib/clightning
 
 # show specific file content from last backup
