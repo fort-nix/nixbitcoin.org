@@ -98,12 +98,12 @@ in
       compression = "zstd";
       extraCreateArgs = "--stats"; # Print stats after backup
       extraInitArgs = "--storage-quota=100G";
-      # prune.keep = {
-      #   within = "1d"; # Keep all archives from the last day
-      #   daily = 4;
-      #   weekly = 2;
-      #   monthly = 2;
-      # };
+      prune.keep = {
+        within = "1d"; # Keep all archives from the last day
+        daily = 4;
+        weekly = 2;
+        monthly = 2;
+      };
       # Compact (free repo storage space) every 7 days
       postPrune = ''
         if (( (($(date +%s) / 86400) % 7) == 0 )); then
