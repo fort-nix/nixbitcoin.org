@@ -40,7 +40,6 @@ flakeInputs:
     '';
   };
   nix-bitcoin.onionServices.clightning.public = true;
-  systemd.services.clightning.serviceConfig.TimeoutStartSec = "5m";
 
   services.rtl = {
     enable = true;
