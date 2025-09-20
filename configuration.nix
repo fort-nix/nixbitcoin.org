@@ -82,6 +82,10 @@ flakeInputs:
       enforce = true;
     };
   };
+  # Work around https://github.com/mempool/mempool/issues/6042
+  systemd.services.mempool = {
+    serviceConfig.Restart = lib.mkForce "always";
+  };
   nix-bitcoin.onionServices.mempool-frontend.enable = true;
 
   nixbitcoin-org.website = {
