@@ -10,5 +10,6 @@
     certificateScheme = "acme-nginx";
 
     virusScanning = false;
+    stateVersion = 3;
   };
 }

@@ -25,7 +25,7 @@ in {
     hashedPassword = base.hashedPassword;
   };
 
-  services.logind.killUserProcesses = true;
+  services.logind.settings.Login.KillUserProcesses = true;
 
   system.stateVersion = config.system.nixos.release;
 }

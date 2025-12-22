@@ -61,7 +61,7 @@ let
       options = "--delete-older-than 30d";
     };
 
-    services.logind.killUserProcesses = true;
+    services.logind.settings.Login.KillUserProcesses = true;
 
     # We never deal with multiple NICs in VPS deployments.
     # This allows us to stably address the external interface as `eth0`.

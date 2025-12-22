@@ -6,7 +6,7 @@ with lib;
 let
   data = ./data;
   btcpayserverDataDir = config.services.btcpayserver.dataDir;
-  runAs = user: "${pkgs.utillinux}/bin/runuser -u ${user} --";
+  runAs = user: "${pkgs.util-linux}/bin/runuser -u ${user} --";
   psql = "${config.services.postgresql.package}/bin/psql";
 in
 {
@@ -15,7 +15,7 @@ in
   };
 
   systemd.services.importBtcpayserverConfig = rec {
-    requires = [ "postgresql.service" ];
+    requires = [ "postgresql.target" ];
     after = requires;
     requiredBy = [ "btcpayserver.service" ];
     before = requiredBy;

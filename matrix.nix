@@ -52,8 +52,8 @@ in {
       sendOnly = true;
     };
   };
-  # hashedPasswordFile is used by dovecot2
-  systemd.services.dovecot2 = requireSecrets;
+  # hashedPasswordFile is used by dovecot
+  systemd.services.dovecot = requireSecrets;
 
   services.matrix-synapse = {
     enable = true;
@@ -222,7 +222,7 @@ in {
   };
 
   nix-bitcoin.secrets.matrix-smtp-password.user = "matrix-synapse";
-  # Used by dovecot2 (via the mailserver module)
+  # Used by dovecot (via the mailserver module)
   nix-bitcoin.secrets.matrix-smtp-password-hashed.user = "root";
   nix-bitcoin.generateSecretsCmds.matrix = ''
     makePasswordSecret matrix-smtp-password
