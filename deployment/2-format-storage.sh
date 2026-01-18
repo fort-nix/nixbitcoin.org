@@ -56,10 +56,10 @@ zpool create -f \
   -o ashift=12 \
   -O acltype=posixacl \
   -O xattr=sa \
+  -O dnodesize=auto \
   -O normalization=formD \
   -O relatime=on \
   -O compression=lz4 \
-  -O dnodesize=auto \
   rpool mirror ${disk1}4 ${disk2}4
 
 zfs create -o mountpoint=legacy rpool/root
